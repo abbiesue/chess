@@ -40,6 +40,16 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
         while (row <= 8 && col <= 8) {
             //set new ChessPosition
             position = new ChessPosition(row, col);
+            // if there is a piece at this space
+            if (chessboard.getPiece(position) != null) {
+               // and the piece is not on my team, add to array and break while loop
+               if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
+                   position = new ChessPosition(row, col);
+                   bishopMoves.add(new ChessMove(startPosition, position, null));
+               }
+               //else, I'm blocked.
+               break;
+            }
             if (chessboard.getPiece(position) == null) {
                 //if the space is free, add it to the collection
                 position = new ChessPosition(row, col);
@@ -49,14 +59,22 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
             row++;
             col++;
         }
-        //reset row and col
-        col = startPosition.getColumn()+1;
-        row = startPosition.getRow()-1;
 
         //check down and right to the edge of the board
+        col = startPosition.getColumn()+1;
+        row = startPosition.getRow()-1;
         while (row > 0 && col <= 8) {
             //set new ChessPosition
             position = new ChessPosition(row, col);
+            if (chessboard.getPiece(position) != null) {
+                // and the piece is not on my team, add to array and break while loop
+                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
+                    position = new ChessPosition(row, col);
+                    bishopMoves.add(new ChessMove(startPosition, position, null));
+                }
+                //else, I'm blocked.
+                break;
+            }
             if (chessboard.getPiece(position) == null) {
                 //if the space is free, add it to the collection
                 position = new ChessPosition(row, col);
@@ -66,14 +84,21 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
             col++;
         }
 
-        //reset row and col
+        //check down and left to the edge of the board
         col = startPosition.getColumn()-1;
         row = startPosition.getRow()-1;
-
-        //check down and left to the edge of the board
         while (row > 0 && col > 0) {
             //set new ChessPosition
             position = new ChessPosition(row, col);
+            if (chessboard.getPiece(position) != null) {
+                // and the piece is not on my team, add to array and break while loop
+                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
+                    position = new ChessPosition(row, col);
+                    bishopMoves.add(new ChessMove(startPosition, position, null));
+                }
+                //else, I'm blocked.
+                break;
+            }
             if (chessboard.getPiece(position) == null) {
                 //if the space is free, add it to the collection
                 position = new ChessPosition(row, col);
@@ -83,14 +108,21 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
             col--;
         }
 
-        //reset row and col
+        //check up and left to the edge of the board
         col = startPosition.getColumn()-1;
         row = startPosition.getRow()+1;
-
-        //check up and left to the edge of the board
         while (row <= 8 && col > 0) {
             //set new ChessPosition
             position = new ChessPosition(row, col);
+            if (chessboard.getPiece(position) != null) {
+                // and the piece is not on my team, add to array and break while loop
+                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
+                    position = new ChessPosition(row, col);
+                    bishopMoves.add(new ChessMove(startPosition, position, null));
+                }
+                //else, I'm blocked.
+                break;
+            }
             if (chessboard.getPiece(position) == null) {
                 //if the space is free, add it to the collection
                 position = new ChessPosition(row, col);
