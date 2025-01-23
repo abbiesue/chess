@@ -28,11 +28,15 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
         // initialized local variables
         List<ChessMove> bishopMoves = new ArrayList<ChessMove>();
         ChessPosition startPosition = position;
-        int col = startPosition.getColumn();
-        int row = startPosition.getRow();
         // four directions to go: up and right, up and left, down and left, down and right
+        //Now, I need to add the fact that there are other pieces on the board. So if you run into a piece in any direction,
+        // you cannot move any farther in that direction.
+        // If the piece is not on your team, you can take it and replace it in that spot, so that space is a valid move.
+        // If it is on your team, that space is not a valid move.
 
         //check up and right to the edge of the board
+        int col = startPosition.getColumn()+1;
+        int row = startPosition.getRow()+1;
         while (row <= 8 && col <= 8) {
             //set new ChessPosition
             position = new ChessPosition(row, col);
@@ -46,8 +50,8 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
             col++;
         }
         //reset row and col
-        col = startPosition.getColumn();
-        row = startPosition.getRow();
+        col = startPosition.getColumn()+1;
+        row = startPosition.getRow()-1;
 
         //check down and right to the edge of the board
         while (row > 0 && col <= 8) {
@@ -63,8 +67,8 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
         }
 
         //reset row and col
-        col = startPosition.getColumn();
-        row = startPosition.getRow();
+        col = startPosition.getColumn()-1;
+        row = startPosition.getRow()-1;
 
         //check down and left to the edge of the board
         while (row > 0 && col > 0) {
@@ -80,8 +84,8 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
         }
 
         //reset row and col
-        col = startPosition.getColumn();
-        row = startPosition.getRow();
+        col = startPosition.getColumn()-1;
+        row = startPosition.getRow()+1;
 
         //check up and left to the edge of the board
         while (row <= 8 && col > 0) {
