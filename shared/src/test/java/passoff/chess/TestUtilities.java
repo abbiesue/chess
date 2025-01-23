@@ -13,10 +13,6 @@ public class TestUtilities {
         var board = loadBoard(boardText);
         var testPiece = board.getPiece(startPosition);
         var validMoves = loadMoves(startPosition, endPositions);
-        System.out.println("validMoves Contents");
-        for (int i =0; i < validMoves.size(); i++) {
-            System.out.println(validMoves.get(i).getEndPosition().getRow() + " , " + validMoves.get(i).getEndPosition().getColumn());
-        }
         validateMoves(board, testPiece, startPosition, validMoves);
     }
 
