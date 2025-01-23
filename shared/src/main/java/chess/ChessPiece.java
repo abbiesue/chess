@@ -53,7 +53,10 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         // store pieceType
         // call pieceMovesCalculator with the pieceType
-
-        throw new RuntimeException("Not implemented");
+        if (pieceType == PieceType.BISHOP) {
+            BishopMovesCalculator piece = new BishopMovesCalculator();
+            return piece.pieceMoves(board, myPosition);
+        }
+        return null;
     }
 }
