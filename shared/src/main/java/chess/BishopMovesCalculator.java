@@ -39,7 +39,7 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
             if (chessboard.getPiece(position) == null) {
                 //if the space is free, add it to the collection
                 position = new ChessPosition(row, col);
-                bishopMoves.add(new ChessMove(startPosition, position, ChessPiece.PieceType.BISHOP));
+                bishopMoves.add(new ChessMove(startPosition, position, null));
             }
             //increment both row and col
             row++;
@@ -56,7 +56,7 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
             if (chessboard.getPiece(position) == null) {
                 //if the space is free, add it to the collection
                 position = new ChessPosition(row, col);
-                bishopMoves.add(new ChessMove(startPosition, position, ChessPiece.PieceType.BISHOP));
+                bishopMoves.add(new ChessMove(startPosition, position, null));
             }
             row--;
             col++;
@@ -73,7 +73,7 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
             if (chessboard.getPiece(position) == null) {
                 //if the space is free, add it to the collection
                 position = new ChessPosition(row, col);
-                bishopMoves.add(new ChessMove(startPosition, position, ChessPiece.PieceType.BISHOP));
+                bishopMoves.add(new ChessMove(startPosition, position, null));
             }
             row--;
             col--;
@@ -90,17 +90,11 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
             if (chessboard.getPiece(position) == null) {
                 //if the space is free, add it to the collection
                 position = new ChessPosition(row, col);
-                bishopMoves.add(new ChessMove(startPosition, position, ChessPiece.PieceType.BISHOP));
+                bishopMoves.add(new ChessMove(startPosition, position, null));
             }
             row++;
             col--;
         }
-
-        System.out.println("bishopMoves Contents");
-        for (int i =0; i < bishopMoves.size(); i++) {
-            System.out.println(bishopMoves.get(i).getEndPosition().getRow() + " , " + bishopMoves.get(i).getEndPosition().getColumn());
-        }
-        // reset to startPosition
         return bishopMoves;
     }
 }
