@@ -11,7 +11,6 @@ import java.util.*;
 public class ChessPiece {
     private PieceType pieceType;
     private ChessGame.TeamColor pieceColor;
-    private boolean hasMoved = false;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         pieceType = type;
@@ -60,7 +59,7 @@ public class ChessPiece {
             case KNIGHT -> new KnightMovesCalculator();
             case KING -> new KingMovesCalculator();
             case QUEEN -> new QueenMovesCalculator();
-            default -> throw new IllegalStateException("Unexpected value: " + getPieceType());
+            case PAWN -> new PawnMovesCalculator();
         };
         return piece.pieceMoves(board, myPosition);
     }
