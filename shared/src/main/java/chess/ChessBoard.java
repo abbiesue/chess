@@ -1,6 +1,9 @@
 package chess;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -64,17 +67,63 @@ public class ChessBoard {
         for (int i = 1; i < 9; i++) {
             squares[2][i] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         }
+
     }
 
     @Override
     public String toString() {
-        return "ChessBoard{" +
-                "squares=" + Arrays.toString(squares) +
-                '}';
+        String outString =  "ChessBoard: \n";
+
+        for (int i = 1; i < 9; i++) {
+            for (int j = 1; j < 9; j++) {
+                ChessPiece temp = squares[i][j];
+                if (temp == null) {
+                    outString = outString.concat(" ");
+                } else {
+                    switch(temp.getPieceType()) {
+                        case PAWN -> {
+                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                                outString = outString.concat("P");
+                            } else { outString = outString.concat("p");}
+                        }
+                        case ROOK -> {
+                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                                outString = outString.concat("R");
+                            } else { outString = outString.concat("r");}
+                        }
+                        case KNIGHT -> {
+                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                                outString = outString.concat("N");
+                            } else { outString = outString.concat("n");}
+                        }
+                        case BISHOP -> {
+                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                                outString = outString.concat("B");
+                            } else { outString = outString.concat("b");}
+                        }
+                        case QUEEN -> {
+                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                                outString = outString.concat("Q");
+                            } else { outString = outString.concat("q");}
+                        }
+                        case KING -> {
+                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                                outString = outString.concat("K");
+                            } else { outString = outString.concat("k");}
+                        }
+                    }
+                }
+                outString = outString.concat(" | ");
+            }
+            outString = outString.concat("\n");
+        }
+
+        return outString;
     }
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) {
             return true;
         }
@@ -82,7 +131,20 @@ public class ChessBoard {
             return false;
         }
         ChessBoard that = (ChessBoard) o;
-        return Arrays.equals(squares, that.squares);
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (squares[i][j] == that.squares[i][j]) {
+                    break;
+                }
+                if (squares[i][j].getTeamColor() != that.squares[i][j].getTeamColor()) {
+                    return false;
+                }
+                if (squares[i][j].getPieceType() != that.squares[i][j].getPieceType()){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override

@@ -44,19 +44,19 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
                     } else {
                         pawnMoves.add(new ChessMove(startPosition, position, null)); //add
                     }
-
-                }
-            }
-            row = startPosition.getRow();
-            col = startPosition.getColumn();
-            if (startPosition.getRow() == 7) {
-                position = new ChessPosition(row-2,col);
-                if (chessboard.getPiece(position) == null) {
-                    if (position.getRow() == 1) {
-                        promote(startPosition, position, pawnMoves);
-                    } else {
-                        pawnMoves.add(new ChessMove(startPosition, position, null)); //add
+                    row = startPosition.getRow();
+                    col = startPosition.getColumn();
+                    if (startPosition.getRow() == 7) {
+                        position = new ChessPosition(row-2,col);
+                        if (chessboard.getPiece(position) == null) {
+                            if (position.getRow() == 1) {
+                                promote(startPosition, position, pawnMoves);
+                            } else {
+                                pawnMoves.add(new ChessMove(startPosition, position, null)); //add
+                            }
+                        }
                     }
+
                 }
             }
         }
@@ -93,23 +93,22 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
                     } else {
                         pawnMoves.add(new ChessMove(startPosition, position, null)); //add
                     }
-
-                }
-            }
-            row = startPosition.getRow();
-            col = startPosition.getColumn();
-            if (startPosition.getRow() == 2) {
-                position = new ChessPosition(row+2,col);
-                if (chessboard.getPiece(position) == null) {
-                    if (position.getRow() == 8) {
-                        promote(startPosition, position, pawnMoves);
-                    } else {
-                        pawnMoves.add(new ChessMove(startPosition, position, null)); //add
+                    row = startPosition.getRow();
+                    col = startPosition.getColumn();
+                    if (startPosition.getRow() == 2) {
+                        position = new ChessPosition(row+2,col);
+                        if (chessboard.getPiece(position) == null) {
+                            if (position.getRow() == 8) {
+                                promote(startPosition, position, pawnMoves);
+                            } else {
+                                pawnMoves.add(new ChessMove(startPosition, position, null)); //add
+                            }
+                        }
                     }
+
                 }
             }
         }
-
         return pawnMoves;
     }
 
