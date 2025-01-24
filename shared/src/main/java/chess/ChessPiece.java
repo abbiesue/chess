@@ -54,28 +54,15 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         // store pieceType
         // call pieceMovesCalculator with the pieceType
-        PieceMovesCalculator piece;
-        if (pieceType == PieceType.BISHOP) {
-            piece = new BishopMovesCalculator();
-            return piece.pieceMoves(board, myPosition);
-        }
-        if (pieceType == PieceType.ROOK) {
-            piece = new RookMovesCalculator();
-            return piece.pieceMoves(board, myPosition);
-        }
-        if (pieceType == PieceType.KNIGHT) {
-            piece = new KnightMovesCalculator();
-            return piece.pieceMoves(board, myPosition);
-        }
-        if (pieceType == PieceType.KING) {
-            piece = new KingMovesCalculator();
-            return piece.pieceMoves(board, myPosition);
-        }
-        if (pieceType == PieceType.QUEEN) {
-            piece = new QueenMovesCalculator();
-            return piece.pieceMoves(board, myPosition);
-        }
-        return null;
+        PieceMovesCalculator piece = switch(getPieceType()) {
+            case BISHOP -> new BishopMovesCalculator();
+            case ROOK -> new RookMovesCalculator();
+            case KNIGHT -> new KnightMovesCalculator();
+            case KING -> new KingMovesCalculator();
+            case QUEEN -> new QueenMovesCalculator();
+            default -> throw new IllegalStateException("Unexpected value: " + getPieceType());
+        };
+        return piece.pieceMoves(board, myPosition);
     }
 
     @Override
