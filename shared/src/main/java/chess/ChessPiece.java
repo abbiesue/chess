@@ -54,8 +54,13 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         // store pieceType
         // call pieceMovesCalculator with the pieceType
+        PieceMovesCalculator piece;
         if (pieceType == PieceType.BISHOP) {
-            BishopMovesCalculator piece = new BishopMovesCalculator();
+            piece = new BishopMovesCalculator();
+            return piece.pieceMoves(board, myPosition);
+        }
+        if (pieceType == PieceType.ROOK) {
+            piece = new RookMovesCalculator();
             return piece.pieceMoves(board, myPosition);
         }
         return null;
