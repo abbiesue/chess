@@ -1,7 +1,6 @@
 package chess;
 
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represents a single chess piece
@@ -12,6 +11,7 @@ import java.util.Objects;
 public class ChessPiece {
     private PieceType pieceType;
     private ChessGame.TeamColor pieceColor;
+    private boolean hasMoved = false;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         pieceType = type;
@@ -67,7 +67,19 @@ public class ChessPiece {
             piece = new KnightMovesCalculator();
             return piece.pieceMoves(board, myPosition);
         }
+        if (pieceType == PieceType.KING) {
+            piece = new KingMovesCalculator();
+            return piece.pieceMoves(board, myPosition);
+        }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "pieceType=" + pieceType +
+                ", pieceColor=" + pieceColor +
+                '}';
     }
 
     @Override
@@ -84,6 +96,19 @@ public class ChessPiece {
 
     @Override
     public int hashCode() {
-        return Objects.hash(pieceType, pieceColor);
+        int colorHash = 0;
+        if (pieceColor == ChessGame.TeamColor.BLACK){
+            colorHash = 0;
+        } else {
+            colorHash = 1;
+        }
+        int typeHash = 0;
+        List<PieceType> pieceTypes = new ArrayList<ChessPiece.PieceType>(Arrays.asList(PieceType.PAWN, PieceType.ROOK, PieceType.KNIGHT, PieceType.BISHOP, PieceType.QUEEN, PieceType.QUEEN));
+        for (int i = 1; i < pieceTypes.size(); i++) {
+            if (pieceType == pieceTypes.get(i)) {
+                typeHash = i;
+            }
+        }
+        return (colorHash*31) + typeHash;
     }
 }
