@@ -116,7 +116,7 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
     @Override
     public boolean checkNAdd(int row, int col) {
         return true;
-    }
+    } //not a lot of copied code so I'm just not gonna implement this method in the Pawn calculator.
 
     void promote(ChessPosition startPosition, ChessPosition endPosition, List<ChessMove> pawnMoves) {
         pawnMoves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.QUEEN));
