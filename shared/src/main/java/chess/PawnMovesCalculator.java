@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class PawnMovesCalculator implements PieceMovesCalculator {
+
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard chessboard, ChessPosition position) {
         List<ChessMove> pawnMoves = new ArrayList<>();
@@ -110,6 +111,11 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
             }
         }
         return pawnMoves;
+    }
+
+    @Override
+    public boolean checkNAdd(int row, int col) {
+        return true;
     }
 
     void promote(ChessPosition startPosition, ChessPosition endPosition, List<ChessMove> pawnMoves) {

@@ -5,6 +5,10 @@ import java.util.Collection;
 import java.util.List;
 
 public class QueenMovesCalculator implements PieceMovesCalculator{
+    List<ChessMove> moves = new ArrayList<>();
+    ChessPosition startPosition;
+    ChessBoard chessBoard = new ChessBoard();
+
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard chessboard, ChessPosition position) {
         List<ChessMove> queenMoves = new ArrayList<>();
@@ -163,5 +167,10 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
             col--;
         }
         return queenMoves;
+    }
+
+    @Override
+    public boolean checkNAdd(int row, int col) {
+        return true;
     }
 }

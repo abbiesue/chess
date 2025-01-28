@@ -5,11 +5,14 @@ import java.util.Collection;
 import java.util.List;
 
 public class RookMovesCalculator implements PieceMovesCalculator {
+    List<ChessMove> moves = new ArrayList<>();
+    ChessPosition startPosition;
+    ChessBoard chessBoard = new ChessBoard();
 
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard chessboard, ChessPosition position) {
-        List<ChessMove> rookMoves = new ArrayList<>();
-        ChessPosition startPosition = position;
+        startPosition = position;
+        chessBoard = chessboard;
         int row;
         int col;
 
@@ -17,70 +20,66 @@ public class RookMovesCalculator implements PieceMovesCalculator {
         col = startPosition.getColumn();
         row = startPosition.getRow() - 1;
         while (row > 0) {
-            position = new ChessPosition(row, col);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    rookMoves.add(new ChessMove(startPosition, position, null));
-                }
+            if (checkNAdd(row,col)) {
+                row--;
+            } else {
                 break;
             }
-            if (chessboard.getPiece(position) == null) {
-                rookMoves.add(new ChessMove(startPosition, position, null));
-            }
-            row--;
         }
 
         //check left
         col = startPosition.getColumn() - 1;
         row = startPosition.getRow();
         while (col > 0) {
-            position = new ChessPosition(row, col);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    rookMoves.add(new ChessMove(startPosition, position, null));
-                }
+            if (checkNAdd(row,col)) {
+                col--;
+            } else {
                 break;
             }
-            if (chessboard.getPiece(position) == null) {
-                rookMoves.add(new ChessMove(startPosition, position, null));
-            }
-            col--;
         }
 
         //check right
         col = startPosition.getColumn() + 1;
         row = startPosition.getRow();
         while (col < 9) {
-            position = new ChessPosition(row, col);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    rookMoves.add(new ChessMove(startPosition, position, null));
-                }
+            if (checkNAdd(row,col)) {
+                col++;
+            } else {
                 break;
             }
-            if (chessboard.getPiece(position) == null) {
-                rookMoves.add(new ChessMove(startPosition, position, null));
-            }
-            col++;
         }
 
         //check up
         row = startPosition.getRow() + 1;
         col = startPosition.getColumn();
         while (row < 9) {
-            position = new ChessPosition(row, col);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    rookMoves.add(new ChessMove(startPosition, position, null));
-                }
+            if (checkNAdd(row,col)) {
+                row++;
+            } else {
                 break;
             }
-            if (chessboard.getPiece(position) == null) {
-                rookMoves.add(new ChessMove(startPosition, position, null));
-            }
-            row++;
         }
 
-        return rookMoves;
+        return moves;
+    }
+
+    @Override
+    public boolean checkNAdd(int row, int col) {
+        //set new ChessPosition
+        ChessPosition position = new ChessPosition(row, col);
+        // if there is a piece at this space
+        if (chessBoard.getPiece(position) == null) {
+            //if the space is free, add it to the collection
+            moves.add(new ChessMove(startPosition, position, null));
+        }
+        if (chessBoard.getPiece(position) != null) {
+            // and the piece is not on my team, add to array and break while loop
+            if (chessBoard.getPiece(position).getTeamColor() != chessBoard.getPiece(startPosition).getTeamColor()) {
+                moves.add(new ChessMove(startPosition, position, null));
+            }
+            //else, I'm blocked.
+            return false;
+        }
+        return true;
     }
 }

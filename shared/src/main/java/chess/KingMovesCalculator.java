@@ -5,110 +5,65 @@ import java.util.Collection;
 import java.util.List;
 
 public class KingMovesCalculator implements PieceMovesCalculator {
+    List<ChessMove> moves = new ArrayList<>();
+    ChessPosition startPosition;
+    ChessBoard chessBoard = new ChessBoard();
+
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard chessboard, ChessPosition position) {
-        List<ChessMove> kingMoves = new ArrayList<>();
-        ChessPosition startPosition = position;
+        startPosition = position;
+        chessBoard = chessboard;
         int row = startPosition.getRow();
         int col = startPosition.getColumn();
         //check (row+1, col)
-        if (row+1 < 9) {
-            position = new ChessPosition(row+1, col);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    kingMoves.add(new ChessMove(startPosition, position, null));
-                }
 
-            } else {
-                kingMoves.add(new ChessMove(startPosition, position, null));
-            }
+        if (row+1 < 9) {
+            checkNAdd(row+1,col);
         }
 
         //check (row+1, col+1)
         if (row+1 < 9 && col+1 < 9) {
-            position = new ChessPosition(row+1, col+1);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    kingMoves.add(new ChessMove(startPosition, position, null));
-                }
-
-            } else {
-                kingMoves.add(new ChessMove(startPosition, position, null));
-            }
+            checkNAdd(row+1,col+1);
         }
         //check (row, col+1)
         if (col+1 < 9) {
-            position = new ChessPosition(row, col+1);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    kingMoves.add(new ChessMove(startPosition, position, null));
-                }
-
-            } else {
-                kingMoves.add(new ChessMove(startPosition, position, null));
-            }
+            checkNAdd(row,col+1);
         }
         //check (row-1, col+1)
         if (row-1 > 0 && col+1 < 9) {
-            position = new ChessPosition(row-1, col+1);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    kingMoves.add(new ChessMove(startPosition, position, null));
-                }
-
-            } else {
-                kingMoves.add(new ChessMove(startPosition, position, null));
-            }
+            checkNAdd(row-1,col+1);
         }
         //check (row-1, col)
         if (row-1 > 0) {
-            position = new ChessPosition(row-1, col);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    kingMoves.add(new ChessMove(startPosition, position, null));
-                }
-
-            } else {
-                kingMoves.add(new ChessMove(startPosition, position, null));
-            }
+            checkNAdd(row-1,col);
         }
         //check (row-1, col-1)
         if (row-1 > 0 && col-1 > 0) {
-            position = new ChessPosition(row-1, col-1);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    kingMoves.add(new ChessMove(startPosition, position, null));
-                }
-
-            } else {
-                kingMoves.add(new ChessMove(startPosition, position, null));
-            }
+            checkNAdd(row-1,col-1);
         }
         //check (row, col-1)
         if (col-1 > 0) {
-            position = new ChessPosition(row, col-1);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    kingMoves.add(new ChessMove(startPosition, position, null));
-                }
-
-            } else {
-                kingMoves.add(new ChessMove(startPosition, position, null));
-            }
+            checkNAdd(row,col-1);
         }
         //check (row+1, col-1)
         if (row+1 < 9 && col-1 > 0) {
-            position = new ChessPosition(row+1, col-1);
-            if (chessboard.getPiece(position) != null) {
-                if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                    kingMoves.add(new ChessMove(startPosition, position, null));
-                }
-
-            } else {
-                kingMoves.add(new ChessMove(startPosition, position, null));
-            }
+            checkNAdd(row+1,col-1);
         }
 
-        return kingMoves;
+        return moves;
+    }
+
+    @Override
+    public boolean checkNAdd(int row, int col) {
+        ChessPosition position = new ChessPosition(row, col);
+        if (chessBoard.getPiece(position) != null) {
+            if (chessBoard.getPiece(position).getTeamColor() != chessBoard.getPiece(startPosition).getTeamColor()) {
+                moves.add(new ChessMove(startPosition, position, null));
+            }
+
+        } else {
+            moves.add(new ChessMove(startPosition, position, null));
+        }
+        return true;
     }
 }
