@@ -151,21 +151,17 @@ public class ChessBoard implements Cloneable{
 
     @Override
     public ChessBoard clone() {
-        try {
-            ChessBoard clone = (ChessBoard) super.clone();
-            ChessPiece[][] cloneBoard = new ChessPiece[9][9];
-            for (int i = 0; i < 9; i++) {
-                for (int j = 0; j < 9; j++) {
+        ChessBoard clone = new ChessBoard();
+        ChessPiece[][] cloneBoard = new ChessPiece[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (squares[i][j] != null) {
                     ChessPiece pieceClone = squares[i][j].clone();
                     cloneBoard[i][j] = pieceClone;
                 }
             }
-            clone.squares = cloneBoard;
-            return clone;
-
-
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
         }
+        clone.squares = cloneBoard;
+        return clone;
     }
 }
