@@ -8,7 +8,7 @@ import java.util.*;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessPiece {
+public class ChessPiece implements Cloneable{
     private PieceType pieceType;
     private ChessGame.TeamColor pieceColor;
 
@@ -100,5 +100,11 @@ public class ChessPiece {
             }
         }
         return (colorHash*31) + typeHash;
+    }
+
+    @Override
+    public ChessPiece clone() {
+        ChessPiece clone = new ChessPiece(pieceColor, pieceType);
+        return clone;
     }
 }
