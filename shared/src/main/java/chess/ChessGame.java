@@ -51,23 +51,26 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+//  validMoves: Takes as input a position on the chessboard and returns all moves the
+//    piece there can legally make. If there is no piece at that location, this method returns null.
+//    A move is valid if it is a "piece move" for the piece at the input location and making that move
+//    would not leave the team’s king in danger of check.
+
+
         List<ChessMove> validMoves = new ArrayList<>();
-        ChessBoard boardCopy = board.clone(); //make this a deep copy
 
         if (board.getPiece(startPosition) == null){
             return validMoves;
         } else {
-            List<ChessMove> pieceMoves = (List<ChessMove>) board.getPiece(startPosition).pieceMoves(board, startPosition);
             //get pieceMoves at that position
+            List<ChessMove> pieceMoves = (List<ChessMove>) board.getPiece(startPosition).pieceMoves(board, startPosition);
             // for each move on PieceMoves
             for (int i = 0; i < pieceMoves.size(); i++) {
-
+                if (isValidMove(pieceMoves.get(i))) {
+                    ChessMove moveClone = pieceMoves.get(i).clone();
+                    validMoves.add(moveClone);
+                }
             }
-                // create a copy of the board
-                // make move
-                // if king is not in check after the move is made
-                    // add the valid moves collection.
-            //return valid moves collection.
         }
         return validMoves;
     }
@@ -79,7 +82,28 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+//  makeMove: Receives a given move and executes it, provided it is a legal move.
+//    If the move is illegal, it throws an InvalidMoveException. A move is illegal if
+//    it is not a "valid" move for the piece at the starting location, or if it’s not
+//    the corresponding team's turn.
+        ChessPosition startPosition = move.getStartPosition();
+        List<ChessMove> validMovesList = (List<ChessMove>) validMoves(startPosition);
+        if (!validMovesList.contains(move)) {
+            throw new InvalidMoveException("Invalid Move");
+        } else {
+            //make move
+            if (move.getPromotionPiece() == null) {
+                ChessPiece newPiece = board.getPiece(move.getStartPosition()).clone();
+                board.addPiece(move.getEndPosition(), newPiece);
+                board.addPiece(move.getStartPosition(), null);
+            } else {
+                ChessPiece.PieceType type = move.getPromotionPiece();
+                TeamColor color = board.getPiece(move.getStartPosition()).getTeamColor();
+                ChessPiece newPiece = new ChessPiece(color, type);
+                board.addPiece(move.getEndPosition(), newPiece);
+                board.addPiece(move.getStartPosition(), null);
+            }
+        }
     }
 
     /**
@@ -89,11 +113,8 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        // my team is in check if my king is in danger of being taken. so, if I run piecemoves on all the pieces on the board
-        // that don't share my color, and my king's position is on any of those lists, then my king is in check
-        //find my king
+//  isInCheck: Returns true if the specified team’s King could be captured by an opposing piece.
         ChessPosition kingPosition = findMyKing(teamColor);
-
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 ChessPosition position = new ChessPosition(i,j);
@@ -122,6 +143,12 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
+//  isInCheckmate: Returns true if the given team has no way to protect their king from being captured.
+
+        // if (isInCheck())
+            //if no validMoves()
+                // return true
+        //return false;
         throw new RuntimeException("Not implemented");
     }
 
@@ -133,6 +160,14 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+//  isInStalemate: Returns true if the given team has no legal moves but their king is not in immediate danger.
+        // if the king is not in check
+        //for every piece on the board
+            // if piece is teamColor
+                //if there are valid moves
+                    // return false
+        //return true
+
         throw new RuntimeException("Not implemented");
     }
 
@@ -142,12 +177,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        System.out.println("Before: ");
-        System.out.print(board.toString());
-        System.out.print(this.board.toString());
         this.board = board.clone();
-        System.out.println("After: ");
-        System.out.print(this.board.toString());
     }
 
     /**
@@ -159,7 +189,7 @@ public class ChessGame {
         throw new RuntimeException("Not implemented");
     }
 
-    public ChessPosition findMyKing(TeamColor teamColor) {
+    private ChessPosition findMyKing(TeamColor teamColor) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 ChessPosition position = new ChessPosition(i,j);
@@ -172,5 +202,12 @@ public class ChessGame {
             }
         }
         return null;
+    }
+
+    private boolean isValidMove(ChessMove move) {
+        // used by ValidMoves to make a move and check the outcome. This only acts on a copy board
+        // makes a move on a copy board and then checks if the king is in check of checkmate.
+        // doesn't need to check if this is a valid move, because it should only be called by ValidMoves
+        return true;
     }
 }
