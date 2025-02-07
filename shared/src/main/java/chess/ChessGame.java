@@ -151,13 +151,13 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
 //  isInCheckmate: Returns true if the given team has no way to protect their king from being captured.
-        if (isInCheck(teamColor)){
+        if (isInCheck(teamColor)) {
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {
-                    if (board.getPiece(new ChessPosition(i,j)) != null) {
-                        ChessPiece pieceCheck = board.getPiece(new ChessPosition(i,j)).clone();
+                    if (board.getPiece(new ChessPosition(i, j)) != null) {
+                        ChessPiece pieceCheck = board.getPiece(new ChessPosition(i, j)).clone();
                         if (pieceCheck.getTeamColor() == teamColor) {
-                            if (validMoves(new ChessPosition(i,j)) != null) {
+                            if (!validMoves(new ChessPosition(i, j)).isEmpty()) {
                                 return false;
                             }
                         }
@@ -165,9 +165,8 @@ public class ChessGame {
                 }
             }
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -186,7 +185,7 @@ public class ChessGame {
                     if (board.getPiece(new ChessPosition(i,j)) != null) {
                         ChessPiece pieceCheck = board.getPiece(new ChessPosition(i,j)).clone();
                         if (pieceCheck.getTeamColor() == teamColor) {
-                            if (validMoves(new ChessPosition(i,j)) != null) {
+                            if (!validMoves(new ChessPosition(i,j)).isEmpty()) {
                                 return false;
                             }
                         }
