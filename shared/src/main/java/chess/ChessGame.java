@@ -68,6 +68,9 @@ public class ChessGame {
                 }
             }
         }
+        if (board.getPiece(startPosition) == null) {
+            return null;
+        }
         return validMoves;
     }
 
@@ -238,19 +241,21 @@ public class ChessGame {
         TeamColor color = boardCopy.getPiece(move.getStartPosition()).getTeamColor();;
         //make move
         if (move.getPromotionPiece() == null) {
-            ChessPiece newPiece = boardCopy.getPiece(move.getStartPosition()).clone();
-            boardCopy.addPiece(move.getEndPosition(), newPiece);
-            boardCopy.addPiece(move.getStartPosition(), null);
+            ChessPiece newPiece = board.getPiece(move.getStartPosition()).clone();
+            board.addPiece(move.getEndPosition(), newPiece);
+            board.addPiece(move.getStartPosition(), null);
         } else {
             ChessPiece.PieceType type = move.getPromotionPiece();
             ChessPiece newPiece = new ChessPiece(color, type);
-            boardCopy.addPiece(move.getEndPosition(), newPiece);
-            boardCopy.addPiece(move.getStartPosition(), null);
+            board.addPiece(move.getEndPosition(), newPiece);
+            board.addPiece(move.getStartPosition(), null);
         }
 
         if (isInCheck(color)) {
+            board = boardCopy;
             return false;
         } else {
+            board = boardCopy;
             return true;
         }
     }
