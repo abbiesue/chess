@@ -10,6 +10,7 @@ import java.util.Arrays;
  */
 public class ChessBoard implements Cloneable{
     private ChessPiece[][] squares;
+
     public ChessBoard() {
         squares = new ChessPiece[9][9];
     }
@@ -151,6 +152,7 @@ public class ChessBoard implements Cloneable{
 
     @Override
     public ChessBoard clone() {
+
         ChessBoard clone = new ChessBoard();
         ChessPiece[][] cloneBoard = new ChessPiece[9][9];
         for (int i = 0; i < 9; i++) {
