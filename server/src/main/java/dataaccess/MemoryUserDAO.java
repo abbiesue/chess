@@ -14,8 +14,17 @@ public class MemoryUserDAO implements UserDAO{
     }
 
     @Override
-    public void getUser() {
-
+    public UserData getUser(String username) {
+        if (Users.isEmpty()){
+            return null;
+        } else {
+            for (int i=0; i<Users.size(); i++) {
+                if (Users.get(i).username() == username) {
+                    return Users.get(i);
+                }
+            }
+        }
+        return null;
     }
 
     @Override
