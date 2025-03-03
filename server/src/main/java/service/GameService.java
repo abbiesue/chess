@@ -1,9 +1,6 @@
 package service;
 
-import chess.ChessGame;
-import model.GameData;
-
-import java.util.List;
+import records.*;
 
 public class GameService {
     public ListResult list(ListRequest listRequest) {
@@ -17,11 +14,5 @@ public class GameService {
     public void join(JoinRequest joinRequest) {
 
     }
-
-    //records:
-    public record ListRequest(String authToken){}
-    public record ListResult(List<GameData> games){}
-    public record CreateRequest(String authToken, String gameName){}
-    public record CreateResult(String gameID) {}
-    public record JoinRequest(String authtoken, ChessGame.TeamColor playerColor, String gameID) {}
 }
+
