@@ -9,8 +9,8 @@ public class MemoryAuthDAO implements AuthDAO {
     private List<AuthData> Auths = new ArrayList<>();
 
     @Override
-    public void createAuth() {
-
+    public void createAuth(AuthData authdata) {
+        Auths.add(authdata);
     }
 
     @Override

@@ -9,8 +9,9 @@ public class MemoryUserDAO implements UserDAO{
     private List<UserData> Users = new ArrayList<>();
 
     @Override
-    public void createUser() {
-
+    public void createUser(UserData userData) {
+        //implement for register service method
+        Users.add(userData);
     }
 
     @Override
