@@ -19,11 +19,12 @@ public class UserHandler {
     }
 
     public Object register(Request req, Response res) throws ResponseException {
-        RegisterRequest request = new Gson().fromJson(req.body(), (Type) UserData.class);
+        RegisterRequest request = new Gson().fromJson(req.body(), (Type) RegisterRequest.class);
         RegisterResult result;
         try {
             result = userService.register(request);
         } catch (ResponseException e) {
+            res.type("application/json");
             return e.toJson();
         }
         return new Gson().toJson(result);
