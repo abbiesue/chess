@@ -29,7 +29,7 @@ public class MemoryUserDAO implements UserDAO{
     }
 
     @Override
-    public void deleteUser() {
+    public void deleteUser(String username) {
 
     }
 }

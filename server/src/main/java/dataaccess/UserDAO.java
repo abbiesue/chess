@@ -5,5 +5,5 @@ import model.UserData;
 public interface UserDAO {
     public void createUser(UserData userData);
     public UserData getUser(String username);
-    void deleteUser();
+    void deleteUser(String username);
 }

@@ -7,6 +7,7 @@ import model.UserData;
 import records.*;
 import server.ResponseException;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class UserService {
@@ -36,13 +37,30 @@ public class UserService {
         return new RegisterResult(authData.username(), authData.authToken());
     }
 
-    public LoginResult login(LoginRequest loginRequest){
-        //implement
-        return null;
+    public LoginResult login(LoginRequest loginRequest) throws ResponseException {
+        //store userData
+        UserData userData = userDAO.getUser(loginRequest.username());
+        //throw exceptions
+        if (userData == null || !Objects.equals(userData.password(), loginRequest.password())) {
+            throw new ResponseException(401, "Error: unauthorized");
+        }
+        if (authDAO.getAuthByUsername(loginRequest.username()) != null) {
+            throw new ResponseException(401, "Error: unauthorized");
+        }
+        AuthData authData = new AuthData(generateToken(), loginRequest.username());
+        authDAO.createAuth(authData);
+        return new LoginResult(authData.username(), authData.authToken());
     }
 
-    public void logout(LogoutRequest logoutRequest) {
-        //implement
+    public LogoutResult logout(LogoutRequest logoutRequest) throws ResponseException {
+        //store AuthData
+        AuthData authData = authDAO.getAuth(logoutRequest.authToken());
+        //throw exceptions
+        if (authData == null) {
+            throw new ResponseException(401, "Error: unauthorized");
+        }
+        authDAO.deleteAuth(authData.authToken());
+        return new LogoutResult(true);
     }
 
     public static String generateToken() {
