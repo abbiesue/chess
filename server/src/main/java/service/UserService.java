@@ -10,23 +10,28 @@ import server.ResponseException;
 import java.util.UUID;
 
 public class UserService {
-    public static RegisterResult register(RegisterRequest registerRequest) throws ResponseException {
-        //create DAOs
-        MemoryUserDAO udao = new MemoryUserDAO();
-        MemoryAuthDAO adao = new MemoryAuthDAO();
+    public static MemoryUserDAO userDAO;
+    public static MemoryAuthDAO authDAO;
+
+    public UserService() {
+        userDAO = new MemoryUserDAO();
+        authDAO = new MemoryAuthDAO();
+    }
+
+    public RegisterResult register(RegisterRequest registerRequest) throws ResponseException {
         //throw exceptions
         if (registerRequest.username() == null || registerRequest.email() == null || registerRequest.password() == null) {
             throw new ResponseException(400, "Error: bad request");
         }
-        if (udao.getUser(registerRequest.username()) != null) {
+        if (userDAO.getUser(registerRequest.username()) != null) {
             throw new ResponseException(403, "Error: already taken");
         }
         //create a new user
         UserData newUser = new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email());
-        udao.createUser(newUser);
+        userDAO.createUser(newUser);
         //create auth data
         AuthData authData = new AuthData(generateToken(), registerRequest.username());
-        adao.createAuth(authData);
+        authDAO.createAuth(authData);
         //return successful result
         return new RegisterResult(authData.username(), authData.authToken());
     }
