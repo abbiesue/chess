@@ -4,7 +4,6 @@ import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
 import records.ClearResult;
-import server.ResponseException;
 
 public class ClearService {
     MemoryUserDAO userDAO;
