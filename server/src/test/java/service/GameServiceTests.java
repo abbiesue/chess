@@ -28,7 +28,8 @@ public class GameServiceTests {
         gameService = new GameService(gameDAO, authDAO);
         userService = new UserService(userDAO, authDAO);
 
-        RegisterResult existingResult = userService.register(new RegisterRequest(existingUser.username(), existingUser.password(), existingUser.email()));
+        RegisterResult existingResult = userService.register(
+                new RegisterRequest(existingUser.username(), existingUser.password(), existingUser.email()));
         authToken = existingResult.authToken();
         gameService.create(new CreateRequest(authToken, "existingGame"));
     }

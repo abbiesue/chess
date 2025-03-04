@@ -7,26 +7,26 @@ import java.util.List;
 import java.util.Objects;
 
 public class MemoryUserDAO implements UserDAO{
-    public List<UserData> Users;
+    public List<UserData> users = new ArrayList<>();;
 
     public MemoryUserDAO() {
-        Users = new ArrayList<>();
+        users = new ArrayList<>();
     }
 
     @Override
     public void createUser(UserData userData) {
         //implement for register service method
-        Users.add(userData);
+        users.add(userData);
     }
 
     @Override
     public UserData getUser(String username) {
-        if (Users.isEmpty()){
+        if (users.isEmpty()){
             return null;
         } else {
-            for (int i=0; i<Users.size(); i++) {
-                if (Objects.equals(Users.get(i).username(), username)) {
-                    return Users.get(i);
+            for (int i = 0; i< users.size(); i++) {
+                if (Objects.equals(users.get(i).username(), username)) {
+                    return users.get(i);
                 }
             }
         }
@@ -35,10 +35,10 @@ public class MemoryUserDAO implements UserDAO{
 
     @Override
     public void deleteUser(String username) {
-        if (!Users.isEmpty()){
-            for (int i=0; i<Users.size(); i++) {
-                if (Objects.equals(Users.get(i).username(), username)) {
-                    Users.remove(i);
+        if (!users.isEmpty()){
+            for (int i = 0; i< users.size(); i++) {
+                if (Objects.equals(users.get(i).username(), username)) {
+                    users.remove(i);
                 }
             }
         }
@@ -46,9 +46,9 @@ public class MemoryUserDAO implements UserDAO{
 
     @Override
     public void clear() {
-        for (int i = Users.size()-1; i >= 0; i--){
-            Users.remove(i);
+        for (int i = users.size()-1; i >= 0; i--){
+            users.remove(i);
         }
-        Users = new ArrayList<>();
+        users = new ArrayList<>();
     }
 }

@@ -7,21 +7,21 @@ import java.util.List;
 import java.util.Objects;
 
 public class MemoryAuthDAO implements AuthDAO {
-    public List<AuthData> Auths = new ArrayList<>();
+    public List<AuthData> auths = new ArrayList<>();
 
     @Override
     public void createAuth(AuthData authdata) {
-        Auths.add(authdata);
+        auths.add(authdata);
     }
 
     @Override
     public AuthData getAuth(String authToken) {
-        if (Auths.isEmpty()) {
+        if (auths.isEmpty()) {
             return null;
         }
-        for (int i=0; i<Auths.size(); i++) {
-            if (Objects.equals(Auths.get(i).authToken(), authToken)) {
-                return Auths.get(i);
+        for (int i = 0; i< auths.size(); i++) {
+            if (Objects.equals(auths.get(i).authToken(), authToken)) {
+                return auths.get(i);
             }
         }
         return null;
@@ -29,12 +29,12 @@ public class MemoryAuthDAO implements AuthDAO {
 
     @Override
     public void deleteAuth(String authToken) {
-        if (Auths.isEmpty() || authToken == null) {
+        if (auths.isEmpty() || authToken == null) {
             return;
         } else {
-            for (int i=0; i<Auths.size(); i++) {
-                if (Auths.get(i).authToken() == authToken) {
-                    Auths.remove(i);
+            for (int i = 0; i< auths.size(); i++) {
+                if (auths.get(i).authToken() == authToken) {
+                    auths.remove(i);
                 }
             }
         }
@@ -42,9 +42,9 @@ public class MemoryAuthDAO implements AuthDAO {
 
     @Override
     public void clear() {
-        for (int i = Auths.size()-1; i >= 0; i--){
-            Auths.remove(i);
+        for (int i = auths.size()-1; i >= 0; i--){
+            auths.remove(i);
         }
-        Auths = new ArrayList<>();
+        auths = new ArrayList<>();
     }
 }

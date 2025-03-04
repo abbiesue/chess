@@ -8,28 +8,28 @@ import java.util.Collection;
 import java.util.List;
 
 public class MemoryGameDAO implements GameDAO {
-    public List<GameData> Games;
+    public List<GameData> games;
     private int nextID = 1;
 
     public MemoryGameDAO() {
-        Games = new ArrayList<>();
+        games = new ArrayList<>();
     }
 
     @Override
     public GameData createGame(String gameName) {
         GameData newGame = new GameData(nextID++, null, null, gameName, new ChessGame());
-        Games.add(newGame);
+        games.add(newGame);
         return newGame;
     }
 
     @Override
     public GameData getGame(int gameID) {
-        if (Games.isEmpty()) {
+        if (games.isEmpty()) {
             return null;
         } else {
-            for (int i = 0; i < Games.size(); i++) {
-                if (Games.get(i).gameID() == gameID) {
-                    return Games.get(i);
+            for (int i = 0; i < games.size(); i++) {
+                if (games.get(i).gameID() == gameID) {
+                    return games.get(i);
                 }
             }
         }
@@ -38,7 +38,7 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public Collection<GameData> listGames() {
-        return Games;
+        return games;
     }
 
     @Override
@@ -51,17 +51,17 @@ public class MemoryGameDAO implements GameDAO {
             newGame = new GameData(oldGame.gameID(), oldGame.whiteUsername(), playerUsername, oldGame.gameName(), oldGame.game());
         }
         deleteGame(oldGame.gameID());
-        Games.add(newGame);
+        games.add(newGame);
     }
 
     @Override
     public void deleteGame(int gameID) {
-        if (Games.isEmpty()) {
+        if (games.isEmpty()) {
             return;
         } else {
-            for (int i = 0; i < Games.size(); i++) {
-                if (Games.get(i).gameID() == gameID) {
-                    Games.remove(i);
+            for (int i = 0; i < games.size(); i++) {
+                if (games.get(i).gameID() == gameID) {
+                    games.remove(i);
                 }
             }
         }
@@ -69,9 +69,9 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public void clear() {
-        for (int i = Games.size()-1; i >= 0; i--){
-            Games.remove(i);
+        for (int i = games.size()-1; i >= 0; i--){
+            games.remove(i);
         }
-        Games = new ArrayList<>();
+        games = new ArrayList<>();
     }
 }

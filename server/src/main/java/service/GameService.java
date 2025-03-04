@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class GameService {
-    final ResponseException BAD_REQUEST = new ResponseException(400, "Error: bad request");
-    final ResponseException UNAUTHORIZED = new ResponseException(401, "Error: unauthorized");
-    final ResponseException TAKEN = new ResponseException(403, "Error: already taken");
+    static final ResponseException BAD_REQUEST = new ResponseException(400, "Error: bad request");
+    static final ResponseException UNAUTHORIZED = new ResponseException(401, "Error: unauthorized");
+    static final ResponseException TAKEN = new ResponseException(403, "Error: already taken");
 
 
     MemoryGameDAO gameDAO;
