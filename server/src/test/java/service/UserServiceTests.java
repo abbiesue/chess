@@ -1,5 +1,7 @@
 package service;
 
+import dataaccess.MemoryAuthDAO;
+import dataaccess.MemoryUserDAO;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,12 +12,16 @@ import server.ResponseException;
 
 public class UserServiceTests {
     UserService userService;
+    MemoryAuthDAO authDAO;
+    MemoryUserDAO userDAO;
     UserData existingUser = new UserData("existingUser", "existingPassword", "existingEmail");
     UserData newUser = new UserData("newUser", "newPassword", "newEmail");
 
     @BeforeEach
     public void init() throws ResponseException {
-        userService = new UserService();
+        authDAO = new MemoryAuthDAO();
+        userDAO = new MemoryUserDAO();
+        userService = new UserService(userDAO, authDAO);
         //add an existing user
         RegisterResult registerExisting = userService.register(new RegisterRequest(existingUser.username(),
                 existingUser.password(), existingUser.email()));

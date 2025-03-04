@@ -11,12 +11,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class UserService {
-    public static MemoryUserDAO userDAO;
-    public static MemoryAuthDAO authDAO;
+    public MemoryUserDAO userDAO;
+    public MemoryAuthDAO authDAO;
 
-    public UserService() {
-        userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
+    public UserService(MemoryUserDAO userDAO, MemoryAuthDAO authDAO) {
+        this.userDAO = userDAO;
+        this.authDAO = authDAO;
     }
 
     public RegisterResult register(RegisterRequest registerRequest) throws ResponseException {

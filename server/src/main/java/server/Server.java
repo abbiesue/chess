@@ -1,5 +1,8 @@
 package server;
 
+import dataaccess.MemoryAuthDAO;
+import dataaccess.MemoryGameDAO;
+import dataaccess.MemoryUserDAO;
 import handler.ClearHandler;
 import handler.GameHandler;
 import handler.UserHandler;
@@ -10,9 +13,17 @@ public class Server {
     GameHandler gameHandler;
     ClearHandler clearHandler;
 
+    MemoryUserDAO userDAO;
+    MemoryAuthDAO authDAO;
+    MemoryGameDAO gameDAO;
+
     public Server() {
-        userHandler = new UserHandler();
-        gameHandler = new GameHandler();
+        userDAO = new MemoryUserDAO();
+        authDAO = new MemoryAuthDAO();
+        gameDAO = new MemoryGameDAO();
+
+        userHandler = new UserHandler(userDAO, authDAO);
+        gameHandler = new GameHandler(gameDAO, authDAO);
         clearHandler = new ClearHandler();
     }
 

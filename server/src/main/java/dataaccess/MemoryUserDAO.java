@@ -7,7 +7,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class MemoryUserDAO implements UserDAO{
-    private List<UserData> Users = new ArrayList<>();
+    private List<UserData> Users;
+
+    public MemoryUserDAO() {
+        Users = new ArrayList<>();
+    }
 
     @Override
     public void createUser(UserData userData) {
