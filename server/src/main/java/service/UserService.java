@@ -60,7 +60,7 @@ public class UserService {
             throw new ResponseException(401, "Error: unauthorized");
         }
         authDAO.deleteAuth(authData.authToken());
-        return new LogoutResult(true);
+        return new LogoutResult();
     }
 
     public static String generateToken() {

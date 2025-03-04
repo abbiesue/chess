@@ -4,6 +4,7 @@ import model.UserData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MemoryUserDAO implements UserDAO{
     private List<UserData> Users = new ArrayList<>();
@@ -20,7 +21,7 @@ public class MemoryUserDAO implements UserDAO{
             return null;
         } else {
             for (int i=0; i<Users.size(); i++) {
-                if (Users.get(i).username() == username) {
+                if (Objects.equals(Users.get(i).username(), username)) {
                     return Users.get(i);
                 }
             }
