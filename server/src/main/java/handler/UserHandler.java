@@ -35,10 +35,6 @@ public class UserHandler {
             res.status(e.StatusCode());
             res.type("application/json");
             return e.toJson();
-        } catch (Exception e) {
-            res.status(500);
-            res.type("application/json");
-            return new Gson().toJson(Map.of("message", "Error: (description of error)", "status", 500));
         }
         res.status(200);
         res.type("application/json");
@@ -54,33 +50,24 @@ public class UserHandler {
             res.status(e.StatusCode());
             res.type("application/json");
             return e.toJson();
-        } catch (Exception e) {
-            res.status(500);
-            res.type("application/json");
-            return new Gson().toJson(Map.of("message", "Error: (description of error)", "status", 500));
         }
         res.status(200);
         res.type("application/json");
         return new Gson().toJson(result);
     }
 
-//    public Object logout(Request req, Response res) throws ResponseException {
-//        LogoutRequest request = new Gson().fromJson(String.valueOf(req.header("authorization"), (Type) LogoutRequest.class);
-//        LogoutResult result;
-//        try {
-//            result = userService.logout(request);
-//        } catch (ResponseException e) {
-//            res.status(e.StatusCode());
-//            res.type("application/json");
-//            return e.toJson();
-//        }
-////        } catch (Exception e) {
-////            res.status(500);
-////            res.type("application/json");
-////            return new Gson().toJson(Map.of("message", "Error: (description of error)", "status", 500));
-////        }
-//        res.status(200);
-//        res.type("application/json");
-//        return new Gson().toJson(result);
-//    }
+    public Object logout(Request req, Response res) throws ResponseException {
+        LogoutRequest request = new LogoutRequest(req.headers("Authorization"));
+        LogoutResult result;
+        try {
+            result = userService.logout(request);
+        } catch (ResponseException e) {
+            res.status(e.StatusCode());
+            res.type("application/json");
+            return e.toJson();
+        }
+        res.status(200);
+        res.type("application/json");
+        return new Gson().toJson(result);
+    }
 }
