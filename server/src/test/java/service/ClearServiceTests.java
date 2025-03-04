@@ -32,13 +32,13 @@ public class ClearServiceTests {
         RegisterResult userResult3 = userService.register(new RegisterRequest("user3", "password3", "email3"));
 
         //populate games
-        CreateResult gameResult1 = gameService.create(new CreateRequest(userResult2.authToken(), "game1"));
-        CreateResult gameResult2 = gameService.create(new CreateRequest(userResult3.authToken(), "game2"));
+        gameService.create(new CreateRequest(userResult2.authToken(), "game1"));
+        gameService.create(new CreateRequest(userResult3.authToken(), "game2"));
     }
 
     @Test
     @DisplayName("clear success")
-    public void clearSuccessTest() throws ResponseException {
+    public void clearSuccessTest() {
         clearService.clear();
         Assertions.assertTrue(userDAO.Users.isEmpty());
         Assertions.assertTrue(gameDAO.Games.isEmpty());

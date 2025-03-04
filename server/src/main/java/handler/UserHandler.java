@@ -2,31 +2,22 @@ package handler;
 
 import com.google.gson.Gson;
 import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
-import model.UserData;
 import records.*;
 import server.ResponseException;
 import service.UserService;
 import spark.Request;
 import spark.Response;
-
-import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.Map;
 
 public class UserHandler {
     public UserService userService;
-    public MemoryUserDAO userDAO;
-    public MemoryAuthDAO authDAO;
 
     public UserHandler(MemoryUserDAO userDAO, MemoryAuthDAO authDAO) {
-        this.userDAO = userDAO;
-        this.authDAO = authDAO;
         userService = new UserService(userDAO, authDAO);
     }
 
-    public Object register(Request req, Response res) throws ResponseException {
+    public Object register(Request req, Response res) {
         RegisterRequest request = new Gson().fromJson(req.body(), (Type) RegisterRequest.class);
         RegisterResult result;
         try {
@@ -41,7 +32,7 @@ public class UserHandler {
         return new Gson().toJson(result);
     }
 
-    public Object login(Request req, Response res) throws ResponseException {
+    public Object login(Request req, Response res) {
         LoginRequest request = new Gson().fromJson(req.body(), (Type) LoginRequest.class);
         LoginResult result;
         try {
@@ -56,7 +47,7 @@ public class UserHandler {
         return new Gson().toJson(result);
     }
 
-    public Object logout(Request req, Response res) throws ResponseException {
+    public Object logout(Request req, Response res) {
         LogoutRequest request = new LogoutRequest(req.headers("Authorization"));
         LogoutResult result;
         try {

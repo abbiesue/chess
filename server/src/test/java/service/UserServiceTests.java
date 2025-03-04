@@ -25,7 +25,7 @@ public class UserServiceTests {
         //add an existing user
         RegisterResult registerExisting = userService.register(new RegisterRequest(existingUser.username(),
                 existingUser.password(), existingUser.email()));
-        LogoutResult logoutExisting = userService.logout(new LogoutRequest(registerExisting.authToken()));
+        userService.logout(new LogoutRequest(registerExisting.authToken()));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("register existing user")
-    public void registerExistingUser() throws ResponseException {
+    public void registerExistingUser() {
         RegisterRequest copyRequest = new RegisterRequest(existingUser.username(), existingUser.password(),
                 existingUser.email());
         Assertions.assertThrows(ResponseException.class, ()-> {userService.register(copyRequest);});
@@ -76,7 +76,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("login wrong password")
-    public void loginWrongPassword() throws ResponseException {
+    public void loginWrongPassword() {
         LoginRequest newLogin = new LoginRequest(existingUser.username(), "wrongPassword");
         Assertions.assertThrows(ResponseException.class, ()-> {userService.login(newLogin);});
     }
@@ -90,7 +90,7 @@ public class UserServiceTests {
 
         //logout
         LogoutRequest logoutRequest = new LogoutRequest(loginResult.authToken());
-        Assertions.assertDoesNotThrow(()-> {LogoutResult logoutResult = userService.logout(logoutRequest);});
+        Assertions.assertDoesNotThrow(()-> {userService.logout(logoutRequest);});
     }
 
     @Test

@@ -30,7 +30,7 @@ public class GameServiceTests {
 
         RegisterResult existingResult = userService.register(new RegisterRequest(existingUser.username(), existingUser.password(), existingUser.email()));
         authToken = existingResult.authToken();
-        CreateResult existingGame = gameService.create(new CreateRequest(authToken, "existingGame"));
+        gameService.create(new CreateRequest(authToken, "existingGame"));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class GameServiceTests {
     }
     @Test
     @DisplayName("listGames success")
-    public void listGamesSuccess() throws ResponseException {
+    public void listGamesSuccess() {
         Assertions.assertDoesNotThrow(()->{gameService.list(new ListRequest(authToken));});
     }
     @Test
@@ -66,7 +66,7 @@ public class GameServiceTests {
     //joinGameSuccess
     @Test
     @DisplayName("joinGame success")
-    public void joinGameSuccess() throws ResponseException {
+    public void joinGameSuccess() {
         Assertions.assertDoesNotThrow(()->{gameService.join(new JoinRequest(authToken, "WHITE", 1));});
     }
     //joinGameBadRequest
