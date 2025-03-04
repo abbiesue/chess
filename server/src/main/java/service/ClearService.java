@@ -1,11 +1,26 @@
 package service;
 
+import dataaccess.MemoryAuthDAO;
+import dataaccess.MemoryGameDAO;
+import dataaccess.MemoryUserDAO;
 import records.ClearResult;
 import server.ResponseException;
 
 public class ClearService {
-    public static ClearResult clear() throws ResponseException {
-        //implement after createGame()
-        return null;
+    MemoryUserDAO userDAO;
+    MemoryGameDAO gameDAO;
+    MemoryAuthDAO authDAO;
+
+    public ClearService(MemoryUserDAO userDAO, MemoryGameDAO gameDAO, MemoryAuthDAO authDAO) {
+        this.userDAO = userDAO;
+        this.gameDAO = gameDAO;
+        this.authDAO = authDAO;
+    }
+
+    public ClearResult clear() throws ResponseException {
+        userDAO.clear();
+        gameDAO.clear();
+        authDAO.clear();
+        return new ClearResult();
     }
 }

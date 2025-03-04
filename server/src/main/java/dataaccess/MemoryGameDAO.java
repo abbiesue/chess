@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class MemoryGameDAO implements GameDAO {
-    private List<GameData> Games;
+    public List<GameData> Games;
     private int nextID = 1;
 
     public MemoryGameDAO() {
@@ -42,12 +42,36 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     @Override
-    public void updateGame() {
-
+    public void updateGame(int gameID, ChessGame.TeamColor playerColor, String playerUsername) {
+        GameData oldGame = getGame(gameID);
+        GameData newGame;
+        if (playerColor == ChessGame.TeamColor.WHITE) {
+            newGame = new GameData(oldGame.gameID(), playerUsername, oldGame.blackUsername(), oldGame.gameName(), oldGame.game());
+        } else {
+            newGame = new GameData(oldGame.gameID(), oldGame.whiteUsername(), playerUsername, oldGame.gameName(), oldGame.game());
+        }
+        deleteGame(oldGame.gameID());
+        Games.add(newGame);
     }
 
     @Override
-    public void deleteGame() {
+    public void deleteGame(int gameID) {
+        if (Games.isEmpty()) {
+            return;
+        } else {
+            for (int i = 0; i < Games.size(); i++) {
+                if (Games.get(i).gameID() == gameID) {
+                    Games.remove(i);
+                }
+            }
+        }
+    }
 
+    @Override
+    public void clear() {
+        for (int i = Games.size()-1; i >= 0; i--){
+            Games.remove(i);
+        }
+        Games = new ArrayList<>();
     }
 }

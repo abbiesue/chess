@@ -39,14 +39,14 @@ public class Server {
         Spark.post("/session", (request, response) -> {
             return userHandler.login(request, response);
         });
-        Spark.delete("/session", (request, response) -> {
-            return userHandler.logout(request, response);
-        });
+//        Spark.delete("/session", (request, response) -> {
+//            return userHandler.logout(request, response);
+//        });
 
 
-        Spark.delete("/db", (request, response) -> {
-            return clearHandler.clear(request,response);
-        });
+//        Spark.delete("/db", (request, response) -> {
+//            return clearHandler.clear(request,response);
+//        });
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();

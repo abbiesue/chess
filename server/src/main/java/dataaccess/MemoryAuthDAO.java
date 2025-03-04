@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MemoryAuthDAO implements AuthDAO {
-    private List<AuthData> Auths = new ArrayList<>();
+    public List<AuthData> Auths = new ArrayList<>();
 
     @Override
     public void createAuth(AuthData authdata) {
@@ -27,19 +27,6 @@ public class MemoryAuthDAO implements AuthDAO {
         return null;
     }
 
-    public AuthData getAuthByUsername(String username) {
-        if (Auths.isEmpty()) {
-            return null;
-        } else {
-            for (int i=0; i<Auths.size(); i++) {
-                if (Auths.get(i).username() == username) {
-                    return Auths.get(i);
-                }
-            }
-        }
-        return null;
-    }
-
     @Override
     public void deleteAuth(String authToken) {
         if (Auths.isEmpty() || authToken == null) {
@@ -51,5 +38,13 @@ public class MemoryAuthDAO implements AuthDAO {
                 }
             }
         }
+    }
+
+    @Override
+    public void clear() {
+        for (int i = Auths.size()-1; i >= 0; i--){
+            Auths.remove(i);
+        }
+        Auths = new ArrayList<>();
     }
 }
