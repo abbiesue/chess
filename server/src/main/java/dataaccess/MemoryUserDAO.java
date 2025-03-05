@@ -34,17 +34,6 @@ public class MemoryUserDAO implements UserDAO{
     }
 
     @Override
-    public void deleteUser(String username) {
-        if (!users.isEmpty()){
-            for (int i = 0; i< users.size(); i++) {
-                if (Objects.equals(users.get(i).username(), username)) {
-                    users.remove(i);
-                }
-            }
-        }
-    }
-
-    @Override
     public void clear() {
         for (int i = users.size()-1; i >= 0; i--){
             users.remove(i);

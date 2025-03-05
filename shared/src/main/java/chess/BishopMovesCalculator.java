@@ -69,19 +69,14 @@ public class BishopMovesCalculator implements PieceMovesCalculator {
 
     @Override
     public boolean checkNAdd(int row, int col) {
-        //set new ChessPosition
         ChessPosition position = new ChessPosition(row, col);
-        // if there is a piece at this space
         if (chessBoard.getPiece(position) == null) {
-            //if the space is free, add it to the collection
             moves.add(new ChessMove(startPosition, position, null));
         }
-        if (chessBoard.getPiece(position) != null) {
-            // and the piece is not on my team, add to array and break while loop
+        if (chessBoard.getPiece(position) != null && chessBoard.getPiece(position).getTeamColor() != chessBoard.getPiece(startPosition).getTeamColor()) {
             if (chessBoard.getPiece(position).getTeamColor() != chessBoard.getPiece(startPosition).getTeamColor()) {
                 moves.add(new ChessMove(startPosition, position, null));
             }
-            //else, I'm blocked.
             return false;
         }
         return true;

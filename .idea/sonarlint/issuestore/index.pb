@@ -17,13 +17,3 @@ k
 ;shared/src/test/java/passoff/chess/piece/RookMoveTests.java,7/f/7fcc205671386de1ff9a72d54f687d72d4f2fde0
 m
 =shared/src/test/java/passoff/chess/piece/KnightMoveTests.java,4/6/46ef87c304e18ba9d31ab5df8735551001527431
-e
-5shared/src/main/java/chess/BishopMovesCalculator.java,4/9/49cd3986ab09d12d5f6316caec58c161790585ff
-c
-3shared/src/main/java/chess/KingMovesCalculator.java,a/9/a90b9367792519035def86bb79365dabc6d3a378
-e
-5shared/src/main/java/chess/KnightMovesCalculator.java,c/f/cfb6660f0c030a4df9b07b888328968bd1b07bd9
-d
-4shared/src/main/java/chess/QueenMovesCalculator.java,f/d/fd02ea730f9105c036508939254eb00b20fdf297
-c
-3shared/src/main/java/chess/RookMovesCalculator.java,c/f/cfbfed9cd31fe5c88ec1949a69e8f5fdebd2d2c8

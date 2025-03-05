@@ -60,7 +60,6 @@ public class KingMovesCalculator implements PieceMovesCalculator {
             if (chessBoard.getPiece(position).getTeamColor() != chessBoard.getPiece(startPosition).getTeamColor()) {
                 moves.add(new ChessMove(startPosition, position, null));
             }
-
         } else {
             moves.add(new ChessMove(startPosition, position, null));
         }
