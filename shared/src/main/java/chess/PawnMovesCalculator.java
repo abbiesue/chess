@@ -65,13 +65,9 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
             position = new ChessPosition(row+1, col);
             if (chessboard.getPiece(position) == null) { // if the space in front of the pawn is free (row+1):
                 whitePawnMakeMove(position, startPosition);
-                row = startPosition.getRow();
-                col = startPosition.getColumn();
-                if (startPosition.getRow() == 2) {
-                    position = new ChessPosition(row+2,col);
-                    if (chessboard.getPiece(position) == null) {
-                        whitePawnMakeMove(position, startPosition);
-                    }
+                position = new ChessPosition(row+2,col);
+                if (startPosition.getRow() == 2 && chessboard.getPiece(position) == null) {
+                    whitePawnMakeMove(position, startPosition);
                 }
 
             }

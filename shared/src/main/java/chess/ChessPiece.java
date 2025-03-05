@@ -93,7 +93,8 @@ public class ChessPiece implements Cloneable{
             colorHash = 1;
         }
         int typeHash = 0;
-        List<PieceType> pieceTypes = new ArrayList<ChessPiece.PieceType>(Arrays.asList(PieceType.PAWN, PieceType.ROOK, PieceType.KNIGHT, PieceType.BISHOP, PieceType.QUEEN, PieceType.QUEEN));
+        List<PieceType> pieceTypes = new ArrayList<ChessPiece.PieceType>(Arrays.asList(PieceType.PAWN, PieceType.ROOK, PieceType.KNIGHT,
+                PieceType.BISHOP, PieceType.QUEEN, PieceType.QUEEN));
         for (int i = 1; i < pieceTypes.size(); i++) {
             if (pieceType == pieceTypes.get(i)) {
                 typeHash = i;

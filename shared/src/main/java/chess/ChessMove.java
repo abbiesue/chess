@@ -62,7 +62,8 @@ public class ChessMove implements Cloneable {
             return false;
         }
         ChessMove chessMove = (ChessMove) o;
-        return Objects.equals(startPosition, chessMove.startPosition) && Objects.equals(endPosition, chessMove.endPosition) && promotionPiece == chessMove.promotionPiece;
+        return Objects.equals(startPosition, chessMove.startPosition) && Objects.equals(endPosition, chessMove.endPosition)
+                && promotionPiece == chessMove.promotionPiece;
     }
 
     @Override

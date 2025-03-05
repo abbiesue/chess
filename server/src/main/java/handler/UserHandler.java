@@ -23,7 +23,7 @@ public class UserHandler {
         try {
             result = userService.register(request);
         } catch (ResponseException e) {
-            res.status(e.StatusCode());
+            res.status(e.statusCode());
             res.type("application/json");
             return e.toJson();
         }
@@ -38,7 +38,7 @@ public class UserHandler {
         try {
             result = userService.login(request);
         } catch (ResponseException e) {
-            res.status(e.StatusCode());
+            res.status(e.statusCode());
             res.type("application/json");
             return e.toJson();
         }
@@ -53,7 +53,7 @@ public class UserHandler {
         try {
             result = userService.logout(request);
         } catch (ResponseException e) {
-            res.status(e.StatusCode());
+            res.status(e.statusCode());
             res.type("application/json");
             return e.toJson();
         }

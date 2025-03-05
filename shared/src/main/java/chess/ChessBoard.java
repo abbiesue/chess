@@ -78,38 +78,7 @@ public class ChessBoard implements Cloneable{
                 if (temp == null) {
                     outString = outString.concat(" ");
                 } else {
-                    switch(temp.getPieceType()) {
-                        case PAWN -> {
-                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                                outString = outString.concat("P");
-                            } else { outString = outString.concat("p");}
-                        }
-                        case ROOK -> {
-                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                                outString = outString.concat("R");
-                            } else { outString = outString.concat("r");}
-                        }
-                        case KNIGHT -> {
-                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                                outString = outString.concat("N");
-                            } else { outString = outString.concat("n");}
-                        }
-                        case BISHOP -> {
-                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                                outString = outString.concat("B");
-                            } else { outString = outString.concat("b");}
-                        }
-                        case QUEEN -> {
-                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                                outString = outString.concat("Q");
-                            } else { outString = outString.concat("q");}
-                        }
-                        case KING -> {
-                            if (temp.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                                outString = outString.concat("K");
-                            } else { outString = outString.concat("k");}
-                        }
-                    }
+                    outString = outString.concat(pieceToCharConverter(temp));
                 }
                 outString = outString.concat(" | ");
             }
@@ -152,7 +121,6 @@ public class ChessBoard implements Cloneable{
 
     @Override
     public ChessBoard clone() {
-
         ChessBoard clone = new ChessBoard();
         ChessPiece[][] cloneBoard = new ChessPiece[9][9];
         for (int i = 0; i < 9; i++) {
@@ -165,5 +133,41 @@ public class ChessBoard implements Cloneable{
         }
         clone.squares = cloneBoard;
         return clone;
+    }
+
+    private String pieceToCharConverter(ChessPiece piece) {
+        switch(piece.getPieceType()) {
+            case PAWN -> {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    return "P";
+                } else { return "p";}
+            }
+            case ROOK -> {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    return "R";
+                } else { return "r";}
+            }
+            case KNIGHT -> {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    return "N";
+                } else { return "n";}
+            }
+            case BISHOP -> {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    return "B";
+                } else { return "b";}
+            }
+            case QUEEN -> {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    return "Q";
+                } else { return "q";}
+            }
+            case KING -> {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    return "K";
+                } else { return "k";}
+            }
+        }
+        return " ";
     }
 }

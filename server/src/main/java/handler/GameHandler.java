@@ -24,7 +24,7 @@ public class GameHandler {
         try {
             result = gameService.list(request);
         } catch (ResponseException e) {
-            res.status(e.StatusCode());
+            res.status(e.statusCode());
             res.type("application/json");
             return e.toJson();
         }
@@ -41,7 +41,7 @@ public class GameHandler {
         try {
             result = gameService.create(request);
         } catch (ResponseException e) {
-            res.status(e.StatusCode());
+            res.status(e.statusCode());
             res.type("application/json");
             return e.toJson();
         }
@@ -58,7 +58,7 @@ public class GameHandler {
         try {
             result = gameService.join(request);
         } catch (ResponseException e) {
-            res.status(e.StatusCode());
+            res.status(e.statusCode());
             res.type("application/json");
             return e.toJson();
         }
