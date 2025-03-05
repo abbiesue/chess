@@ -5,14 +5,14 @@ import java.util.Collection;
 import java.util.List;
 
 public class QueenMovesCalculator implements PieceMovesCalculator{
-    List<ChessMove> queenMoves = new ArrayList<>();
+    List<ChessMove> moves = new ArrayList<>();
     ChessPosition startPosition;
-    ChessBoard chessboard;
+    ChessBoard chessBoard;
 
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition position) {
-        queenMoves = new ArrayList<>();
-        chessboard = board;
+        moves = new ArrayList<>();
+        chessBoard = board;
         startPosition = position;
         int row;
         int col;
@@ -94,24 +94,19 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
             row++;
             col--;
         }
-        return queenMoves;
+        return moves;
     }
 
-    @Override
     public boolean checkNAdd(int row, int col) {
-        //set new ChessPosition
         ChessPosition position = new ChessPosition(row, col);
-        if (chessboard.getPiece(position) != null) {
-            // and the piece is not on my team, add to array and break while loop
-            if (chessboard.getPiece(position).getTeamColor() != chessboard.getPiece(startPosition).getTeamColor()) {
-                queenMoves.add(new ChessMove(startPosition, position, null));
+        if (chessBoard.getPiece(position) != null) {
+            if (chessBoard.getPiece(position).getTeamColor() != chessBoard.getPiece(startPosition).getTeamColor()) {
+                moves.add(new ChessMove(startPosition, position, null));
             }
-            //else, I'm blocked.
             return false;
         }
-        if (chessboard.getPiece(position) == null) {
-            //if the space is free, add it to the collection
-            queenMoves.add(new ChessMove(startPosition, position, null));
+        if (chessBoard.getPiece(position) == null) {
+            moves.add(new ChessMove(startPosition, position, null));
         }
         return true;
     }

@@ -5,11 +5,11 @@ import java.util.Collection;
 import java.util.List;
 
 public class PawnMovesCalculator implements PieceMovesCalculator {
-    List<ChessMove> pawnMoves;
+    List<ChessMove> moves;
 
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard chessboard, ChessPosition position) {
-        pawnMoves = new ArrayList<>();
+        moves = new ArrayList<>();
         ChessPosition startPosition = position;
         int row = startPosition.getRow();
         int col = startPosition.getColumn();
@@ -68,26 +68,26 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
 
             }
         }
-        return pawnMoves;
+        return moves;
     }
 
-    @Override
+
     public boolean checkNAdd(int row, int col) {
         return true;
     } //not a lot of copied code so I'm just not gonna implement this method in the Pawn calculator.
 
     void promote(ChessPosition startPosition, ChessPosition endPosition) {
-        pawnMoves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.QUEEN));
-        pawnMoves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.BISHOP));
-        pawnMoves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.KNIGHT));
-        pawnMoves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.ROOK));
+        moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.QUEEN));
+        moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.BISHOP));
+        moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.KNIGHT));
+        moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.ROOK));
     }
 
     void blackPawnMakeMove(ChessPosition position, ChessPosition startPosition){
         if (position.getRow() == 1) {
             promote(startPosition, position);
         } else {
-            pawnMoves.add(new ChessMove(startPosition, position, null)); //add
+            moves.add(new ChessMove(startPosition, position, null)); //add
         }
     }
 
@@ -95,7 +95,7 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
         if (position.getRow() == 8) {
             promote(startPosition, position);
         } else {
-            pawnMoves.add(new ChessMove(startPosition, position, null)); //add
+            moves.add(new ChessMove(startPosition, position, null)); //add
         }
     }
 
