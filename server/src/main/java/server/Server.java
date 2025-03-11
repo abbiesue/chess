@@ -1,11 +1,7 @@
 package server;
 
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
-import handler.ClearHandler;
-import handler.GameHandler;
-import handler.UserHandler;
+import dataaccess.*;
+import handler.*;
 import spark.*;
 
 public class Server {
@@ -13,14 +9,18 @@ public class Server {
     GameHandler gameHandler;
     ClearHandler clearHandler;
 
-    MemoryUserDAO userDAO;
-    MemoryAuthDAO authDAO;
-    MemoryGameDAO gameDAO;
+    UserDAO userDAO;
+    AuthDAO authDAO;
+    GameDAO gameDAO;
 
     public Server() {
-        userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
-        gameDAO = new MemoryGameDAO();
+        try {
+            userDAO = new SQLUserDAO();
+            authDAO = new SQLAuthDAO();
+            gameDAO = new SQLGameDAO();
+        } catch (ResponseException | DataAccessException e) {
+            e.printStackTrace();
+        }
 
         userHandler = new UserHandler(userDAO, authDAO);
         gameHandler = new GameHandler(gameDAO, authDAO);
