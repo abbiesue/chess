@@ -5,16 +5,17 @@ import dataaccess.MemoryUserDAO;
 import model.AuthData;
 import model.UserData;
 import records.*;
+import dataaccess.*;
 import server.ResponseException;
 
 import java.util.Objects;
 import java.util.UUID;
 
 public class UserService {
-    public MemoryUserDAO userDAO;
-    public MemoryAuthDAO authDAO;
+    public UserDAO userDAO;
+    public AuthDAO authDAO;
 
-    public UserService(MemoryUserDAO userDAO, MemoryAuthDAO authDAO) {
+    public UserService(UserDAO userDAO, AuthDAO authDAO) {
         this.userDAO = userDAO;
         this.authDAO = authDAO;
     }

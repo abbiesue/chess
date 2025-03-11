@@ -1,8 +1,7 @@
 package handler;
 
 import com.google.gson.Gson;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.*;
 import records.*;
 import server.ResponseException;
 import service.UserService;
@@ -13,7 +12,7 @@ import java.lang.reflect.Type;
 public class UserHandler {
     public UserService userService;
 
-    public UserHandler(MemoryUserDAO userDAO, MemoryAuthDAO authDAO) {
+    public UserHandler(UserDAO userDAO, AuthDAO authDAO) {
         userService = new UserService(userDAO, authDAO);
     }
 

@@ -1,16 +1,14 @@
 package handler;
 
 import com.google.gson.Gson;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.*;
 import records.ClearResult;
 import service.ClearService;
 
 public class ClearHandler {
     ClearService clearService;
 
-    public ClearHandler(MemoryGameDAO gameDAO, MemoryAuthDAO authDAO, MemoryUserDAO userDAO) {
+    public ClearHandler(GameDAO gameDAO, AuthDAO authDAO, UserDAO userDAO) {
         clearService = new ClearService(userDAO, gameDAO, authDAO);
     }
 

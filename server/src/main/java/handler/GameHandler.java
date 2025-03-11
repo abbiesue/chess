@@ -1,8 +1,7 @@
 package handler;
 
 import com.google.gson.Gson;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
+import dataaccess.*;
 import records.*;
 import server.ResponseException;
 import service.GameService;
@@ -14,7 +13,7 @@ import java.lang.reflect.Type;
 public class GameHandler {
     public GameService gameService;
 
-    public GameHandler(MemoryGameDAO gameDAO, MemoryAuthDAO authDAO) {
+    public GameHandler(GameDAO gameDAO, AuthDAO authDAO) {
         gameService = new GameService(gameDAO, authDAO);;
     }
 

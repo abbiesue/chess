@@ -1,8 +1,7 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
+import dataaccess.*;
 import model.GameData;
 import records.*;
 import server.ResponseException;
@@ -15,10 +14,10 @@ public class GameService {
     static final ResponseException TAKEN = new ResponseException(403, "Error: already taken");
 
 
-    MemoryGameDAO gameDAO;
-    MemoryAuthDAO authDAO;
+    GameDAO gameDAO;
+    AuthDAO authDAO;
 
-    public GameService(MemoryGameDAO gameDAO, MemoryAuthDAO authDAO) {
+    public GameService(GameDAO gameDAO, AuthDAO authDAO) {
         this.gameDAO = gameDAO;
         this.authDAO = authDAO;
     }
