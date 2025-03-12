@@ -49,7 +49,7 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
 
     @Override
     public void deleteAuth(String authToken) throws ResponseException {
-        var statement = "DELETE FROM pet WHERE authToken=?";
+        var statement = "DELETE FROM authData WHERE authToken=?";
         executeUpdate(statement, authToken);
     }
 
