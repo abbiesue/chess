@@ -3,6 +3,7 @@ package handler;
 import com.google.gson.Gson;
 import dataaccess.*;
 import records.ClearResult;
+import server.ResponseException;
 import service.ClearService;
 
 public class ClearHandler {
@@ -14,7 +15,11 @@ public class ClearHandler {
 
     public Object clear(){
         ClearResult result;
-        result = clearService.clear();
+        try {
+            result = clearService.clear();
+        } catch (ResponseException e) {
+            return e.toJson();
+        }
         return new Gson().toJson(result);
     }
 

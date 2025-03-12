@@ -2,6 +2,7 @@ package service;
 
 import dataaccess.*;
 import records.ClearResult;
+import server.ResponseException;
 
 public class ClearService {
     UserDAO userDAO;
@@ -14,7 +15,7 @@ public class ClearService {
         this.authDAO = authDAO;
     }
 
-    public ClearResult clear() {
+    public ClearResult clear() throws ResponseException {
         userDAO.clear();
         gameDAO.clear();
         authDAO.clear();
