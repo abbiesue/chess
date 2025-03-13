@@ -19,6 +19,12 @@ public class SQLUserDAOTests {
         userService = new UserService(userDAO, authDAO);
     }
 
+    @AfterEach
+    void tearDown() throws ResponseException {
+        userDAO.clear();
+        authDAO.clear();
+    }
+
     @Test
     @DisplayName("createUser success")
     public void createUserSuccess() throws ResponseException, DataAccessException {
@@ -44,6 +50,7 @@ public class SQLUserDAOTests {
     @Test
     @DisplayName("getUser failure")
     public void getUserFailure() throws ResponseException {
+        userDAO.clear();
         Assertions.assertEquals(null, userDAO.getUser(existingUser.username()));
     }
 

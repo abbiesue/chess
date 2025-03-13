@@ -18,7 +18,7 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
             `gameID` int NOT NULL AUTO_INCREMENT,
             `whiteUsername` varchar(256) DEFAULT NULL,
             `blackUsername` varchar(256) DEFAULT NULL,
-            'gameName` varchar(256) NOT NULL,
+            `gameName` varchar(256) NOT NULL,
             `gameJson` TEXT DEFAULT NULL,
             PRIMARY KEY(`gameID`),
             INDEX indx_whiteUsername (whiteUsername),
