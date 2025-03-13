@@ -35,7 +35,6 @@ public class UserHandler {
         LoginRequest request = new Gson().fromJson(req.body(), (Type) LoginRequest.class);
         LoginResult result;
         try {
-            System.out.println("Entered UserHandler login()");
             result = userService.login(request);
         } catch (ResponseException e) {
             res.status(e.statusCode());

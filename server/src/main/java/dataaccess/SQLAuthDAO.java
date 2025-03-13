@@ -1,7 +1,6 @@
 package dataaccess;
 
 import model.AuthData;
-import model.UserData;
 import server.ResponseException;
 
 import java.sql.ResultSet;
@@ -25,7 +24,7 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
 
     @Override
     public void createAuth(AuthData authdata) throws ResponseException {
-        var statement = "INSERT INTO authData (authToken, username) VALUES (?,?)";
+        var statement = "INSERT IGNORE INTO authData (authToken, username) VALUES (?,?)";
         String authToken = authdata.authToken();
         String username = authdata.username();
         executeUpdate(statement, authToken, username);
