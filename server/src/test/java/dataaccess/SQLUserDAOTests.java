@@ -2,36 +2,55 @@ package dataaccess;
 
 import model.UserData;
 import org.junit.jupiter.api.*;
+import records.RegisterRequest;
 import server.ResponseException;
+import service.UserService;
 
 public class SQLUserDAOTests {
-    private SQLUserDAO testDAO;
-    private UserData existingUser = new UserData("existingUser", "existingPassword", "existingEmail");
-    private UserData newUser = new UserData("newUser", "newPassword", "newEmail");
+    private SQLUserDAO userDAO;
+    private SQLAuthDAO authDAO;
+    private UserService userService;
+    UserData existingUser = new UserData("existingUser", "existingPassword", "existingEmail");
 
     @BeforeEach
-    public void init() {
-        try {
-            testDAO = new SQLUserDAO();
-            testDAO.createUser(existingUser);
-        } catch (ResponseException | DataAccessException e) {
-            e.printStackTrace();
-        }
+    void init() throws ResponseException, DataAccessException {
+        userDAO = new SQLUserDAO();
+        authDAO = new SQLAuthDAO();
+        userService = new UserService(userDAO, authDAO);
     }
 
-    @AfterEach
-    public void destruct() {
-        try {
-            testDAO.clear();
-        } catch (ResponseException e) {
-            e.printStackTrace();
-        }
+    @Test
+    @DisplayName("createUser success")
+    public void createUserSuccess() throws ResponseException, DataAccessException {
+        userDAO = new SQLUserDAO();
+        Assertions.assertDoesNotThrow(()->{userDAO.createUser(existingUser);});
+    }
+
+    @Test
+    @DisplayName("createUser failure")
+    public void createUserFailure() throws ResponseException {
+        userDAO.createUser(existingUser);
+        Assertions.assertThrows(ResponseException.class, ()->{userService.register(
+                new RegisterRequest(existingUser.username(), existingUser.password(), existingUser.email()));});
+    }
+
+    @Test
+    @DisplayName("getUser success")
+    public void getUserSuccess() throws ResponseException {
+        userDAO.createUser(existingUser);
+        Assertions.assertDoesNotThrow(()->{userDAO.getUser(existingUser.username());});
+    }
+
+    @Test
+    @DisplayName("getUser failure")
+    public void getUserFailure() throws ResponseException {
+        Assertions.assertEquals(null, userDAO.getUser(existingUser.username()));
     }
 
     @Test
     @DisplayName("clear success")
-    void clearSuccess() {
-        Assertions.assertDoesNotThrow(()->{testDAO.clear();});
+    public void clearSuccess() {
+        Assertions.assertDoesNotThrow(()-> {userDAO.clear();});
     }
 
 
