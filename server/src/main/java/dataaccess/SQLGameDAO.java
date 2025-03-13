@@ -35,7 +35,7 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         var statement = "INSERT INTO gameData (whiteUsername, blackUsername, gameName, gameJson) VALUES (?,?,?,?)";
         ChessGame game = new ChessGame();
         var gameJson = new Gson().toJson(game);
-        var id = executeUpdate(statement, gameName, gameJson);
+        var id = executeUpdate(statement, null, null, gameName, gameJson);
         return new GameData(id, null, null, gameName, game);
     }
 
@@ -91,7 +91,7 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         }
 
         deleteGame(gameID);
-        var statement = "INSERT INTO gameData (whiteUsername, blackUsername, gameName, gameJson) VALUES (?,?,?,?)";
+        var statement = "INSERT INTO gameData (gameID, whiteUsername, blackUsername, gameName, gameJson) VALUES (?,?,?,?,?)";
         var gameJson = new Gson().toJson(game);
         executeUpdate(statement, gameID, whiteUsername, blackUsername, gameName, gameJson);
     }

@@ -1,14 +1,11 @@
 package service;
 
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryUserDAO;
 import model.AuthData;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 import records.*;
 import dataaccess.*;
 import server.ResponseException;
-
-import java.util.Objects;
 import java.util.UUID;
 
 public class UserService {
@@ -42,7 +39,7 @@ public class UserService {
         //store userData
         UserData userData = userDAO.getUser(loginRequest.username());
         //throw exceptions
-        if (userData == null || !Objects.equals(userData.password(), loginRequest.password())) {
+        if (userData == null || !BCrypt.checkpw(loginRequest.password(), userData.password())) {
             throw new ResponseException(401, "Error: unauthorized");
         }
         AuthData authData = new AuthData(generateToken(), loginRequest.username());

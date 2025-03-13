@@ -11,10 +11,12 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
     private String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS authData (
+            `id` int NOT NULL AUTO_INCREMENT,
             `authToken` varchar(256) NOT NULL,
             `username` varchar(256) NOT NULL,
-            PRIMARY KEY(`username`),
-            INDEX indx_auth(authToken)
+            PRIMARY KEY (`id`),
+            INDEX indx_auth(authToken),
+            INDEX indx_user(username)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
@@ -32,7 +34,7 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
     @Override
     public AuthData getAuth(String authToken) throws ResponseException {
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT username, authToken FROM authData WHERE username=?";
+            var statement = "SELECT username, authToken FROM authData WHERE authToken=?";
             try (var ps = conn.prepareStatement(statement)) {
                 ps.setString(1, authToken);
                 try (var rs = ps.executeQuery()) {

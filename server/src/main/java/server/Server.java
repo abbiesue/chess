@@ -56,7 +56,6 @@ public class Server {
         });
 
 
-
         Spark.awaitInitialization();
         return Spark.port();
     }
