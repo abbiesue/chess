@@ -47,6 +47,11 @@ public class ServerFacadeTests {
     class RegisterTests {
         RegisterRequest newReq = new RegisterRequest("newUser", "newPass", "new@email");
         //FINISH TESTS ONCE CLEAR IS IMPLEMENTED
+        @BeforeEach
+        public void init() throws ResponseException {
+            facade.clear();
+        }
+
         @Test
         @DisplayName("register runs")
         public void registerRuns() throws ResponseException {
