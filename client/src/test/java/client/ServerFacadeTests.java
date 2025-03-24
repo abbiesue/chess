@@ -46,6 +46,7 @@ public class ServerFacadeTests {
     @DisplayName("register tests")
     class RegisterTests {
         RegisterRequest newReq = new RegisterRequest("newUser", "newPass", "new@email");
+        RegisterRequest badReq = new RegisterRequest(null, null, null);
         //FINISH TESTS ONCE CLEAR IS IMPLEMENTED
         @BeforeEach
         public void init() throws ResponseException {
@@ -62,6 +63,35 @@ public class ServerFacadeTests {
         @DisplayName("register output check")
         public void registerOutputCheck() throws ResponseException {
             Assertions.assertEquals(facade.register(newReq).getClass(), RegisterResult.class);
+        }
+
+        @Test
+        @DisplayName("register success")
+        public void registerSuccess() throws ResponseException {
+            RegisterResult result = facade.register(newReq);
+            Assertions.assertEquals(newReq.username(), result.username());
+            Assertions.assertNotNull(result.authToken());
+        }
+
+        @Test
+        @DisplayName("register failure - already taken")
+        public void registerAlreadyTaken() throws ResponseException {
+            facade.register(newReq);
+            try {
+                facade.register(newReq);
+            } catch (ResponseException e) {
+                Assertions.assertEquals(403, e.statusCode());
+            }
+        }
+
+        @Test
+        @DisplayName("register failure - bad request")
+        public void registerBadRequest() {
+            try {
+                facade.register(badReq);
+            } catch (ResponseException e) {
+                Assertions.assertEquals(400, e.statusCode());
+            }
         }
     }
 
