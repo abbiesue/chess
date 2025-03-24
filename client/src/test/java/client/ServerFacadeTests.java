@@ -1,6 +1,9 @@
 package client;
 
 import org.junit.jupiter.api.*;
+import records.RegisterRequest;
+import records.RegisterResult;
+import server.ResponseException;
 import server.Server;
 import server.ServerFacade;
 
@@ -31,6 +34,30 @@ public class ServerFacadeTests {
     @DisplayName("check init")
     public void checkInit() {
         Assertions.assertEquals("http://localhost:" + port, url);
+    }
+
+    @Test
+    @DisplayName("clear success")
+    public void clearSuccess() {
+        Assertions.assertDoesNotThrow(()->facade.clear());
+    }
+
+    @Nested
+    @DisplayName("register tests")
+    class RegisterTests {
+        RegisterRequest newReq = new RegisterRequest("newUser", "newPass", "new@email");
+        //FINISH TESTS ONCE CLEAR IS IMPLEMENTED
+        @Test
+        @DisplayName("register runs")
+        public void registerRuns() throws ResponseException {
+            Assertions.assertDoesNotThrow(()->facade.register(newReq));
+        }
+
+        @Test
+        @DisplayName("register output check")
+        public void registerOutputCheck() throws ResponseException {
+            Assertions.assertEquals(facade.register(newReq).getClass(), RegisterResult.class);
+        }
     }
 
     @Test
