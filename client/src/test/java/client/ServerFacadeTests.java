@@ -1,5 +1,8 @@
 package client;
 
+import chess.ChessGame;
+import chess.ChessPiece;
+import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import records.*;
@@ -245,18 +248,104 @@ public class ServerFacadeTests {
     }
 
     @Nested
-    @DisplayName("list tests")
-    class ListTest {
-        ListRequest goodReq;
+    @DisplayName("join tests")
+    class JoinTests {
         String authToken;
+        int gameID;
 
         @BeforeEach
         public void init() throws ResponseException {
-            facade.register(new RegisterRequest(oldUser.username(), oldUser.password(), oldUser.email()));
-
+            facade.clear();
+            RegisterResult result = facade.register(
+                    new RegisterRequest(oldUser.username(), oldUser.password(), oldUser.email()));
+            authToken = result.authToken();
+            CreateResult gameResult = facade.create(new CreateRequest(authToken, "goodGame"));
+            gameID = gameResult.gameID();
         }
 
+        @Test
+        @DisplayName("join success")
+        void joinSuccess() {
+            Assertions.assertDoesNotThrow(()->facade.join(new JoinRequest(authToken, "WHITE", gameID)));
+        }
 
+        @Test
+        @DisplayName("join failure - bad auth")
+        void joinBadAuth() {
+            try {
+                facade.join(new JoinRequest("badauth", "WHITE", gameID));
+            } catch (ResponseException e) {
+                Assertions.assertEquals(401, e.statusCode());
+            }
+        }
+
+        @Test
+        @DisplayName("join failure - bad team color")
+        void joinBadTeamColor() {
+            try {
+                facade.join(new JoinRequest(authToken, "GREEN", gameID));
+            } catch (ResponseException e) {
+                Assertions.assertEquals(400, e.statusCode());
+            }
+        }
+
+        @Test
+        @DisplayName("join failure - bad gameID")
+        void joinBadGameID() {
+            try {
+                facade.join(new JoinRequest(authToken, "WHITE", null));
+            } catch (ResponseException e) {
+                Assertions.assertEquals(400, e.statusCode());
+            }
+        }
+
+        @Test
+        @DisplayName("join failure - already taken")
+        void joinAlreadyTaken() throws ResponseException {
+            facade.join(new JoinRequest(authToken, "WHITE", gameID));
+            try {
+                facade.join(new JoinRequest(authToken, "WHITE", gameID));
+            } catch (ResponseException e) {
+                Assertions.assertEquals(403, e.statusCode());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("list tests")
+    class ListTests {
+        String authToken;
+        int gameID1;
+        int gameID2;
+
+        @BeforeEach
+        public void init() throws ResponseException {
+            facade.clear();
+            RegisterResult regResult = facade.register(
+                    new RegisterRequest(oldUser.username(), oldUser.password(), oldUser.email()));
+            authToken = regResult.authToken();
+            CreateResult gameResult = facade.create(new CreateRequest(authToken, "game1"));
+            gameID1 = gameResult.gameID();
+            gameResult = facade.create(new CreateRequest(authToken, "game2"));
+            gameID2 = gameResult.gameID();
+            facade.join(new JoinRequest(authToken, "WHITE", gameID1));
+        }
+
+        @Test
+        @DisplayName("list success")
+        void listSuccess() {
+            Assertions.assertDoesNotThrow(()-> facade.list(new ListRequest(authToken)));
+        }
+
+        @Test
+        @DisplayName("list failure - bad auth")
+        void listBadAuth() {
+            try {
+                facade.list(new ListRequest(null));
+            } catch (ResponseException e) {
+                Assertions.assertEquals(401, e.statusCode());
+            }
+        }
     }
 
 }

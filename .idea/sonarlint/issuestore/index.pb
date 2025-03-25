@@ -101,14 +101,8 @@ b
 2server/src/main/java/dataaccess/MemoryUserDAO.java,0/7/07c8e87dfa1f0641556e5d98b5a66011b7b29e80
 d
 4server/src/main/java/dataaccess/DatabaseManager.java,f/b/fb7cdb568d97831984b27de21950263d16967a67
-f
-6server/src/test/java/passoff/server/DatabaseTests.java,f/e/fe756adf1db32cf19b0ba4465213263dea6b150d
-_
-/server/src/main/java/dataaccess/SQLUserDAO.java,9/3/93f463d0cc18cf6427e4c1e66a945e5880b71bc7
 b
 2server/src/main/java/dataaccess/MemoryAuthDAO.java,8/a/8a97b34294ab136117de6d255e41a49f801be6d3
-]
--server/src/main/java/handler/GameHandler.java,e/1/e15ebbef76783532dade9f9afce75c463bd43b4a
 _
 /server/src/main/java/dataaccess/SQLGameDAO.java,1/0/104cf004342c318954f87f8aa998f5be26fd7d4d
 d

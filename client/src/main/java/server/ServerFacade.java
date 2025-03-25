@@ -38,10 +38,22 @@ public class ServerFacade {
         return this.makeRequest("POST", path, request, CreateResult.class);
     }
 
+    public JoinResult join(JoinRequest request) throws ResponseException {
+        var path = "/game";
+        return this.makeRequest("PUT", path, request, JoinResult.class);
+    }
+
+    public ListResult list(ListRequest request) throws ResponseException {
+        var path = "/game";
+        return this.makeRequest("GET", path, request, ListResult.class);
+    }
+
     public ClearResult clear() throws ResponseException {
         var path = "/db";
         return this.makeRequest("DELETE", path, null, ClearResult.class);
     }
+
+
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws ResponseException {
         try {
@@ -67,7 +79,7 @@ public class ServerFacade {
     }
 
     private static void writeBody(Object request, HttpURLConnection http) throws IOException {
-        if (request != null) {
+        if (request != null && !"GET".equals(http.getRequestMethod())) {
             http.addRequestProperty("Content-Type", "application/json");
             String reqData = new Gson().toJson(request);
             try (OutputStream reqBody = http.getOutputStream()) {

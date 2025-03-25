@@ -23,8 +23,8 @@ public class PostloginClient {
             return switch (cmd) {
                 case "create" -> create(params);
                 case "list" -> list();
-                case "join" -> join(params);
-                case "observe" -> observe(params);
+                //case "join" -> join(params);
+                //case "observe" -> observe(params);
                 case "logout" -> logout();
                 case "quit" -> "quit";
                 default -> help();
@@ -45,6 +45,7 @@ public class PostloginClient {
 
     public String list () {
         ListResult result;
+        return "finish";
     }
 
     public String logout () throws ResponseException {
