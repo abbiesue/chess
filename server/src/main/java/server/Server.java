@@ -48,7 +48,7 @@ public class Server {
         Spark.get("/game", (request, response) -> {
            return gameHandler.listGames(request, response);
         });
-        Spark.post("game", (request, response) -> {
+        Spark.post("/game", (request, response) -> {
             return gameHandler.createGame(request, response);
         });
         Spark.put("/game", (request, response) -> {

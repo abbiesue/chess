@@ -33,6 +33,11 @@ public class ServerFacade {
         return this.makeRequest("DELETE", path, request, LogoutResult.class);
     }
 
+    public CreateResult create(CreateRequest request) throws ResponseException {
+        var path = "/game";
+        return this.makeRequest("POST", path, request, CreateResult.class);
+    }
+
     public ClearResult clear() throws ResponseException {
         var path = "/db";
         return this.makeRequest("DELETE", path, null, ClearResult.class);
@@ -86,11 +91,19 @@ public class ServerFacade {
 
     private Map<String, String> extractHeaders(Object request) {
         Map<String, String> headers = new HashMap<>();
+        final String AUTH_HEADER = "Authorization";
 
-        if (request instanceof LogoutRequest || request instanceof CreateRequest
-                || request instanceof ListRequest|| request instanceof JoinRequest) {
-            LogoutRequest req = (LogoutRequest) request;
-            headers.put("Authorization", req.authToken());
+        if (request instanceof LogoutRequest req) {
+            headers.put(AUTH_HEADER, req.authToken());
+        }
+        if (request instanceof CreateRequest req) {
+            headers.put(AUTH_HEADER, req.authToken());
+        }
+        if (request instanceof ListRequest req) {
+            headers.put(AUTH_HEADER, req.authToken());
+        }
+        if (request instanceof JoinRequest req) {
+            headers.put(AUTH_HEADER, req.authToken());
         }
 
         return headers;

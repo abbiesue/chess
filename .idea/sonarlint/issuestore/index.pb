@@ -46,8 +46,6 @@ a
 ^
 .server/src/main/java/records/CreateResult.java,7/c/7ca434e6c69348f13b13d8b93751ca37dc9d0f92
 ]
--server/src/main/java/records/ListRequest.java,7/c/7c7bfbed30fdb8a049458fd57f2ac9e01c2458b5
-]
 -server/src/main/java/records/ClearResult.java,3/0/30f565b7e15853540f9bb18409f750775ef80e6b
 ]
 -server/src/main/java/records/JoinRequest.java,7/3/73b900f14aa3504e85ac01635244c4d209ec49b4
@@ -119,10 +117,6 @@ b
 2server/src/test/java/service/GameServiceTests.java,c/b/cbbd93c03402376669a48a743c29d734c3573acf
 l
 <shared/src/test/java/passoff/chess/game/ValidMovesTests.java,f/f/ffd727fc5e9fd2b43cbe3581e669a4c1ed406a80
-W
-'server/src/main/java/server/Server.java,8/0/8036b8cb9ce2e6760f04e2a3b475b260935bb7b8
-b
-2server/src/test/java/service/UserServiceTests.java,4/0/40225ce89c71f4bd51f61940039c3dcfdc669a0b
 b
 2server/src/main/java/server/ResponseException.java,0/8/08e86f571108c451256ea638b24ce179200fac04
 A

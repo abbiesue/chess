@@ -16,8 +16,8 @@ public class ServerFacadeTests {
     private static String url;
     private static int port;
 
-    private UserData newUser = new UserData("newUser", "newPass", "new@email");
-    private UserData oldUser = new UserData("oldUser", "oldPass", "old@email");
+    private final UserData newUser = new UserData("newUser", "newPass", "new@email");
+    private final UserData oldUser = new UserData("oldUser", "oldPass", "old@email");
 
     @BeforeAll
     public static void init() {
@@ -35,13 +35,13 @@ public class ServerFacadeTests {
 
     @Test
     @DisplayName("check init")
-    public void checkInit() {
+    void checkInit() {
         Assertions.assertEquals("http://localhost:" + port, url);
     }
 
     @Test
     @DisplayName("clear success")
-    public void clearSuccess() {
+    void clearSuccess() {
         Assertions.assertDoesNotThrow(()->facade.clear());
     }
 
@@ -58,19 +58,19 @@ public class ServerFacadeTests {
 
         @Test
         @DisplayName("register runs")
-        public void registerRuns() {
+        void registerRuns() {
             Assertions.assertDoesNotThrow(()->facade.register(newReq));
         }
 
         @Test
         @DisplayName("register output check")
-        public void registerOutputCheck() throws ResponseException {
+        void registerOutputCheck() throws ResponseException {
             Assertions.assertEquals(facade.register(newReq).getClass(), RegisterResult.class);
         }
 
         @Test
         @DisplayName("register success")
-        public void registerSuccess() throws ResponseException {
+        void registerSuccess() throws ResponseException {
             RegisterResult result = facade.register(newReq);
             Assertions.assertEquals(newReq.username(), result.username());
             Assertions.assertNotNull(result.authToken());
@@ -78,7 +78,7 @@ public class ServerFacadeTests {
 
         @Test
         @DisplayName("register failure - already taken")
-        public void registerAlreadyTaken() throws ResponseException {
+        void registerAlreadyTaken() throws ResponseException {
             facade.register(newReq);
             try {
                 facade.register(newReq);
@@ -89,7 +89,7 @@ public class ServerFacadeTests {
 
         @Test
         @DisplayName("register failure - bad request")
-        public void registerBadRequest() {
+        void registerBadRequest() {
             try {
                 facade.register(badReq);
             } catch (ResponseException e) {
@@ -112,7 +112,7 @@ public class ServerFacadeTests {
 
         @Test
         @DisplayName("login success")
-        public void loginSuccess() throws ResponseException {
+        void loginSuccess() throws ResponseException {
             Assertions.assertDoesNotThrow(()-> facade.login(oldReq));
             Assertions.assertEquals(facade.login(oldReq).getClass(), LoginResult.class);
             LoginResult result = facade.login(oldReq);
@@ -122,7 +122,7 @@ public class ServerFacadeTests {
 
         @Test
         @DisplayName("login success - unique tokens")
-        public void loginUniqueTokens() throws ResponseException {
+        void loginUniqueTokens() throws ResponseException {
             LoginResult result1 = facade.login(oldReq);
             LoginResult result2 = facade.login(oldReq);
             Assertions.assertNotEquals(result1.authToken(), result2.authToken());
@@ -130,7 +130,7 @@ public class ServerFacadeTests {
 
         @Test
         @DisplayName("login failure - nonexisting user")
-        public void loginNonexisting() {
+        void loginNonexisting() {
             try {
                 facade.login(newReq);
             } catch (ResponseException e) {
@@ -140,7 +140,7 @@ public class ServerFacadeTests {
 
         @Test
         @DisplayName("login failure - wrong password")
-        public void loginWrongPassword() {
+        void loginWrongPassword() {
             try {
                 facade.login(new LoginRequest(oldUser.username(), "wrongPass"));
             } catch (ResponseException e) {
@@ -150,7 +150,7 @@ public class ServerFacadeTests {
 
         @Test
         @DisplayName("login failure - bad request")
-        public void loginBadRequest() {
+        void loginBadRequest() {
             try {
                 facade.login(new LoginRequest(null, null));
             } catch (ResponseException e) {
@@ -173,15 +173,66 @@ public class ServerFacadeTests {
 
         @Test
         @DisplayName("logout success")
-        public void logoutSuccess() {
+        void logoutSuccess() {
             Assertions.assertDoesNotThrow(()->facade.logout(new LogoutRequest(authToken)));
             Assertions.assertThrows(ResponseException.class, ()->facade.logout(new LogoutRequest(authToken)));
+        }
+
+        @Test
+        @DisplayName("logout failure - bad auth")
+        void logoutBadAuth() {
+            try {
+                facade.logout(new LogoutRequest("badAuth"));
+            } catch (ResponseException e) {
+                Assertions.assertEquals(401, e.statusCode());
+            }
+        }
+
+        @Test
+        @DisplayName("login failure - bad request")
+        void logoutBadRequest() {
+            try {
+                facade.logout(new LogoutRequest(null));
+            } catch (ResponseException e) {
+                Assertions.assertEquals(401, e.statusCode());
+            }
+        }
+
+    }
+
+    @Nested
+    @DisplayName("create tests")
+    class CreateTests {
+        CreateRequest goodReq;
+        String authToken;
+
+        @BeforeEach
+        void init() throws ResponseException {
+            facade.clear();
+            RegisterResult result = facade.register(new RegisterRequest(oldUser.username(), oldUser.password(), oldUser.email()));
+            authToken = result.authToken();
+            goodReq = new CreateRequest(authToken, "goodGame");
+        }
+
+        @Test
+        @DisplayName("create success")
+        void createSuccess() {
+            Assertions.assertDoesNotThrow(()->facade.create(goodReq));
         }
     }
 
     @Nested
     @DisplayName("list tests")
     class ListTest {
+        ListRequest goodReq;
+        String authToken;
+
+        @BeforeEach
+        public void init() throws ResponseException {
+            facade.register(new RegisterRequest(oldUser.username(), oldUser.password(), oldUser.email()));
+
+        }
+
 
     }
 
