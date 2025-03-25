@@ -1,9 +1,6 @@
 package ui;
 
-import records.LoginRequest;
-import records.LoginResult;
-import records.RegisterRequest;
-import records.RegisterResult;
+import records.*;
 import server.ResponseException;
 import server.ServerFacade;
 
