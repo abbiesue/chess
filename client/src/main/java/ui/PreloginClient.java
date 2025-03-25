@@ -12,8 +12,6 @@ import java.util.Arrays;
 public class PreloginClient {
     private final ServerFacade server;
     private String username;
-    private String password;
-    private String email;
     String authToken;
 
     public PreloginClient(ServerFacade server) {
@@ -49,8 +47,8 @@ public class PreloginClient {
     public String register(String... params) throws ResponseException {
         if (params.length >= 1) {
             username = params[0];
-            password = params[1];
-            email = params[2];
+            String password = params[1];
+            String email = params[2];
             RegisterResult result = server.register(new RegisterRequest(username, password, email));
             authToken = result.authToken();
             return "Logged in as " + username;

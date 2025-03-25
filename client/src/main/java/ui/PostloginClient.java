@@ -23,8 +23,8 @@ public class PostloginClient {
             return switch (cmd) {
                 case "create" -> create(params);
                 case "list" -> list();
-                //case "join" -> join(params);
-                //case "observe" -> observe(params);
+                case "join" -> join(params);
+                case "observe" -> observe(params);
                 case "logout" -> logout();
                 case "quit" -> "quit";
                 default -> help();
@@ -34,7 +34,7 @@ public class PostloginClient {
         }
     }
 
-    public String create (String... params) throws ResponseException {
+    public String create(String... params) throws ResponseException {
         if (params.length >= 1) {
             var gameName = params[0];
             server.create(new CreateRequest(authToken, gameName));
@@ -43,12 +43,34 @@ public class PostloginClient {
         throw new ResponseException(400, "Expected: <username> <password>");
     }
 
-    public String list () {
-        ListResult result;
-        return "finish";
+    public String list() throws ResponseException {
+        ListResult result = server.list(new ListRequest(authToken));
+        String listString = "";
+        for (int i = 0; i < result.games().size(); i++) {
+            listString = listString.concat("\n" + result.games().get(i));
+        }
+        return listString;
     }
 
-    public String logout () throws ResponseException {
+    public String join(String... params) throws ResponseException {
+        if (params.length >= 1) {
+            int gameID = Integer.parseInt(params[0]);
+            var playerColor = params[1];
+            server.join(new JoinRequest(authToken, playerColor, gameID));
+            //call gameClient and pass authToken, gameID, and playercolor
+        }
+        throw new ResponseException(400, "Expected: <username> <password>");
+    }
+
+    public String observe(String...params) throws ResponseException {
+        if (params.length >= 1) {
+            int gameID = Integer.parseInt(params[0]);
+            //call gameClient and pass gameID
+        }
+        throw new ResponseException(400, "Expected: <username> <password>");
+    }
+
+    public String logout() throws ResponseException {
         server.logout(new LogoutRequest(authToken));
         return "logged out";
     }
