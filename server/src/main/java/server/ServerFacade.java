@@ -26,12 +26,15 @@ public class ServerFacade {
         return this.makeRequest("POST", path, request, LoginResult.class);
     }
 
+    public LogoutResult logout(LogoutRequest request) throws ResponseException {
+        var path = "/session";
+        return this.makeRequest("DELETE", path, request, LogoutResult.class);
+    }
+
     public ClearResult clear() throws ResponseException {
         var path = "/db";
         return this.makeRequest("DELETE", path, null, ClearResult.class);
     }
-
-
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws ResponseException {
         try {

@@ -2,10 +2,7 @@ package client;
 
 import model.UserData;
 import org.junit.jupiter.api.*;
-import records.LoginRequest;
-import records.LoginResult;
-import records.RegisterRequest;
-import records.RegisterResult;
+import records.*;
 import server.ResponseException;
 import server.Server;
 import server.ServerFacade;
@@ -165,6 +162,26 @@ public class ServerFacadeTests {
     @Nested
     @DisplayName("logout tests")
     class LogoutTests {
+        String authToken;
+
+        @BeforeEach
+        public void init() throws ResponseException {
+            facade.clear();
+            RegisterResult result = facade.register(new RegisterRequest(oldUser.username(), oldUser.password(), oldUser.email()));
+            authToken = result.authToken();
+        }
+
+        @Test
+        @DisplayName("logout success")
+        public void logoutSuccess() {
+            Assertions.assertDoesNotThrow(()->facade.logout(new LogoutRequest(authToken)));
+            Assertions.assertThrows(ResponseException.class, ()->facade.logout(new LogoutRequest(authToken)));
+        }
+    }
+
+    @Nested
+    @DisplayName("list tests")
+    class ListTest {
 
     }
 
