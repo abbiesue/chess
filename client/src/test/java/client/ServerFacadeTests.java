@@ -1,8 +1,5 @@
 package client;
 
-import chess.ChessGame;
-import chess.ChessPiece;
-import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import records.*;
