@@ -204,6 +204,8 @@ public class ServerFacadeTests {
     @DisplayName("create tests")
     class CreateTests {
         CreateRequest goodReq;
+        CreateRequest badAuth = new CreateRequest("badAuth", "badGame");
+        CreateRequest badReq;
         String authToken;
 
         @BeforeEach
@@ -212,12 +214,33 @@ public class ServerFacadeTests {
             RegisterResult result = facade.register(new RegisterRequest(oldUser.username(), oldUser.password(), oldUser.email()));
             authToken = result.authToken();
             goodReq = new CreateRequest(authToken, "goodGame");
+            badReq = new CreateRequest(authToken, "badGame");
         }
 
         @Test
         @DisplayName("create success")
         void createSuccess() {
             Assertions.assertDoesNotThrow(()->facade.create(goodReq));
+        }
+
+        @Test
+        @DisplayName("create failure - bad auth")
+        void createBadAuth() {
+            try {
+                facade.create(badAuth);
+            } catch (ResponseException e) {
+                Assertions.assertEquals(401, e.statusCode());
+            }
+        }
+
+        @Test
+        @DisplayName("create failure - bad req")
+        void createBadReq() {
+            try {
+                facade.create(badReq);
+            } catch (ResponseException e) {
+                Assertions.assertEquals(400, e.statusCode());
+            }
         }
     }
 
