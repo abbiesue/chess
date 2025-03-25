@@ -19,6 +19,8 @@ public class ClearHandler {
             result = clearService.clear();
         } catch (ResponseException e) {
             return e.toJson();
+        } catch (DataAccessException e) {
+            return new ResponseException(500, "DataAccessException");
         }
         return new Gson().toJson(result);
     }

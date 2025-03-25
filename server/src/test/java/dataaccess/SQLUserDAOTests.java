@@ -20,7 +20,7 @@ public class SQLUserDAOTests {
     }
 
     @AfterEach
-    void tearDown() throws ResponseException {
+    void tearDown() throws ResponseException, DataAccessException {
         userDAO.clear();
         authDAO.clear();
     }

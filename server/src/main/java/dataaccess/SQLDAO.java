@@ -11,6 +11,9 @@ public abstract class SQLDAO {
     void configureDatabase(String[] createStatements) throws ResponseException, DataAccessException {
         DatabaseManager.createDatabase();
         try (var conn = DatabaseManager.getConnection()) {
+//            try (var stmt = conn.createStatement()) {
+//                stmt.executeUpdate("DROP TABLE IF EXISTS authData");
+//            }
             for (var statement : createStatements) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();

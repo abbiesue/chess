@@ -1,5 +1,6 @@
 package service;
 
+import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
@@ -37,7 +38,7 @@ public class ClearServiceTests {
 
     @Test
     @DisplayName("clear success")
-    public void clearSuccessTest() throws ResponseException {
+    public void clearSuccessTest() throws ResponseException, DataAccessException {
         clearService.clear();
         Assertions.assertTrue(userDAO.users.isEmpty());
         Assertions.assertTrue(gameDAO.games.isEmpty());

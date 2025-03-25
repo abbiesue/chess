@@ -14,7 +14,7 @@ public class SQLAuthDAOTests {
     }
 
     @AfterEach
-    void tearDown() throws ResponseException {
+    void tearDown() throws ResponseException, DataAccessException {
         authDAO.clear();
     }
 

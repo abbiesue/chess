@@ -13,9 +13,9 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
             `id` int NOT NULL AUTO_INCREMENT,
             `authToken` varchar(256) NOT NULL,
             `username` varchar(256) NOT NULL,
-            PRIMARY KEY (`id`),
-            INDEX indx_auth(authToken),
-            INDEX indx_user(username)
+            PRIMARY KEY (`id`), 
+            INDEX indx_auth(authToken),  -- Regular index (NOT UNIQUE)
+            INDEX indx_user(username)    -- Regular index (NOT UNIQUE)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
@@ -24,7 +24,7 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
 
     @Override
     public void createAuth(AuthData authdata) throws ResponseException {
-        var statement = "INSERT IGNORE INTO authData (authToken, username) VALUES (?,?)";
+        var statement = "INSERT INTO authData (authToken, username) VALUES (?,?)";
         String authToken = authdata.authToken();
         String username = authdata.username();
         executeUpdate(statement, authToken, username);
@@ -55,9 +55,10 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
     }
 
     @Override
-    public void clear() throws ResponseException {
-        var statement = "TRUNCATE authData";
+    public void clear() throws ResponseException, DataAccessException {
+        var statement = "DROP TABLE IF EXISTS authData";
         executeUpdate(statement);
+        configureDatabase(createStatements);
     }
 
     private AuthData readAuth(ResultSet rs) throws SQLException {
