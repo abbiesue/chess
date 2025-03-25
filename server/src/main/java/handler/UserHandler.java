@@ -47,6 +47,7 @@ public class UserHandler {
     }
 
     public Object logout(Request req, Response res) {
+        System.out.println(req.toString());
         LogoutRequest request = new LogoutRequest(req.headers("Authorization"));
         LogoutResult result;
         try {

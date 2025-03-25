@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerFacade {
     private final String serverURL;
@@ -43,6 +45,11 @@ public class ServerFacade {
             http.setRequestMethod(method);
             http.setDoOutput(true);
 
+            Map<String, String> headers = extractHeaders(request);
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                http.setRequestProperty(header.getKey(), header.getValue());
+            }
+
             writeBody(request, http);
             http.connect();
             throwIfNotSuccessful(http);
@@ -75,6 +82,18 @@ public class ServerFacade {
             }
         }
         return response;
+    }
+
+    private Map<String, String> extractHeaders(Object request) {
+        Map<String, String> headers = new HashMap<>();
+
+        if (request instanceof LogoutRequest || request instanceof CreateRequest
+                || request instanceof ListRequest|| request instanceof JoinRequest) {
+            LogoutRequest req = (LogoutRequest) request;
+            headers.put("Authorization", req.authToken());
+        }
+
+        return headers;
     }
 
     private void throwIfNotSuccessful(HttpURLConnection http) throws IOException, ResponseException{
