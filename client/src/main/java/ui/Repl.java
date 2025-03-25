@@ -1,15 +1,18 @@
 package ui;
 
+import server.ServerFacade;
+
 import java.util.Scanner;
 
 
 public class Repl {
     private final PreloginClient preloginClient;
-    private String serverURL;
+    private PostloginClient postloginClient;
+    ServerFacade server;
 
     public Repl(String serverURL) {
-        this.serverURL = serverURL;
-        preloginClient = new PreloginClient(serverURL);
+        server = new ServerFacade(serverURL);
+        preloginClient = new PreloginClient(server);
     }
 
     public void run () {
@@ -23,6 +26,15 @@ public class Repl {
             try {
                 result = preloginClient.eval(line);
                 System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
+                if (result.contains("Logged in")) {
+                    while(!result.equals("logged out") && !result.equals("quit")) {
+                        printPrompt();
+                        line = scanner.nextLine();
+                        postloginClient = new PostloginClient(server, preloginClient.authToken);
+                        result = postloginClient.eval(line);
+                        System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
+                    }
+                }
             } catch (Throwable e) {
                 var msg = e.toString();
                 System.out.print(msg);

@@ -1,7 +1,9 @@
 package ui;
 
 import records.LoginRequest;
+import records.LoginResult;
 import records.RegisterRequest;
+import records.RegisterResult;
 import server.ResponseException;
 import server.ServerFacade;
 
@@ -9,14 +11,13 @@ import java.util.Arrays;
 
 public class PreloginClient {
     private final ServerFacade server;
-    private final String serverUrl;
     private String username;
     private String password;
     private String email;
+    String authToken;
 
-    public PreloginClient(String serverUrl) {
-        server = new ServerFacade(serverUrl);
-        this.serverUrl = serverUrl;
+    public PreloginClient(ServerFacade server) {
+        this.server = server;
     }
 
     public String eval(String input) {
@@ -38,8 +39,9 @@ public class PreloginClient {
     public String login(String... params) throws ResponseException {
         if (params.length >= 1) {
             username = params[0];
-            server.login(new LoginRequest(username, params[1]));
-            return String.format("Logged in as " + username);
+            LoginResult result = server.login(new LoginRequest(username, params[1]));
+            authToken = result.authToken();
+            return "Logged in as " + username;
         }
         throw new ResponseException(400, "Expected: <username> <password>");
     }
@@ -49,13 +51,14 @@ public class PreloginClient {
             username = params[0];
             password = params[1];
             email = params[2];
-            server.register(new RegisterRequest(username, password, email));
-            return String.format("Logged in as " + username);
+            RegisterResult result = server.register(new RegisterRequest(username, password, email));
+            authToken = result.authToken();
+            return "Logged in as " + username;
         }
         throw new ResponseException(400, "Expected: <username> <password> <email>");
     }
 
-    public String help(String... params) {
+    public String help() {
         return """
                 register <USERNAME> <PASSWORD> <EMAIL> - to create an account
                 login <USERNAME> <PASSWORD> - to access to server
