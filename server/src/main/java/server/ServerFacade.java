@@ -1,9 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
-import records.ClearResult;
-import records.RegisterRequest;
-import records.RegisterResult;
+import records.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +19,11 @@ public class ServerFacade {
     public RegisterResult register(RegisterRequest request) throws ResponseException {
         var path = "/user";
         return this.makeRequest("POST", path, request, RegisterResult.class);
+    }
+
+    public LoginResult login(LoginRequest request) throws ResponseException {
+        var path = "/session";
+        return this.makeRequest("POST", path, request, LoginResult.class);
     }
 
     public ClearResult clear() throws ResponseException {
