@@ -1,14 +1,17 @@
 package ui;
 
+import model.GameData;
 import records.*;
 import server.ResponseException;
 import server.ServerFacade;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class PostloginClient {
     private final ServerFacade server;
     String authToken;
+    GameClient gameClient;
 
     public PostloginClient(ServerFacade server, String authToken) {
         this.server = server;
@@ -23,8 +26,10 @@ public class PostloginClient {
             return switch (cmd) {
                 case "create" -> create(params);
                 case "list" -> list();
-                case "join" -> join(params);
-                case "observe" -> observe(params);
+                case "join", "observe" -> {
+                    gameClient = new GameClient(server, authToken);
+                    yield gameClient.eval(input);
+                }
                 case "logout" -> logout();
                 case "quit" -> "quit";
                 default -> help();
@@ -40,34 +45,23 @@ public class PostloginClient {
             server.create(new CreateRequest(authToken, gameName));
             return "Successfully created " + gameName;
         }
-        throw new ResponseException(400, "Expected: <username> <password>");
+        throw new ResponseException(400, "Expected: <GAME_NAME>");
     }
 
     public String list() throws ResponseException {
         ListResult result = server.list(new ListRequest(authToken));
+        List<GameData> games = result.games();
         String listString = "";
-        for (int i = 0; i < result.games().size(); i++) {
-            listString = listString.concat("\n" + result.games().get(i));
+        GameData game;
+        int index;
+        for (int i = 0; i < games.size(); i++) {
+            game = games.get(i);
+            index = i+1;
+            listString = listString.concat("\n" + index +
+                    ": NAME - " + game.gameName() + " ID - " + game.gameID() +
+                    " WHITE - " + game.whiteUsername() + " BLACK - " + game.blackUsername());
         }
         return listString;
-    }
-
-    public String join(String... params) throws ResponseException {
-        if (params.length >= 1) {
-            int gameID = Integer.parseInt(params[0]);
-            var playerColor = params[1];
-            server.join(new JoinRequest(authToken, playerColor, gameID));
-            //call gameClient and pass authToken, gameID, and playercolor
-        }
-        throw new ResponseException(400, "Expected: <username> <password>");
-    }
-
-    public String observe(String...params) throws ResponseException {
-        if (params.length >= 1) {
-            int gameID = Integer.parseInt(params[0]);
-            //call gameClient and pass gameID
-        }
-        throw new ResponseException(400, "Expected: <username> <password>");
     }
 
     public String logout() throws ResponseException {
@@ -77,7 +71,7 @@ public class PostloginClient {
 
     public String help() {
         return """
-                create <NAME> - to create a game
+                create <GAME_NAME> - to create a game
                 list - to list games
                 join <ID> [WHITE|BLACK] - to join a game
                 observe<ID> - to observe a game
