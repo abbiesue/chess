@@ -3,8 +3,6 @@ package ui;
 import records.JoinRequest;
 import server.ResponseException;
 import server.ServerFacade;
-
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -13,11 +11,11 @@ import static ui.EscapeSequences.*;
 
 public class GameClient {
     //board dimensions:
-    final int SQUARE_SIZE_IN_PADDED_CHARS = 3;
-    final int BOARD_SIZE_IN_SQUARES = 8;
+    static final int BOARD_SIZE_IN_SQUARES = 8;
 
-    final String LIGHT = "light";
-    final String DARK = "dark";
+    static final String LIGHT = "light";
+    static final String DARK = "dark";
+    static final String WHITE = "WHITE";
 
 
     private final ServerFacade server;
@@ -59,9 +57,8 @@ public class GameClient {
 
     public String observe(String...params) throws ResponseException {
         if (params.length >= 1) {
-            //int gameID = Integer.parseInt(params[0]);
             //this is hardcoded and will need to be changed later.
-            playerColor = "WHITE";
+            playerColor = WHITE;
             printBoard();
             return "\n observing...";
         }
@@ -84,7 +81,7 @@ public class GameClient {
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         out.print(ERASE_SCREEN);
         printHorizontalBoarder(out);
-        if (playerColor.equals("WHITE")) {
+        if (playerColor.equals(WHITE)) {
             printBlackSide(out);
             printEmptySquares(out);
             printWhiteSide(out);
@@ -102,7 +99,7 @@ public class GameClient {
         out.print("\n");
         setGrey(out);
         String[] headers;
-        if (playerColor.equals("WHITE")) {
+        if (playerColor.equals(WHITE)) {
             headers = new String[]{ " ", " a ", " b ", " c ", " d ", " e ", " f ", " g ", " h ", " "};
         } else {
             headers = new String[]{ " ", " h ", " g ", " f ", " e ", " d ", " c ", " b ", " a ", " "};
@@ -120,7 +117,7 @@ public class GameClient {
     }
 
     private void printWhiteSide(PrintStream out) {
-        if (playerColor.equals("WHITE")) {
+        if (playerColor.equals(WHITE)) {
             out.print(SET_BG_COLOR_DARK_GREY);
             out.print("\n");
             printBoarderSquare(out, "2");
@@ -230,7 +227,7 @@ public class GameClient {
     }
 
     private void printBoardSquare(PrintStream out, String piece, String shade) {
-        if (shade.equals("dark")) {
+        if (shade.equals(DARK)) {
             setDark(out);
         } else {
             setLight(out);
@@ -241,23 +238,13 @@ public class GameClient {
 
 
     private void printEmptySquares(PrintStream out) {
-        if (playerColor.equals("WHITE")) {
+        if (playerColor.equals(WHITE)) {
             String shade = LIGHT;
             for (int j = 6; j > 2; j--) {
                 out.print(SET_BG_COLOR_DARK_GREY);
                 out.print("\n");
                 printBoarderSquare(out, String.valueOf(j));
-                for (int i = 0; i < BOARD_SIZE_IN_SQUARES; i++) {
-                    if (shade.equals(LIGHT)) {
-                        setLight(out);
-                        out.print(EMPTY);
-                        shade = DARK;
-                    } else {
-                        setDark(out);
-                        out.print(EMPTY);
-                        shade = LIGHT;
-                    }
-                }
+                printSquareLoop(shade, out);
                 printBoarderSquare(out, String.valueOf(j));
                 if (shade.equals(DARK)) {
                     shade = LIGHT;
@@ -271,23 +258,27 @@ public class GameClient {
                 out.print(SET_BG_COLOR_DARK_GREY);
                 out.print("\n");
                 printBoarderSquare(out, String.valueOf(j));
-                for (int i = 0; i < BOARD_SIZE_IN_SQUARES; i++) {
-                    if (shade.equals(LIGHT)) {
-                        setLight(out);
-                        out.print(EMPTY);
-                        shade = DARK;
-                    } else {
-                        setDark(out);
-                        out.print(EMPTY);
-                        shade = LIGHT;
-                    }
-                }
+                printSquareLoop(shade, out);
                 printBoarderSquare(out, String.valueOf(j));
                 if (shade.equals(DARK)) {
                     shade = LIGHT;
                 } else {
                     shade = DARK;
                 }
+            }
+        }
+    }
+
+    private void printSquareLoop(String shade, PrintStream out) {
+        for (int i = 0; i < BOARD_SIZE_IN_SQUARES; i++) {
+            if (shade.equals(LIGHT)) {
+                setLight(out);
+                out.print(EMPTY);
+                shade = DARK;
+            } else {
+                setDark(out);
+                out.print(EMPTY);
+                shade = LIGHT;
             }
         }
     }

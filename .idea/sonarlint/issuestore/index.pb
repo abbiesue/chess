@@ -109,7 +109,5 @@ b
 2server/src/test/java/service/GameServiceTests.java,c/b/cbbd93c03402376669a48a743c29d734c3573acf
 l
 <shared/src/test/java/passoff/chess/game/ValidMovesTests.java,f/f/ffd727fc5e9fd2b43cbe3581e669a4c1ed406a80
-b
-2server/src/main/java/server/ResponseException.java,0/8/08e86f571108c451256ea638b24ce179200fac04
 A
 client/client.iml,0/2/022fd7ad3cac7d492229d5142f7207b87826a366

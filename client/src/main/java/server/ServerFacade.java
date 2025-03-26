@@ -103,19 +103,19 @@ public class ServerFacade {
 
     private Map<String, String> extractHeaders(Object request) {
         Map<String, String> headers = new HashMap<>();
-        final String AUTH_HEADER = "Authorization";
+        final String authHeader = "Authorization";
 
         if (request instanceof LogoutRequest req) {
-            headers.put(AUTH_HEADER, req.authToken());
+            headers.put(authHeader, req.authToken());
         }
         if (request instanceof CreateRequest req) {
-            headers.put(AUTH_HEADER, req.authToken());
+            headers.put(authHeader, req.authToken());
         }
         if (request instanceof ListRequest req) {
-            headers.put(AUTH_HEADER, req.authToken());
+            headers.put(authHeader, req.authToken());
         }
         if (request instanceof JoinRequest req) {
-            headers.put(AUTH_HEADER, req.authToken());
+            headers.put(authHeader, req.authToken());
         }
 
         return headers;
