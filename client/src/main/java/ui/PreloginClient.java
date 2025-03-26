@@ -32,7 +32,7 @@ public class PreloginClient {
     }
 
     public String login(String... params) throws ResponseException {
-        if (params.length >= 1) {
+        if (params.length >= 2) {
             username = params[0];
             LoginResult result = server.login(new LoginRequest(username, params[1]));
             authToken = result.authToken();
@@ -42,7 +42,7 @@ public class PreloginClient {
     }
 
     public String register(String... params) throws ResponseException {
-        if (params.length >= 1) {
+        if (params.length >= 3) {
             username = params[0];
             String password = params[1];
             String email = params[2];
