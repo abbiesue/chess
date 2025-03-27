@@ -58,40 +58,12 @@ public class UserServiceTests {
         Assertions.assertThrows(ResponseException.class, ()-> {userService.register(noEmail);});
     }
 
-//    @Test
-//    @DisplayName("login success")
-//    public void loginSucess() throws ResponseException {
-//        LoginRequest newLogin = new LoginRequest(existingUser.username(), existingUser.password());
-//        LoginResult loginResult = userService.login(newLogin);
-//        Assertions.assertEquals(loginResult.username(), existingUser.username(), "username of request and result did not match");
-//        Assertions.assertNotNull(loginResult.authToken(), "result had a null authToken");
-//    }
-
     @Test
     @DisplayName("login nonexisting user")
     public void loginNonexistingUser() {
         LoginRequest newLogin = new LoginRequest(newUser.username(), newUser.password());
         Assertions.assertThrows(ResponseException.class, ()-> {userService.login(newLogin);});
     }
-
-//    @Test
-//    @DisplayName("login wrong password")
-//    public void loginWrongPassword() {
-//        LoginRequest newLogin = new LoginRequest(existingUser.username(), "wrongPassword");
-//        Assertions.assertThrows(ResponseException.class, ()-> {userService.login(newLogin);});
-//    }
-
-//    @Test
-//    @DisplayName("logout success")
-//    public void logoutSuccess() throws ResponseException {
-//        //login
-//        LoginRequest newLogin = new LoginRequest(existingUser.username(), existingUser.password());
-//        LoginResult loginResult = userService.login(newLogin);
-//
-//        //logout
-//        LogoutRequest logoutRequest = new LogoutRequest(loginResult.authToken());
-//        Assertions.assertDoesNotThrow(()-> {userService.logout(logoutRequest);});
-//    }
 
     @Test
     @DisplayName("logout unauthorized")
