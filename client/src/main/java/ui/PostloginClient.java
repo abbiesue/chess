@@ -58,7 +58,7 @@ public class PostloginClient {
             game = games.get(i);
             index = i+1;
             listString = listString.concat("\n" + index +
-                    ": NAME - " + game.gameName() + " ID - " + game.gameID() +
+                    ": NAME - " + game.gameName() +
                     " WHITE - " + game.whiteUsername() + " BLACK - " + game.blackUsername());
         }
         return listString;

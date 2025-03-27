@@ -1,6 +1,9 @@
 package ui;
 
+import model.GameData;
 import records.JoinRequest;
+import records.ListRequest;
+import records.ListResult;
 import server.ResponseException;
 import server.ServerFacade;
 import java.io.PrintStream;
@@ -10,9 +13,7 @@ import java.util.Arrays;
 import static ui.EscapeSequences.*;
 
 public class GameClient {
-    //board dimensions:
     static final int BOARD_SIZE_IN_SQUARES = 8;
-
     static final String LIGHT = "light";
     static final String DARK = "dark";
     static final String WHITE = "WHITE";
@@ -48,7 +49,8 @@ public class GameClient {
             if (!isInteger(params[0])) {
                 throw new ResponseException(400, "ID must be an integer");
             }
-            int gameID = Integer.parseInt(params[0]);
+            int listID = Integer.parseInt(params[0]);
+            int gameID = getIDfromList(listID);
             playerColor = params[1].toUpperCase();
             server.join(new JoinRequest(authToken, playerColor, gameID));
             printBoard();
@@ -78,6 +80,12 @@ public class GameClient {
                 quit - to exit program
                 help - to list options
                 """;
+    }
+
+    public int getIDfromList(int listID) throws ResponseException {
+        ListResult listResult = server.list(new ListRequest(authToken));
+        GameData game = listResult.games().get(listID-1);
+        return game.gameID();
     }
 
     public static boolean isInteger(String s) {
