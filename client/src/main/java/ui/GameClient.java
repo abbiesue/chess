@@ -45,6 +45,9 @@ public class GameClient {
 
     public String join(String... params) throws ResponseException {
         if (params.length >= 2) {
+            if (!isInteger(params[0])) {
+                throw new ResponseException(400, "ID must be an integer");
+            }
             int gameID = Integer.parseInt(params[0]);
             playerColor = params[1].toUpperCase();
             server.join(new JoinRequest(authToken, playerColor, gameID));
@@ -75,6 +78,15 @@ public class GameClient {
                 quit - to exit program
                 help - to list options
                 """;
+    }
+
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 
     private void printBoard() {
