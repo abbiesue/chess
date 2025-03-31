@@ -83,7 +83,11 @@ public class GameClient {
     }
 
     public int getIDfromList(int listID) throws ResponseException {
+
         ListResult listResult = server.list(new ListRequest(authToken));
+        if (listID > listResult.games().size() || listID < 0) {
+            return -1;
+        }
         GameData game = listResult.games().get(listID-1);
         return game.gameID();
     }
@@ -166,19 +170,19 @@ public class GameClient {
         } else {
             out.print(SET_BG_COLOR_DARK_GREY);
             out.print("\n");
-            printBoarderSquare(out, "8");
+            printBoarderSquare(out, "1");
             printBoardSquare(out, WHITE_ROOK, LIGHT);
             printBoardSquare(out, WHITE_KNIGHT, DARK);
             printBoardSquare(out, WHITE_BISHOP, LIGHT);
-            printBoardSquare(out, WHITE_QUEEN, DARK);
-            printBoardSquare(out, WHITE_KING, LIGHT);
+            printBoardSquare(out, WHITE_KING, DARK);
+            printBoardSquare(out, WHITE_QUEEN, LIGHT);
             printBoardSquare(out, WHITE_BISHOP, DARK);
             printBoardSquare(out, WHITE_KNIGHT, LIGHT);
             printBoardSquare(out, WHITE_ROOK, DARK);
-            printBoarderSquare(out, "8");
+            printBoarderSquare(out, "1");
             out.print(SET_BG_COLOR_DARK_GREY);
             out.print("\n");
-            printBoarderSquare(out, "7");
+            printBoarderSquare(out, "2");
             printBoardSquare(out, WHITE_PAWN, DARK);
             printBoardSquare(out, WHITE_PAWN, LIGHT);
             printBoardSquare(out, WHITE_PAWN, DARK);
@@ -187,7 +191,7 @@ public class GameClient {
             printBoardSquare(out, WHITE_PAWN, LIGHT);
             printBoardSquare(out, WHITE_PAWN, DARK);
             printBoardSquare(out, WHITE_PAWN, LIGHT);
-            printBoarderSquare(out, "7");
+            printBoarderSquare(out, "2");
         }
     }
 
@@ -195,7 +199,7 @@ public class GameClient {
         if (playerColor.equals("BLACK")) {
             out.print(SET_BG_COLOR_DARK_GREY);
             out.print("\n");
-            printBoarderSquare(out, "2");
+            printBoarderSquare(out, "7");
             printBoardSquare(out, BLACK_PAWN, LIGHT);
             printBoardSquare(out, BLACK_PAWN, DARK);
             printBoardSquare(out, BLACK_PAWN, LIGHT);
@@ -204,10 +208,10 @@ public class GameClient {
             printBoardSquare(out, BLACK_PAWN, DARK);
             printBoardSquare(out, BLACK_PAWN, LIGHT);
             printBoardSquare(out, BLACK_PAWN, DARK);
-            printBoarderSquare(out, "2");
+            printBoarderSquare(out, "7");
             out.print(SET_BG_COLOR_DARK_GREY);
             out.print("\n");
-            printBoarderSquare(out, "1");
+            printBoarderSquare(out, "8");
             printBoardSquare(out, BLACK_ROOK, DARK);
             printBoardSquare(out, BLACK_KNIGHT, LIGHT);
             printBoardSquare(out, BLACK_BISHOP, DARK);
@@ -216,7 +220,7 @@ public class GameClient {
             printBoardSquare(out, BLACK_BISHOP, LIGHT);
             printBoardSquare(out, BLACK_KNIGHT, DARK);
             printBoardSquare(out, BLACK_ROOK, LIGHT);
-            printBoarderSquare(out, "1");
+            printBoarderSquare(out, "8");
             out.print(SET_BG_COLOR_DARK_GREY);
         } else {
             out.print(SET_BG_COLOR_DARK_GREY);
