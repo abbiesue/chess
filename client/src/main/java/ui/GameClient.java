@@ -1,5 +1,9 @@
 package ui;
 
+import chess.ChessBoard;
+import chess.ChessGame;
+import chess.ChessPiece;
+import chess.ChessPosition;
 import model.GameData;
 import records.JoinRequest;
 import records.ListRequest;
@@ -14,6 +18,9 @@ import static ui.EscapeSequences.*;
 
 public class GameClient {
     static final int BOARD_SIZE_IN_SQUARES = 8;
+    static final int TOTAL_COLUMNS = 8;
+    static final int TOTAL_ROWS = 8;
+    static final int SPACES_ON_BOARD = 64;
     static final String LIGHT = "light";
     static final String DARK = "dark";
     static final String WHITE = "WHITE";
@@ -53,7 +60,7 @@ public class GameClient {
             int gameID = getIDfromList(listID);
             playerColor = params[1].toUpperCase();
             server.join(new JoinRequest(authToken, playerColor, gameID));
-            printBoard();
+            printFromGame(getGame(gameID));
             return " ";
 
         }
@@ -62,9 +69,13 @@ public class GameClient {
 
     public String observe(String...params) throws ResponseException {
         if (params.length >= 1) {
-            //this is hardcoded and will need to be changed later.
             playerColor = WHITE;
-            printBoard();
+            if (!isInteger(params[0])) {
+                throw new ResponseException(400, "ID must be an integer");
+            }
+            int listID = Integer.parseInt(params[0]);
+            int gameID = getIDfromList(listID);
+            printFromGame(getGame(gameID));
             return "\n observing...";
         }
         throw new ResponseException(400, "Expected: <ID>");
@@ -80,6 +91,16 @@ public class GameClient {
                 quit - to exit program
                 help - to list options
                 """;
+    }
+
+    private ChessGame getGame(int gameID) throws ResponseException {
+        var games = server.list(new ListRequest(authToken)).games();
+        for (int i = 0; i < games.size(); i++) {
+            if (games.get(i).gameID() == gameID) {
+                return games.get(i).game();
+            }
+        }
+        throw new ResponseException(400, "Game not Found");
     }
 
     public int getIDfromList(int listID) throws ResponseException {
@@ -101,22 +122,57 @@ public class GameClient {
         return true;
     }
 
-    private void printBoard() {
-        var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-        out.print(ERASE_SCREEN);
+
+    private void printFromGame(ChessGame game){
+        ChessBoard board = game.getBoard();
+        PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
+        if (playerColor.equals(WHITE)){
+            game.getBoard().flipBoard();
+        }
+        String shade = LIGHT;
+        int rowHeader;
+
         printHorizontalBoarder(out);
-        if (playerColor.equals(WHITE)) {
-            printBlackSide(out);
-            printEmptySquares(out);
-            printWhiteSide(out);
-        } else {
-            printWhiteSide(out);
-            printEmptySquares(out);
-            printBlackSide(out);
+        for (int row = 1; row <= TOTAL_ROWS; row++) {
+            if (playerColor.equals(WHITE)) {rowHeader = (TOTAL_ROWS+1) - row;} else {rowHeader = row;}
+            out.print("\n");
+            printBoarderSquare(out, String.valueOf(rowHeader));
+            for (int col = 1; col <= TOTAL_COLUMNS; col++) {
+                var location = new ChessPosition(row, col);
+                String printChar = EMPTY;
+                if (board.getPiece(location) != null) {
+                    var type = board.getPiece(location).getPieceType();
+                    var color = board.getPiece(location).getTeamColor();
+                    //switch to assign printChar
+                    switch (type) {
+                        case ROOK -> {
+                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_ROOK;} else {printChar = BLACK_ROOK;}
+                        }
+                        case KNIGHT -> {
+                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_KNIGHT;} else {printChar = BLACK_KNIGHT;}
+                        }
+                        case BISHOP -> {
+                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_BISHOP;} else {printChar = BLACK_BISHOP;}
+                        }
+                        case KING -> {
+                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_KING;} else {printChar = BLACK_KING;}
+                        }
+                        case QUEEN -> {
+                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_QUEEN;} else {printChar = BLACK_QUEEN;}
+                        }
+                        case PAWN -> {
+                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_PAWN;} else {printChar = BLACK_PAWN;}
+                        }
+                    }
+                }
+                printBoardSquare(out, printChar, shade);
+                if (shade.equals(LIGHT)) {shade = DARK;} else {shade = LIGHT;}
+            }
+            printBoarderSquare(out, String.valueOf(rowHeader));
+            out.print(SET_BG_COLOR_DARK_GREY);
+            if (shade.equals(LIGHT)) {shade = DARK;} else {shade = LIGHT;}
         }
         printHorizontalBoarder(out);
-        out.print(SET_BG_COLOR_DARK_GREY);
-        out.print(SET_TEXT_COLOR_WHITE);
     }
 
     private void printHorizontalBoarder(PrintStream out) {
@@ -131,6 +187,7 @@ public class GameClient {
         for (int col = 0; col < BOARD_SIZE_IN_SQUARES + 2; col++) {
             printBoarderSquare(out, headers[col]);
         }
+        out.print(SET_BG_COLOR_DARK_GREY);
     }
 
     private void printBoarderSquare(PrintStream out, String character){
@@ -138,116 +195,6 @@ public class GameClient {
         out.print(SET_BG_COLOR_LIGHT_GREY);
         out.print(SET_TEXT_COLOR_BLACK);
         out.print(character);
-    }
-
-    private void printWhiteSide(PrintStream out) {
-        if (playerColor.equals(WHITE)) {
-            out.print(SET_BG_COLOR_DARK_GREY);
-            out.print("\n");
-            printBoarderSquare(out, "2");
-            printBoardSquare(out, WHITE_PAWN, LIGHT);
-            printBoardSquare(out, WHITE_PAWN, DARK);
-            printBoardSquare(out, WHITE_PAWN, LIGHT);
-            printBoardSquare(out, WHITE_PAWN, DARK);
-            printBoardSquare(out, WHITE_PAWN, LIGHT);
-            printBoardSquare(out, WHITE_PAWN, DARK);
-            printBoardSquare(out, WHITE_PAWN, LIGHT);
-            printBoardSquare(out, WHITE_PAWN, DARK);
-            printBoarderSquare(out, "2");
-            out.print(SET_BG_COLOR_DARK_GREY);
-            out.print("\n");
-            printBoarderSquare(out, "1");
-            printBoardSquare(out, WHITE_ROOK, DARK);
-            printBoardSquare(out, WHITE_KNIGHT, LIGHT);
-            printBoardSquare(out, WHITE_BISHOP, DARK);
-            printBoardSquare(out, WHITE_QUEEN, LIGHT);
-            printBoardSquare(out, WHITE_KING, DARK);
-            printBoardSquare(out, WHITE_BISHOP, LIGHT);
-            printBoardSquare(out, WHITE_KNIGHT, DARK);
-            printBoardSquare(out, WHITE_ROOK, LIGHT);
-            printBoarderSquare(out, "1");
-            out.print(SET_BG_COLOR_DARK_GREY);
-        } else {
-            out.print(SET_BG_COLOR_DARK_GREY);
-            out.print("\n");
-            printBoarderSquare(out, "1");
-            printBoardSquare(out, WHITE_ROOK, LIGHT);
-            printBoardSquare(out, WHITE_KNIGHT, DARK);
-            printBoardSquare(out, WHITE_BISHOP, LIGHT);
-            printBoardSquare(out, WHITE_KING, DARK);
-            printBoardSquare(out, WHITE_QUEEN, LIGHT);
-            printBoardSquare(out, WHITE_BISHOP, DARK);
-            printBoardSquare(out, WHITE_KNIGHT, LIGHT);
-            printBoardSquare(out, WHITE_ROOK, DARK);
-            printBoarderSquare(out, "1");
-            out.print(SET_BG_COLOR_DARK_GREY);
-            out.print("\n");
-            printBoarderSquare(out, "2");
-            printBoardSquare(out, WHITE_PAWN, DARK);
-            printBoardSquare(out, WHITE_PAWN, LIGHT);
-            printBoardSquare(out, WHITE_PAWN, DARK);
-            printBoardSquare(out, WHITE_PAWN, LIGHT);
-            printBoardSquare(out, WHITE_PAWN, DARK);
-            printBoardSquare(out, WHITE_PAWN, LIGHT);
-            printBoardSquare(out, WHITE_PAWN, DARK);
-            printBoardSquare(out, WHITE_PAWN, LIGHT);
-            printBoarderSquare(out, "2");
-        }
-    }
-
-    private void printBlackSide(PrintStream out) {
-        if (playerColor.equals("BLACK")) {
-            out.print(SET_BG_COLOR_DARK_GREY);
-            out.print("\n");
-            printBoarderSquare(out, "7");
-            printBoardSquare(out, BLACK_PAWN, LIGHT);
-            printBoardSquare(out, BLACK_PAWN, DARK);
-            printBoardSquare(out, BLACK_PAWN, LIGHT);
-            printBoardSquare(out, BLACK_PAWN, DARK);
-            printBoardSquare(out, BLACK_PAWN, LIGHT);
-            printBoardSquare(out, BLACK_PAWN, DARK);
-            printBoardSquare(out, BLACK_PAWN, LIGHT);
-            printBoardSquare(out, BLACK_PAWN, DARK);
-            printBoarderSquare(out, "7");
-            out.print(SET_BG_COLOR_DARK_GREY);
-            out.print("\n");
-            printBoarderSquare(out, "8");
-            printBoardSquare(out, BLACK_ROOK, DARK);
-            printBoardSquare(out, BLACK_KNIGHT, LIGHT);
-            printBoardSquare(out, BLACK_BISHOP, DARK);
-            printBoardSquare(out, BLACK_KING, LIGHT);
-            printBoardSquare(out, BLACK_QUEEN, DARK);
-            printBoardSquare(out, BLACK_BISHOP, LIGHT);
-            printBoardSquare(out, BLACK_KNIGHT, DARK);
-            printBoardSquare(out, BLACK_ROOK, LIGHT);
-            printBoarderSquare(out, "8");
-            out.print(SET_BG_COLOR_DARK_GREY);
-        } else {
-            out.print(SET_BG_COLOR_DARK_GREY);
-            out.print("\n");
-            printBoarderSquare(out, "8");
-            printBoardSquare(out, BLACK_ROOK, LIGHT);
-            printBoardSquare(out, BLACK_KNIGHT, DARK);
-            printBoardSquare(out, BLACK_BISHOP, LIGHT);
-            printBoardSquare(out, BLACK_QUEEN, DARK);
-            printBoardSquare(out, BLACK_KING, LIGHT);
-            printBoardSquare(out, BLACK_BISHOP, DARK);
-            printBoardSquare(out, BLACK_KNIGHT, LIGHT);
-            printBoardSquare(out, BLACK_ROOK, DARK);
-            printBoarderSquare(out, "8");
-            out.print(SET_BG_COLOR_DARK_GREY);
-            out.print("\n");
-            printBoarderSquare(out, "7");
-            printBoardSquare(out, BLACK_PAWN, DARK);
-            printBoardSquare(out, BLACK_PAWN, LIGHT);
-            printBoardSquare(out, BLACK_PAWN, DARK);
-            printBoardSquare(out, BLACK_PAWN, LIGHT);
-            printBoardSquare(out, BLACK_PAWN, DARK);
-            printBoardSquare(out, BLACK_PAWN, LIGHT);
-            printBoardSquare(out, BLACK_PAWN, DARK);
-            printBoardSquare(out, BLACK_PAWN, LIGHT);
-            printBoarderSquare(out, "7");
-        }
     }
 
     private void printBoardSquare(PrintStream out, String piece, String shade) {
@@ -258,53 +205,6 @@ public class GameClient {
         }
         out.print(SET_TEXT_COLOR_BLACK);
         out.print(piece);
-    }
-
-
-    private void printEmptySquares(PrintStream out) {
-        if (playerColor.equals(WHITE)) {
-            String shade = LIGHT;
-            for (int j = 6; j > 2; j--) {
-                out.print(SET_BG_COLOR_DARK_GREY);
-                out.print("\n");
-                printBoarderSquare(out, String.valueOf(j));
-                printSquareLoop(shade, out);
-                printBoarderSquare(out, String.valueOf(j));
-                if (shade.equals(DARK)) {
-                    shade = LIGHT;
-                } else {
-                    shade = DARK;
-                }
-            }
-        } else {
-            String shade = LIGHT;
-            for (int j = 3; j < 7; j++) {
-                out.print(SET_BG_COLOR_DARK_GREY);
-                out.print("\n");
-                printBoarderSquare(out, String.valueOf(j));
-                printSquareLoop(shade, out);
-                printBoarderSquare(out, String.valueOf(j));
-                if (shade.equals(DARK)) {
-                    shade = LIGHT;
-                } else {
-                    shade = DARK;
-                }
-            }
-        }
-    }
-
-    private void printSquareLoop(String shade, PrintStream out) {
-        for (int i = 0; i < BOARD_SIZE_IN_SQUARES; i++) {
-            if (shade.equals(LIGHT)) {
-                setLight(out);
-                out.print(EMPTY);
-                shade = DARK;
-            } else {
-                setDark(out);
-                out.print(EMPTY);
-                shade = LIGHT;
-            }
-        }
     }
 
     private void setGrey(PrintStream out) {

@@ -59,8 +59,6 @@ f
 6server/src/main/java/records/JoinRequestPrimative.java,e/f/ef65829b9ed58528f95a25c9d8221438db0dbbcb
 \
 ,server/src/main/java/records/ListResult.java,c/7/c71021785d879dd5e9e46a52d6f0c99f79fba6cd
-Z
-*shared/src/main/java/chess/ChessBoard.java,d/f/dfc4ec84b5d57ac6e0266e9c319b728da99e0c51
 Y
 )shared/src/main/java/chess/ChessGame.java,1/2/12ee2b2e0577bf40c2f0f09ceb1e2b3d9b36bd7a
 Y
@@ -81,8 +79,6 @@ d
 4shared/src/main/java/chess/PieceMovesCalculator.java,8/6/86445dd29f479c1c12adb292aa9650c09ed77fad
 c
 3shared/src/main/java/chess/RookMovesCalculator.java,c/f/cfbfed9cd31fe5c88ec1949a69e8f5fdebd2d2c8
-A
-server/server.iml,3/f/3f335f11ae5914540a6aba5f5129f694b55a8d87
 A
 shared/shared.iml,7/9/79ea1508e9af0cc867e2dcc0eceb8e335efeb3ab
 l
@@ -109,5 +105,3 @@ b
 2server/src/test/java/service/GameServiceTests.java,c/b/cbbd93c03402376669a48a743c29d734c3573acf
 l
 <shared/src/test/java/passoff/chess/game/ValidMovesTests.java,f/f/ffd727fc5e9fd2b43cbe3581e669a4c1ed406a80
-A
-client/client.iml,0/2/022fd7ad3cac7d492229d5142f7207b87826a366
