@@ -130,13 +130,15 @@ public class GameClient {
             game.getBoard().flipBoard();
         }
         String shade = DARK;
-        int rowHeader;
+        int rowNumber;
+        String rowHeader = "";
 
         printHorizontalBoarder(out);
         for (int row = 1; row <= TOTAL_ROWS; row++) {
-            if (playerColor.equals(WHITE)) {rowHeader = (TOTAL_ROWS+1) - row;} else {rowHeader = row;}
+            if (playerColor.equals(WHITE)) {rowNumber = (TOTAL_ROWS+1) - row;} else {rowNumber = row;}
             out.print("\n");
-            printBoarderSquare(out, String.valueOf(rowHeader));
+            rowHeader = rowHeader.concat(" " + rowNumber + " ");
+            printBoarderSquare(out, rowHeader);
             for (int col = 1; col <= TOTAL_COLUMNS; col++) {
                 var location = new ChessPosition(row, col);
                 String printChar = EMPTY;
@@ -168,9 +170,10 @@ public class GameClient {
                 printBoardSquare(out, printChar, shade);
                 if (shade.equals(LIGHT)) {shade = DARK;} else {shade = LIGHT;}
             }
-            printBoarderSquare(out, String.valueOf(rowHeader));
+            printBoarderSquare(out, rowHeader);
             out.print(SET_BG_COLOR_DARK_GREY);
             if (shade.equals(LIGHT)) {shade = DARK;} else {shade = LIGHT;}
+            rowHeader = "";
         }
         printHorizontalBoarder(out);
     }
@@ -180,9 +183,9 @@ public class GameClient {
         setGrey(out);
         String[] headers;
         if (playerColor.equals(WHITE)) {
-            headers = new String[]{ " ", " a ", " b ", " c ", " d ", " e ", " f ", " g ", " h ", " "};
+            headers = new String[]{ "   ", " a ", " b ", " c ", " d ", " e ", " f ", " g ", " h ", "   "};
         } else {
-            headers = new String[]{ " ", " h ", " g ", " f ", " e ", " d ", " c ", " b ", " a ", " "};
+            headers = new String[]{ "   ", " h ", " g ", " f ", " e ", " d ", " c ", " b ", " a ", "   "};
         }
         for (int col = 0; col < BOARD_SIZE_IN_SQUARES + 2; col++) {
             printBoarderSquare(out, headers[col]);
@@ -192,7 +195,7 @@ public class GameClient {
 
     private void printBoarderSquare(PrintStream out, String character){
         setGrey(out);
-        out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_BG_COLOR_GOLD);
         out.print(SET_TEXT_COLOR_BLACK);
         out.print(character);
     }
@@ -213,12 +216,12 @@ public class GameClient {
     }
 
     private void setDark(PrintStream out) {
-        out.print(SET_BG_COLOR_DARK_GREEN);
-        out.print(SET_TEXT_COLOR_DARK_GREEN);
+        out.print(SET_BG_COLOR_DARK_LAVENDER);
+        out.print(SET_TEXT_COLOR_DARK_LAVENDER);
     }
 
     private void setLight(PrintStream out) {
-        out.print(SET_BG_COLOR_GREEN);
-        out.print(SET_TEXT_COLOR_GREEN);
+        out.print(SET_BG_COLOR_LAVENDER);
+        out.print(SET_TEXT_COLOR_LAVENDER);
     }
 }

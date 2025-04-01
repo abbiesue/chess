@@ -23,8 +23,6 @@ j
 -shared/src/main/java/chess/ChessPosition.java,3/b/3b013a24b64d343e15bac32b29d3d69c6c135d82
 g
 7shared/src/test/java/passoff/chess/ChessBoardTests.java,7/0/704add9b7257f7adc3fb4fb5f33f76b7c8820901
-i
-9shared/src/test/java/passoff/chess/game/FullGameTest.java,3/0/304a628b79462cebf64407482375f8e693e3f5cc
 X
 (shared/src/main/java/model/UserData.java,4/a/4a7475d8234e0a3bd1fad3b5ac4f0ea9e6d43286
 X
