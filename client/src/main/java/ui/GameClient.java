@@ -129,7 +129,7 @@ public class GameClient {
         if (playerColor.equals(WHITE)){
             game.getBoard().flipBoard();
         }
-        String shade = LIGHT;
+        String shade = DARK;
         int rowHeader;
 
         printHorizontalBoarder(out);
