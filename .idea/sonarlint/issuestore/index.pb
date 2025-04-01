@@ -58,8 +58,6 @@ f
 \
 ,server/src/main/java/records/ListResult.java,c/7/c71021785d879dd5e9e46a52d6f0c99f79fba6cd
 Y
-)shared/src/main/java/chess/ChessGame.java,1/2/12ee2b2e0577bf40c2f0f09ceb1e2b3d9b36bd7a
-Y
 )shared/src/main/java/chess/ChessMove.java,c/5/c52f67c55315a844e23611bb848b35269aaedb66
 Z
 *shared/src/main/java/chess/ChessPiece.java,c/0/c02b93065e1c720b0a958f6a9aa91f709ca1cca9

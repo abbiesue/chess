@@ -76,7 +76,7 @@ public class PostloginClient {
             playerColor = params[1].toUpperCase();
             server.join(new JoinRequest(authToken, playerColor, gameID));
             printer.printFromGame(getGame(gameID), playerColor);
-            return " ";
+            return "\n joined game!";
 
         }
         throw new ResponseException(400, "Expected: <ID> [WHITE|BLACK]");
@@ -91,7 +91,7 @@ public class PostloginClient {
             int listID = Integer.parseInt(params[0]);
             int gameID = getIDFromList(listID);
             printer.printFromGame(getGame(gameID), playerColor);
-            return "\n observing...";
+            return "\n observing game!";
         }
         throw new ResponseException(400, "Expected: <ID>");
     }
