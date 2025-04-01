@@ -2,7 +2,6 @@ package ui;
 
 import chess.ChessBoard;
 import chess.ChessGame;
-import chess.ChessPiece;
 import chess.ChessPosition;
 import model.GameData;
 import records.JoinRequest;
@@ -16,11 +15,10 @@ import java.util.Arrays;
 
 import static ui.EscapeSequences.*;
 
-public class GameClient {
+public class PrintClient {
     static final int BOARD_SIZE_IN_SQUARES = 8;
     static final int TOTAL_COLUMNS = 8;
     static final int TOTAL_ROWS = 8;
-    static final int SPACES_ON_BOARD = 64;
     static final String LIGHT = "light";
     static final String DARK = "dark";
     static final String WHITE = "WHITE";
@@ -30,7 +28,7 @@ public class GameClient {
     String authToken;
     String playerColor;
 
-    public GameClient(ServerFacade server, String authToken) {
+    public PrintClient(ServerFacade server, String authToken) {
         this.server = server;
         this.authToken = authToken;
     }

@@ -11,7 +11,7 @@ import java.util.List;
 public class PostloginClient {
     private final ServerFacade server;
     String authToken;
-    GameClient gameClient;
+    PrintClient printClient;
 
     public PostloginClient(ServerFacade server, String authToken) {
         this.server = server;
@@ -27,8 +27,8 @@ public class PostloginClient {
                 case "create" -> create(params);
                 case "list" -> list();
                 case "join", "observe" -> {
-                    gameClient = new GameClient(server, authToken);
-                    yield gameClient.eval(input);
+                    printClient = new PrintClient(server, authToken);
+                    yield printClient.eval(input);
                 }
                 case "logout" -> logout();
                 case "quit" -> "quit";
