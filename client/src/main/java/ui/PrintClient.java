@@ -193,7 +193,7 @@ public class PrintClient {
 
     private void printBoarderSquare(PrintStream out, String character){
         setGrey(out);
-        out.print(SET_BG_COLOR_GOLD);
+        out.print(SET_BG_COLOR_DARK_GREEN);
         out.print(SET_TEXT_COLOR_BLACK);
         out.print(character);
     }
@@ -214,12 +214,12 @@ public class PrintClient {
     }
 
     private void setDark(PrintStream out) {
-        out.print(SET_BG_COLOR_DARK_LAVENDER);
-        out.print(SET_TEXT_COLOR_DARK_LAVENDER);
+        out.print(SET_BG_COLOR_DARK_RED);
+        out.print(SET_TEXT_COLOR_DARK_RED);
     }
 
     private void setLight(PrintStream out) {
-        out.print(SET_BG_COLOR_LAVENDER);
-        out.print(SET_TEXT_COLOR_LAVENDER);
+        out.print(SET_BG_COLOR_BRIGHT_RED);
+        out.print(SET_TEXT_COLOR_BRIGHT_RED);
     }
 }
