@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class Repl {
     private final PreloginClient preloginClient;
     private PostloginClient postloginClient;
+    private GameClient gameClient;
     ServerFacade server;
 
     public Repl(String serverURL) {
@@ -33,8 +34,18 @@ public class Repl {
                         postloginClient = new PostloginClient(server, preloginClient.authToken);
                         result = postloginClient.eval(line);
                         System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
+                        if (result.contains("game!")) {
+                            while(!result.contains("left")) {
+                                printPrompt();
+                                line = scanner.nextLine();
+                                gameClient = new GameClient(server);
+                                result = gameClient.eval(line);
+                                System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
+                            }
+                        }
                     }
                 }
+
             } catch (Throwable e) {
                 var msg = e.toString();
                 System.out.print(msg);

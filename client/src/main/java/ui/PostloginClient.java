@@ -91,7 +91,7 @@ public class PostloginClient {
             int listID = Integer.parseInt(params[0]);
             int gameID = getIDFromList(listID);
             printer.printFromGame(getGame(gameID), playerColor);
-            return "\n observing game!";
+            return "\n observing game...";
         }
         throw new ResponseException(400, "Expected: <ID>");
     }

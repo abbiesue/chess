@@ -22,7 +22,7 @@ public class GameClient {
                 case "highlight" -> highlightLegalMoves(params);
                 case "redraw" -> redrawChessBoard(params);
                 case "resign" -> resign();
-                case "leave" -> "leave";
+                case "leave" -> "You've left gameplay.";
                 default -> help();
             };
         } catch (ResponseException ex) {
@@ -32,7 +32,7 @@ public class GameClient {
 
     public String makeMove(String... params) throws ResponseException{
         if (params.length < 1) {
-            return help();
+            return "Did you mean \"make move <START_POSITION> <END_POSITION>\"? Please try again.";
         } else {
             return "make move is under construction...";
         }
@@ -40,7 +40,7 @@ public class GameClient {
 
     public String highlightLegalMoves(String... params) {
         if (params.length < 2) {
-            return help();
+            return "did you mean \"highlight legal moves <START_POSITION>\"? Please try again.";
         } else {
             return "highlight legal moves is under construction...";
         }
@@ -48,7 +48,7 @@ public class GameClient {
 
     public String redrawChessBoard(String... params) {
         if (params.length < 2) {
-            return help();
+            return "did you mean \"redraw chess board\"? Please try again.";
         } else {
             return "redraw chess board is under construction...";
         }
