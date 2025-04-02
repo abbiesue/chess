@@ -8,7 +8,8 @@ import java.util.Scanner;
 public class Repl {
     private final PreloginClient preloginClient;
     private PostloginClient postloginClient;
-    private GameClient gameClient;
+    private PlayerClient playerClient;
+    private ObserverClient observerClient;
     ServerFacade server;
 
     public Repl(String serverURL) {
@@ -35,12 +36,24 @@ public class Repl {
                         result = postloginClient.eval(line);
                         System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
                         if (result.contains("game!")) {
-                            while(!result.contains("left")) {
-                                printPrompt();
-                                line = scanner.nextLine();
-                                gameClient = new GameClient(server);
-                                result = gameClient.eval(line);
-                                System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
+                            if (result.contains("joined")) {
+                                while(!result.contains("left")) {
+                                    printPrompt();
+                                    line = scanner.nextLine();
+                                    playerClient = new PlayerClient(server);
+                                    result = playerClient.eval(line);
+                                    System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
+                                }
+                            } else if (result.contains("observing")) {
+                                while(!result.contains("left")) {
+                                    printPrompt();
+                                    line = scanner.nextLine();
+                                    observerClient = new ObserverClient(server);
+                                    result = observerClient.eval(line);
+                                    System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
+                                }
+                            } else {
+                                result = "entered game repl leak";
                             }
                         }
                     }
