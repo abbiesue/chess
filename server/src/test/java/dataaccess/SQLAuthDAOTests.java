@@ -48,4 +48,10 @@ public class SQLAuthDAOTests {
         Assertions.assertDoesNotThrow(()->{authDAO.clear();});
     }
 
+    @Test
+    @DisplayName("observe insert success")
+    public void observeSuccess() {
+        Assertions.assertDoesNotThrow(()->authDAO.updateObserveID(existingAuth.authToken(), 2));
+    }
+
 }

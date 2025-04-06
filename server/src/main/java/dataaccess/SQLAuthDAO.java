@@ -60,6 +60,11 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
         configureDatabase(createStatements);
     }
 
+    public void updateObserveID(String authToken, int gameID) throws ResponseException {
+        var statement = "UPDATE authData SET observeID=? WHERE authToken=?";
+        executeUpdate(statement, gameID, authToken);
+    }
+
     private AuthData readAuth(ResultSet rs) throws SQLException {
         var username = rs.getString("username");
         var authToken = rs.getString("authToken");
