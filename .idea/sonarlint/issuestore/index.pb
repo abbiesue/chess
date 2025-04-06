@@ -90,12 +90,6 @@ b
 b
 2server/src/main/java/dataaccess/MemoryUserDAO.java,0/7/07c8e87dfa1f0641556e5d98b5a66011b7b29e80
 d
-4server/src/main/java/dataaccess/DatabaseManager.java,f/b/fb7cdb568d97831984b27de21950263d16967a67
-b
-2server/src/main/java/dataaccess/MemoryAuthDAO.java,8/a/8a97b34294ab136117de6d255e41a49f801be6d3
-_
-/server/src/main/java/dataaccess/SQLGameDAO.java,1/0/104cf004342c318954f87f8aa998f5be26fd7d4d
-d
 4server/src/test/java/dataaccess/SQLGameDAOTests.java,c/8/c83edfdf34fd4ed224e9a572c9e4cc4680b70a5f
 b
 2server/src/test/java/service/GameServiceTests.java,c/b/cbbd93c03402376669a48a743c29d734c3573acf
