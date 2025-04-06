@@ -10,12 +10,10 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
     private String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS authData (
-            `id` int NOT NULL AUTO_INCREMENT,
             `authToken` varchar(256) NOT NULL,
             `username` varchar(256) NOT NULL,
-            PRIMARY KEY (`id`), 
-            INDEX indx_auth(authToken),  -- Regular index (NOT UNIQUE)
-            INDEX indx_user(username)    -- Regular index (NOT UNIQUE)
+            PRIMARY KEY (`authToken`),
+            INDEX indx_user(username)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
