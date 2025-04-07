@@ -12,7 +12,6 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
             CREATE TABLE IF NOT EXISTS authData (
             `authToken` varchar(256) NOT NULL,
             `username` varchar(256) NOT NULL,
-            `observeID` INT DEFAULT -1,
             PRIMARY KEY (`authToken`),
             INDEX indx_user(username)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
@@ -58,11 +57,6 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO{
         var statement = "DROP TABLE IF EXISTS authData";
         executeUpdate(statement);
         configureDatabase(createStatements);
-    }
-
-    public void updateObserveID(String authToken, int gameID) throws ResponseException {
-        var statement = "UPDATE authData SET observeID=? WHERE authToken=?";
-        executeUpdate(statement, gameID, authToken);
     }
 
     private AuthData readAuth(ResultSet rs) throws SQLException {
