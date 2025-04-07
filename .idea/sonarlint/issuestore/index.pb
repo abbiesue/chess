@@ -66,6 +66,8 @@ b
 _
 /server/src/main/java/dataaccess/SQLGameDAO.java,1/0/104cf004342c318954f87f8aa998f5be26fd7d4d
 d
+4server/src/main/java/dataaccess/DatabaseManager.java,f/b/fb7cdb568d97831984b27de21950263d16967a67
+d
 4server/src/test/java/dataaccess/SQLGameDAOTests.java,c/8/c83edfdf34fd4ed224e9a572c9e4cc4680b70a5f
 b
 2server/src/test/java/service/GameServiceTests.java,c/b/cbbd93c03402376669a48a743c29d734c3573acf
