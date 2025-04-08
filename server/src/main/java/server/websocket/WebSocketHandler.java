@@ -38,7 +38,7 @@ public class WebSocketHandler {
             saveSession(command.getGameID(), session);
 
             switch (command.getCommandType()) {
-                case CONNECT -> connect(session, username, new ConnectCommand(command.getAuthToken(), command.getGameID()));
+                case CONNECT -> connect(session, username, (ConnectCommand) command);
                 case MAKE_MOVE -> makeMove(session, username, (MakeMoveCommand) command);
                 case LEAVE -> leaveGame(session, username, (LeaveGameCommand) command);
                 case RESIGN -> resign(session, username, (ResignCommand) command);
@@ -55,14 +55,17 @@ public class WebSocketHandler {
     }
 
     private void resign(Session session, String username, ResignCommand command) {
+        System.out.println("ResignCommand received");
         //notifies all observers and players.
         //
     }
 
     private void leaveGame(Session session, String username, LeaveGameCommand command) {
+        System.out.println("LeaveGameCommand received");
     }
 
     private void makeMove(Session session, String username, MakeMoveCommand command) {
+        System.out.println("MakeMoveCommand received");
     }
 
     private void connect(Session session, String username, ConnectCommand command) {

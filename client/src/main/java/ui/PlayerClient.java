@@ -83,13 +83,13 @@ public class PlayerClient extends GameClient{
         return "";
     }
 
-    public String resign() {
+    public String resign() throws ResponseException {
         ws.resign(authToken, gameID);
         return "You resigned. Better luck next time!";
     }
 
-    public String leave() {
-        ws.leave(authToken, gameID, playerColor);
+    public String leave() throws ResponseException {
+        ws.leave(authToken, gameID);
         return "You've left gameplay.";
     }
 

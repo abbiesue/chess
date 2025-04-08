@@ -39,7 +39,7 @@ public class ObserverClient extends GameClient{
                 case "observe" -> observe(params);
                 case "highlight" -> highlightLegalMoves(params);
                 case "redraw" -> redrawChessBoard(params);
-                case "leave" -> "You've left gameplay.";
+                case "leave" -> leave();
                 default -> help();
             };
         } catch (ResponseException ex) {
@@ -53,6 +53,11 @@ public class ObserverClient extends GameClient{
         gameID = getIDFromList(listID);
         ws.connect(authToken, gameID);
         return "observing game...";
+    }
+
+    public String leave() throws ResponseException {
+        ws.leave(authToken, gameID);
+        return "You've left gameplay.";
     }
 
     public String help() {
@@ -73,13 +78,4 @@ public class ObserverClient extends GameClient{
         return game.gameID();
     }
 
-    private ChessGame getGame(int gameID) throws ResponseException {
-        var games = server.list(new ListRequest(authToken)).games();
-        for (int i = 0; i < games.size(); i++) {
-            if (games.get(i).gameID() == gameID) {
-                return games.get(i).game();
-            }
-        }
-        throw new ResponseException(400, "Game not Found");
-    }
 }

@@ -1,9 +1,10 @@
+
 package websocket;
 
 import chess.ChessMove;
 import com.google.gson.Gson;
 import server.ResponseException;
-import websocket.commands.UserGameCommand;
+import websocket.commands.*;
 import websocket.messages.ErrorMessage;
 import websocket.messages.ServerMessage;
 
@@ -42,24 +43,31 @@ public class WebSocketFacade extends Endpoint {
     }
 
     public void connect(String authToken, int gameID) throws ResponseException {
-        try  {
-            var command = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
+        var command = new ConnectCommand(authToken, gameID);
+        sendCommand(command);
+    }
+
+    public void makeMove(String authToken, int gameID, ChessMove move) throws ResponseException {
+        var command = new MakeMoveCommand(authToken, gameID, move);
+        sendCommand(command);
+    }
+
+    public void leave(String authToken, int gameID) throws ResponseException {
+        var command = new LeaveGameCommand(authToken, gameID);
+        sendCommand(command);
+    }
+
+    public void resign (String authToken, int gameID) throws ResponseException {
+        var command = new ResignCommand(authToken, gameID);
+        sendCommand(command);
+    }
+
+    private void sendCommand(UserGameCommand command) throws ResponseException {
+        try {
             this.session.getBasicRemote().sendText(new Gson().toJson(command));
         } catch (IOException e) {
             throw new ResponseException(500, e.getMessage());
         }
-    }
-
-    public void makeMove(String authToken, int gameID, ChessMove move) {
-        System.out.println("in facade makeMove()");
-    }
-
-    public void leave(String authToken, int gameID, String playerColor) {
-        System.out.println("in facade leave()");
-    }
-
-    public void resign (String authToken, int gameID) {
-        System.out.println("in facade resign()");
     }
 
     @Override
