@@ -71,13 +71,7 @@ public class PostloginClient {
             if (!isInteger(params[0])) {
                 throw new ResponseException(400, "ID must be an integer");
             }
-            int listID = Integer.parseInt(params[0]);
-            int gameID = getIDFromList(listID);
-            playerColor = params[1].toUpperCase();
-            server.join(new JoinRequest(authToken, playerColor, gameID));
-            printer.printFromGame(getGame(gameID), playerColor);
-            return "\n joined game!";
-
+            return "joined";
         }
         throw new ResponseException(400, "Expected: <ID> [WHITE|BLACK]");
     }

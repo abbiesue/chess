@@ -1,15 +1,34 @@
 package ui;
 
+import chess.ChessGame;
+import model.GameData;
+import records.JoinRequest;
+import records.ListRequest;
+import records.ListResult;
 import server.ResponseException;
 import server.ServerFacade;
+import websocket.ServerMessageObserver;
+import websocket.WebSocketFacade;
 
 import java.util.Arrays;
 
 public class PlayerClient extends GameClient{
     private final ServerFacade server;
+    private String serverURL;
+    private WebSocketFacade ws;
+    ServerMessageObserver observer;
 
-    public PlayerClient(ServerFacade server) {
+    private String username = null;
+    private String playerColor;
+    private int gameID;
+    private String authToken;
+
+
+
+    public PlayerClient(ServerFacade server, String serverURL, ServerMessageObserver observer) {
         this.server = server;
+        this.serverURL = serverURL;
+        this.observer = observer;
     }
 
     public String eval(String input) {
@@ -18,6 +37,7 @@ public class PlayerClient extends GameClient{
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd) {
+                case "join" -> join(params);
                 case "make" -> makeMove(params);
                 case "highlight" -> highlightLegalMoves(params);
                 case "redraw" -> redrawChessBoard(params);
@@ -28,6 +48,16 @@ public class PlayerClient extends GameClient{
         } catch (ResponseException ex) {
             return ex.getMessage();
         }
+    }
+
+    private String join(String... params) throws ResponseException {
+        int listID = Integer.parseInt(params[0]);
+        gameID = getIDFromList(listID);
+        playerColor = params[1].toUpperCase();
+        server.join(new JoinRequest(authToken, playerColor, gameID));
+        return "\n joining game...";
+
+        //ws = new WebSocketFacade(serverURL, observer);
     }
 
     public String makeMove(String... params) throws ResponseException{
@@ -54,4 +84,12 @@ public class PlayerClient extends GameClient{
                 """;
     }
 
+    public int getIDFromList(int listID) throws ResponseException {
+        ListResult listResult = server.list(new ListRequest(authToken));
+        if (listID > listResult.games().size() || listID < 0) {
+            return -1;
+        }
+        GameData game = listResult.games().get(listID-1);
+        return game.gameID();
+    }
 }

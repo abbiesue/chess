@@ -2,14 +2,21 @@ package ui;
 
 import server.ResponseException;
 import server.ServerFacade;
+import websocket.ServerMessageObserver;
+import websocket.WebSocketFacade;
 
 import java.util.Arrays;
 
 public class ObserverClient extends GameClient{
     private final ServerFacade server;
+    private String serverURL;
+    private String username = null;
+    private WebSocketFacade ws;
 
-    public ObserverClient(ServerFacade server) {
+    public ObserverClient(ServerFacade server, String serverURL, ServerMessageObserver observer) throws ResponseException {
         this.server = server;
+        this.serverURL = serverURL;
+        ws = new WebSocketFacade(serverURL, observer);
     }
 
     public String eval(String input) {
