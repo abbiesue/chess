@@ -10,12 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PostloginClient {
-    static final String WHITE = "WHITE";
-
     private final ServerFacade server;
-    private final BoardPrinter printer = new BoardPrinter();
     String authToken;
-    String playerColor;
 
     public PostloginClient(ServerFacade server, String authToken) {
         this.server = server;
@@ -71,21 +67,17 @@ public class PostloginClient {
             if (!isInteger(params[0])) {
                 throw new ResponseException(400, "ID must be an integer");
             }
-            return "joined";
+            return "joining";
         }
         throw new ResponseException(400, "Expected: <ID> [WHITE|BLACK]");
     }
 
     public String observe(String...params) throws ResponseException {
         if (params.length >= 1) {
-            playerColor = WHITE;
             if (!isInteger(params[0])) {
                 throw new ResponseException(400, "ID must be an integer");
             }
-            int listID = Integer.parseInt(params[0]);
-            int gameID = getIDFromList(listID);
-            printer.printFromGame(getGame(gameID), playerColor);
-            return "\n observing game!";
+            return "observing";
         }
         throw new ResponseException(400, "Expected: <ID>");
     }
@@ -106,26 +98,6 @@ public class PostloginClient {
                 quit - to exit program
                 help - to list options
                 """;
-    }
-
-    private ChessGame getGame(int gameID) throws ResponseException {
-        var games = server.list(new ListRequest(authToken)).games();
-        for (int i = 0; i < games.size(); i++) {
-            if (games.get(i).gameID() == gameID) {
-                return games.get(i).game();
-            }
-        }
-        throw new ResponseException(400, "Game not Found");
-    }
-
-    public int getIDFromList(int listID) throws ResponseException {
-
-        ListResult listResult = server.list(new ListRequest(authToken));
-        if (listID > listResult.games().size() || listID < 0) {
-            return -1;
-        }
-        GameData game = listResult.games().get(listID-1);
-        return game.gameID();
     }
 
     public static boolean isInteger(String s) {

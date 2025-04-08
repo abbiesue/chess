@@ -25,7 +25,8 @@ public class PlayerClient extends GameClient{
 
 
 
-    public PlayerClient(ServerFacade server, String serverURL, ServerMessageObserver observer) {
+    public PlayerClient(String authToken, ServerFacade server, String serverURL, ServerMessageObserver observer) {
+        this.authToken = authToken;
         this.server = server;
         this.serverURL = serverURL;
         this.observer = observer;
@@ -56,7 +57,6 @@ public class PlayerClient extends GameClient{
         playerColor = params[1].toUpperCase();
         server.join(new JoinRequest(authToken, playerColor, gameID));
         return "\n joining game...";
-
         //ws = new WebSocketFacade(serverURL, observer);
     }
 
@@ -91,5 +91,15 @@ public class PlayerClient extends GameClient{
         }
         GameData game = listResult.games().get(listID-1);
         return game.gameID();
+    }
+
+    private ChessGame getGame(int gameID) throws ResponseException {
+        var games = server.list(new ListRequest(authToken)).games();
+        for (int i = 0; i < games.size(); i++) {
+            if (games.get(i).gameID() == gameID) {
+                return games.get(i).game();
+            }
+        }
+        throw new ResponseException(400, "Game not Found");
     }
 }

@@ -42,27 +42,28 @@ public class Repl implements ServerMessageObserver {
                         postloginClient = new PostloginClient(server, preloginClient.authToken);
                         result = postloginClient.eval(line);
                         System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
-                        if (result.contains("joined")) {
-                            playerClient = new PlayerClient(server, serverURL, this);
+                        if (result.contains("joining")) {
+                            playerClient = new PlayerClient(postloginClient.authToken, server, serverURL, this);
                             result = playerClient.eval(line);
                             System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
                             while(!result.contains("left")) {
                                 printPrompt();
                                 line = scanner.nextLine();
-                                playerClient = new PlayerClient(server, serverURL, this);
                                 result = playerClient.eval(line);
                                 System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
                             }
                         }
-                        if (result.contains("observe")) {
+                        if (result.contains("observing")) {
                             // fix later
-                                while(!result.contains("left")) {
-                                    printPrompt();
-                                    line = scanner.nextLine();
-                                    observerClient = new ObserverClient(server, serverURL, this);
-                                    result = observerClient.eval(line);
-                                    System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
-                                }
+                            observerClient = new ObserverClient(postloginClient.authToken,server, serverURL, this);
+                            result = observerClient.eval(line);
+                            System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
+                            while(!result.contains("left")) {
+                                printPrompt();
+                                line = scanner.nextLine();
+                                result = observerClient.eval(line);
+                                System.out.println(EscapeSequences.SET_TEXT_COLOR_BLUE + result);
+                            }
                         }
                     }
                 }
