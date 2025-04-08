@@ -2,6 +2,7 @@ package dataaccess;
 
 import chess.ChessGame;
 import model.GameData;
+import server.ResponseException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,5 +74,10 @@ public class MemoryGameDAO implements GameDAO {
             games.remove(i);
         }
         games = new ArrayList<>();
+    }
+
+    @Override
+    public boolean isGameOver(int gameID) throws ResponseException {
+        return false;
     }
 }

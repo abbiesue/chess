@@ -20,6 +20,7 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
             `blackUsername` varchar(256) DEFAULT NULL,
             `gameName` varchar(256) NOT NULL,
             `gameJson` TEXT DEFAULT NULL,
+            `finished` BOOLEAN DEFAULT FALSE,
             PRIMARY KEY(`gameID`),
             INDEX indx_whiteUsername (whiteUsername),
             INDEX indx_blackUsername (blackUsername),
@@ -65,7 +66,9 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
             try (var ps = conn.prepareStatement(statement)) {
                 try (var rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        games.add(readGame(rs));
+                        if (!isGameOver(Integer.parseInt(rs.getString("gameID")))) {
+                            games.add(readGame(rs));
+                        }
                     }
                 }
             }
@@ -103,9 +106,10 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
     }
 
     @Override
-    public void clear() throws ResponseException {
-        var statement = "TRUNCATE gameData";
+    public void clear() throws ResponseException, DataAccessException {
+        var statement = "DROP TABLE IF EXISTS gameData";
         executeUpdate(statement);
+        configureDatabase(createStatements);
     }
 
     private GameData readGame(ResultSet rs) throws SQLException {
@@ -117,5 +121,27 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         ChessGame game = new Gson().fromJson(gameJson,ChessGame.class);
         GameData gameData = new GameData(gameID, whiteUsername, blackUsername, gameName, game);
         return gameData;
+    }
+
+    public void setGameOver(int gameID) throws ResponseException {
+        String statement = "UPDATE gameData SET finished = TRUE WHERE gameID = ?";
+        executeUpdate(statement, gameID);
+    }
+
+    public boolean isGameOver(int gameID) throws ResponseException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT finished FROM gameData WHERE gameID=?";
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setInt(1, gameID);
+                try (var rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return Boolean.valueOf(rs.getString("finished"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new ResponseException(500, String.format("Unable to read data: %s", e.getMessage()));
+        }
+        return true;
     }
 }

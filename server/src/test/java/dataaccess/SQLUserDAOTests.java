@@ -49,7 +49,7 @@ public class SQLUserDAOTests {
 
     @Test
     @DisplayName("getUser failure")
-    public void getUserFailure() throws ResponseException {
+    public void getUserFailure() throws ResponseException, DataAccessException {
         userDAO.clear();
         Assertions.assertEquals(null, userDAO.getUser(existingUser.username()));
     }

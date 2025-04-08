@@ -18,7 +18,7 @@ public class SQLGameDAOTests {
     }
 
     @AfterEach
-    void tearDown() throws ResponseException {
+    void tearDown() throws ResponseException, DataAccessException {
         gameDAO.clear();
     }
 

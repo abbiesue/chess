@@ -52,9 +52,10 @@ public class SQLUserDAO extends SQLDAO implements UserDAO{
     }
 
     @Override
-    public void clear() throws ResponseException {
-        var statement = "TRUNCATE userData";
+    public void clear() throws ResponseException, DataAccessException {
+        var statement = "DROP TABLE IF EXISTS userData";
         executeUpdate(statement);
+        configureDatabase(createStatements);
     }
 
     private String hashPassword(String password) {

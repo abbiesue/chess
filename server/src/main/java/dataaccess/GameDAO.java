@@ -12,5 +12,6 @@ public interface GameDAO {
     Collection<GameData> listGames() throws ResponseException;
     void updateGame(int gameID, ChessGame.TeamColor playerColor, String playerUsername) throws ResponseException;
     void deleteGame(int gameID) throws ResponseException;
-    void clear() throws ResponseException;
+    void clear() throws ResponseException, DataAccessException;
+    boolean isGameOver(int gameID) throws ResponseException;
 }
