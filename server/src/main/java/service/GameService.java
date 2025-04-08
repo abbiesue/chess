@@ -58,6 +58,9 @@ public class GameService {
         if (authDAO.getAuth(joinRequest.authToken()) == null) {
             throw UNAUTHORIZED;
         }
+        if (gameDAO.isGameOver(joinRequest.gameID())) {
+            throw new ResponseException(400, "Error: game marked over");
+        }
         GameData gameWanted = gameDAO.getGame(joinRequest.gameID());
         if (joinRequest.playerColor().equals("WHITE")) {
             if (gameWanted.whiteUsername() != null) {

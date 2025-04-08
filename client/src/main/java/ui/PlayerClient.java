@@ -1,6 +1,8 @@
 package ui;
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPosition;
 import model.GameData;
 import records.JoinRequest;
 import records.ListRequest;
@@ -18,18 +20,18 @@ public class PlayerClient extends GameClient{
     private WebSocketFacade ws;
     ServerMessageObserver observer;
 
-    private String username = null;
     private String playerColor;
     private int gameID;
     private String authToken;
 
 
 
-    public PlayerClient(String authToken, ServerFacade server, String serverURL, ServerMessageObserver observer) {
+    public PlayerClient(String authToken, ServerFacade server, String serverURL, ServerMessageObserver observer) throws ResponseException {
         this.authToken = authToken;
         this.server = server;
         this.serverURL = serverURL;
         this.observer = observer;
+        ws = new WebSocketFacade(serverURL, observer);
     }
 
     public String eval(String input) {
@@ -42,8 +44,9 @@ public class PlayerClient extends GameClient{
                 case "make" -> makeMove(params);
                 case "highlight" -> highlightLegalMoves(params);
                 case "redraw" -> redrawChessBoard(params);
-                case "resign" -> resign();
-                case "leave" -> "You've left gameplay.";
+                case "resign" -> "Are you sure? If so, type \"Yield\" to confirm";
+                case "yield" -> resign();
+                case "leave" -> leave();
                 default -> help();
             };
         } catch (ResponseException ex) {
@@ -55,22 +58,40 @@ public class PlayerClient extends GameClient{
         int listID = Integer.parseInt(params[0]);
         gameID = getIDFromList(listID);
         playerColor = params[1].toUpperCase();
+        // only join if the game is not over
         server.join(new JoinRequest(authToken, playerColor, gameID));
+        ws.connect(authToken, gameID);
         return "\n joining game...";
-        //ws = new WebSocketFacade(serverURL, observer);
     }
 
     public String makeMove(String... params) throws ResponseException{
-        // add code to make sure that even if there is the right number of parameters they are the right parameters
+        // validate parameters
         if (params.length < 1) {
             return "Did you mean \"make move <START_POSITION> <END_POSITION>\"? Please try again.";
-        } else {
-            return "make move is under construction...";
+        } else if (params.length != 3) {
+            throw new ResponseException(400, "Expected: make move <START_POSITION> <END_POSITION>");
+        } else if (!Character.isAlphabetic(params[1].charAt(0)) || !Character.isDigit(params[1].charAt(1)) || params[1].length() > 2) {
+            throw new ResponseException(400, "Expected: <START_POSITION> in form <letter#> ex: E2 or A8");
+        } else if (!Character.isAlphabetic(params[2].charAt(0)) || !Character.isDigit(params[2].charAt(1)) || params[2].length() > 2) {
+            throw new ResponseException(400, "Expected: <END_POSITION> in form <letter#> ex: E2 or A8");
+        } else if (!validPosition(params[1]) || !validPosition(params[2])) {
+            throw new ResponseException(400, "Position does not exist on the board");
         }
+        ChessPosition startPosition = stringToPosition(params[1]);
+        ChessPosition endPosition = stringToPosition(params[2]);
+        ChessMove move = new ChessMove(startPosition,endPosition,null);
+        ws.makeMove(authToken, gameID, move);
+        return "";
     }
 
     public String resign() {
-        return "resign is under construction...";
+        ws.resign(authToken, gameID);
+        return "You resigned. Better luck next time!";
+    }
+
+    public String leave() {
+        ws.leave(authToken, gameID, playerColor);
+        return "You've left gameplay.";
     }
 
     public String help() {
@@ -93,13 +114,35 @@ public class PlayerClient extends GameClient{
         return game.gameID();
     }
 
-    private ChessGame getGame(int gameID) throws ResponseException {
-        var games = server.list(new ListRequest(authToken)).games();
-        for (int i = 0; i < games.size(); i++) {
-            if (games.get(i).gameID() == gameID) {
-                return games.get(i).game();
-            }
+    private ChessPosition stringToPosition(String stringPos) throws ResponseException {
+        char rowChar = Character.toUpperCase(stringPos.charAt(0));
+        int row;
+        switch (rowChar) {
+            case 'A' -> row = 1;
+            case 'B' -> row = 2;
+            case 'C' -> row = 3;
+            case 'D' -> row = 4;
+            case 'E' -> row = 5;
+            case 'F' -> row = 6;
+            case 'G' -> row = 7;
+            case 'H' -> row = 8;
+            default -> throw new ResponseException(400, "Invalid Position");
         }
-        throw new ResponseException(400, "Game not Found");
+        int col = stringPos.charAt(1) - '0';
+        return new ChessPosition(row, col);
+    }
+
+    private boolean validPosition(String stringPos) {
+        char rowChar = Character.toUpperCase(stringPos.charAt(0));
+        int col = stringPos.charAt(1) - '0';
+        if (rowChar != 'A' && rowChar != 'B' && rowChar != 'C' &&
+                rowChar != 'D' && rowChar != 'E' && rowChar != 'F' &&
+                rowChar != 'G' && rowChar != 'H') {
+            return false;
+        }
+        if (col > 8 || col < 1) {
+            return false;
+        }
+        return true;
     }
 }

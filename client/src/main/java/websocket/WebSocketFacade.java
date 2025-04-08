@@ -1,6 +1,9 @@
 package websocket;
 
+import chess.ChessGame;
+import chess.ChessMove;
 import com.google.gson.Gson;
+import records.ListRequest;
 import server.ResponseException;
 import websocket.commands.ConnectCommand;
 import websocket.commands.UserGameCommand;
@@ -41,7 +44,6 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
-    //connect
     public void connect(String authToken, int gameID) throws ResponseException {
         try  {
             var command = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
@@ -50,11 +52,30 @@ public class WebSocketFacade extends Endpoint {
             throw new ResponseException(500, e.getMessage());
         }
     }
-    //make move
-    //leave
-    //resign
+
+    public void makeMove(String authToken, int gameID, ChessMove move) {
+        System.out.println("in facade makeMove()");
+    }
+
+    public void leave(String authToken, int gameID, String playerColor) {
+        System.out.println("in facade leave()");
+    }
+
+    public void resign (String authToken, int gameID) {
+        System.out.println("in facade resign()");
+    }
 
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
     }
+
+//    private ChessGame getGame(int gameID) throws ResponseException {
+//        var games = server.list(new ListRequest(authToken)).games();
+//        for (int i = 0; i < games.size(); i++) {
+//            if (games.get(i).gameID() == gameID) {
+//                return games.get(i).game();
+//            }
+//        }
+//        throw new ResponseException(400, "Game not Found");
+//    }
 }
