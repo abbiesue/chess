@@ -2,6 +2,8 @@ package websocket;
 
 import com.google.gson.Gson;
 import server.ResponseException;
+import websocket.commands.ConnectCommand;
+import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.ServerMessage;
 
@@ -39,10 +41,18 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
-
-
-
-
+    //connect
+    public void connect(String authToken, int gameID) throws ResponseException {
+        try  {
+            var command = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        } catch (IOException e) {
+            throw new ResponseException(500, e.getMessage());
+        }
+    }
+    //make move
+    //leave
+    //resign
 
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {

@@ -4,6 +4,8 @@ import server.ResponseException;
 
 public abstract class GameClient {
 
+    //these two don't use the websocket and instead interact with the chessgame and BoardPrinter
+
     public String highlightLegalMoves(String... params) throws ResponseException {
         // add code to make sure that even if there is the right number of parameters they are the right parameters
         if (params.length < 2) {

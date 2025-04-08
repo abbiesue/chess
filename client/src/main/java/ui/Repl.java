@@ -1,10 +1,7 @@
 package ui;
 
-import chess.ChessGame;
-import records.JoinRequest;
 import server.ServerFacade;
 import websocket.ServerMessageObserver;
-import websocket.WebSocketFacade;
 import websocket.messages.ServerMessage;
 
 import java.util.Scanner;

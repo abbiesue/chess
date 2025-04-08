@@ -27,6 +27,7 @@ public class ObserverClient extends GameClient{
         this.authToken = authToken;
         this.server = server;
         this.serverURL = serverURL;
+        ws = new WebSocketFacade(serverURL, observer);
     }
 
     public String eval(String input) {
@@ -50,7 +51,7 @@ public class ObserverClient extends GameClient{
         playerColor = WHITE;
         int listID = Integer.parseInt(params[0]);
         gameID = getIDFromList(listID);
-        ws = new WebSocketFacade(serverURL, observer);
+        ws.connect(authToken, gameID);
         return "observing game...";
     }
 

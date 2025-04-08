@@ -15,11 +15,17 @@ public class WebSocketHandler {
     static final ResponseException UNAUTHORIZED = new ResponseException(401, "Error: unauthorized");
 
     private final ConnectionManager connections = new ConnectionManager();
+
+    public WebSocketHandler(SQLAuthDAO authDAO) {
+        this.authDAO = authDAO;
+    }
+
     SQLAuthDAO authDAO;
 
     @OnWebSocketMessage
     public void onMessage(Session session, String msg) {
         try {
+            System.out.println("in onMessage");
             UserGameCommand command = new Gson().fromJson(msg, UserGameCommand.class);
             //validate authToken
             String authToken = command.getAuthToken();
@@ -59,6 +65,7 @@ public class WebSocketHandler {
     }
 
     private void connect(Session session, String username, ConnectCommand command) {
+        System.out.println("ConnectCommand received");
     }
 
 }
