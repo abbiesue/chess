@@ -16,6 +16,7 @@ public class ObserverClient extends GameClient{
     private final ServerFacade server;
     private String serverURL;
     private WebSocketFacade ws;
+    ServerMessageObserver observer;
 
     private String username = null;
     private String playerColor;
@@ -49,9 +50,8 @@ public class ObserverClient extends GameClient{
         playerColor = WHITE;
         int listID = Integer.parseInt(params[0]);
         gameID = getIDFromList(listID);
+        ws = new WebSocketFacade(serverURL, observer);
         return "observing game...";
-
-        //ws = new WebSocketFacade(serverURL, observer);
     }
 
     public String help() {

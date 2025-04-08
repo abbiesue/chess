@@ -14,6 +14,7 @@ import websocket.messages.ErrorMessage;
 public class WebSocketHandler {
     static final ResponseException UNAUTHORIZED = new ResponseException(401, "Error: unauthorized");
 
+    private final ConnectionManager connections = new ConnectionManager();
     SQLAuthDAO authDAO;
 
     @OnWebSocketMessage
