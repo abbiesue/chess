@@ -1,6 +1,5 @@
 package ui;
 
-import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
 import model.GameData;

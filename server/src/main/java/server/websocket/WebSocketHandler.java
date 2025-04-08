@@ -25,7 +25,6 @@ public class WebSocketHandler {
     @OnWebSocketMessage
     public void onMessage(Session session, String msg) {
         try {
-            System.out.println("in onMessage");
             UserGameCommand command = new Gson().fromJson(msg, UserGameCommand.class);
             //validate authToken
             String authToken = command.getAuthToken();
@@ -39,7 +38,7 @@ public class WebSocketHandler {
             saveSession(command.getGameID(), session);
 
             switch (command.getCommandType()) {
-                case CONNECT -> connect(session, username, (ConnectCommand) command);
+                case CONNECT -> connect(session, username, new ConnectCommand(command.getAuthToken(), command.getGameID()));
                 case MAKE_MOVE -> makeMove(session, username, (MakeMoveCommand) command);
                 case LEAVE -> leaveGame(session, username, (LeaveGameCommand) command);
                 case RESIGN -> resign(session, username, (ResignCommand) command);
@@ -56,6 +55,8 @@ public class WebSocketHandler {
     }
 
     private void resign(Session session, String username, ResignCommand command) {
+        //notifies all observers and players.
+        //
     }
 
     private void leaveGame(Session session, String username, LeaveGameCommand command) {
@@ -65,6 +66,7 @@ public class WebSocketHandler {
     }
 
     private void connect(Session session, String username, ConnectCommand command) {
+        //
         System.out.println("ConnectCommand received");
     }
 

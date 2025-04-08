@@ -1,11 +1,8 @@
 package websocket;
 
-import chess.ChessGame;
 import chess.ChessMove;
 import com.google.gson.Gson;
-import records.ListRequest;
 import server.ResponseException;
-import websocket.commands.ConnectCommand;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.ServerMessage;
