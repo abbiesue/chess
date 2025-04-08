@@ -2,8 +2,6 @@ package websocket;
 
 import websocket.messages.ServerMessage;
 
-public class ServerMessageObserver {
-    void notify(ServerMessage notification) {
-
-    }
+public interface ServerMessageObserver {
+    void notify(ServerMessage notification);
 }
