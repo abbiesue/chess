@@ -1,5 +1,6 @@
 package server.websocket;
 
+import com.google.gson.Gson;
 import org.eclipse.jetty.websocket.api.Session;
 import websocket.messages.ServerMessage;
 
@@ -25,7 +26,8 @@ public class ConnectionManager {
         for (var c : connections.values()) {
             if (c.session.isOpen()) {
                 if (!c.username.equals(excludeUsername) && Objects.equals(c.gameID, gameID)) {
-                    c.send(notification.toString());
+                    String json = new Gson().toJson(notification);
+                    c.send(json);
                 }
             } else {
                 filteredList.add(c);
