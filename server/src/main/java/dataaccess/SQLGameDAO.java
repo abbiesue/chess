@@ -99,6 +99,19 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         executeUpdate(statement, gameID, whiteUsername, blackUsername, gameName, gameJson);
     }
 
+    public void updateAfterMove(int gameID, ChessGame newGame) throws ResponseException {
+        GameData oldGame = getGame(gameID);
+        var whiteUsername = oldGame.whiteUsername();
+        var blackUsername = oldGame.blackUsername();
+        var gameName = oldGame.gameName();
+        ChessGame game = newGame;
+
+        deleteGame(gameID);
+        var statement = "INSERT INTO gameData (gameID, whiteUsername, blackUsername, gameName, gameJson) VALUES (?,?,?,?,?)";
+        var gameJson = new Gson().toJson(game);
+        executeUpdate(statement, gameID, whiteUsername, blackUsername, gameName, gameJson);
+    }
+
     @Override
     public void deleteGame(int gameID) throws ResponseException {
         var statement = "DELETE FROM gameData WHERE gameID=?";
@@ -135,7 +148,7 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
                 ps.setInt(1, gameID);
                 try (var rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        return Boolean.valueOf(rs.getString("finished"));
+                        return rs.getBoolean("finished");
                     }
                 }
             }
