@@ -40,7 +40,7 @@ public class WebSocketHandler {
             String username = authDAO.getAuth(authToken).username();
 
             // save session to connection manager map
-            saveSession(command.getGameID(), session);
+            saveSession( username, command.getGameID(), session);
 
             switch (command.getCommandType()) {
                 case CONNECT -> connect(session, username, (ConnectCommand) command);
@@ -56,7 +56,8 @@ public class WebSocketHandler {
     private void sendMessage(RemoteEndpoint remote, ErrorMessage errorMessage) {
     }
 
-    private void saveSession(Integer gameID, Session session) {
+    private void saveSession(String username, Integer gameID, Session session) {
+        connections.add(username, gameID, session);
     }
 
     private void resign(Session session, String username, ResignCommand command) {
