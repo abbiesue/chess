@@ -1,9 +1,12 @@
 
 package websocket;
 
+import chess.ChessGame;
 import chess.ChessMove;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import server.ResponseException;
+import ui.ServerMessageDeserializer;
 import websocket.commands.*;
 import websocket.messages.ErrorMessage;
 import websocket.messages.ServerMessage;
@@ -17,6 +20,10 @@ import java.net.URISyntaxException;
 public class WebSocketFacade extends Endpoint {
     ServerMessageObserver observer;
     Session session;
+    Gson gson = new GsonBuilder()
+            .registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer())
+            .create();
+
 
     public WebSocketFacade(String url, ServerMessageObserver observer) throws ResponseException {
         try {
@@ -31,7 +38,7 @@ public class WebSocketFacade extends Endpoint {
             //set message handler
             this.session.addMessageHandler((MessageHandler.Whole<String>) msg -> {
                 try {
-                    ServerMessage message = new Gson().fromJson(msg, ServerMessage.class);
+                    ServerMessage message = gson.fromJson(msg, ServerMessage.class);
                     observer.notify(message);
                 } catch (Exception e) {
                     observer.notify(new ErrorMessage(e.getMessage()));
@@ -42,8 +49,8 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
-    public void connect(String authToken, int gameID) throws ResponseException {
-        var command = new ConnectCommand(authToken, gameID);
+    public void connect(String authToken, int gameID, ChessGame.TeamColor playerColor) throws ResponseException {
+        var command = new ConnectCommand(authToken, gameID, playerColor);
         sendCommand(command);
     }
 

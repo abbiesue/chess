@@ -1,5 +1,6 @@
 package ui;
 
+import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
 import model.GameData;
@@ -12,6 +13,9 @@ import websocket.ServerMessageObserver;
 import websocket.WebSocketFacade;
 
 import java.util.Arrays;
+import java.util.Objects;
+
+import static chess.ChessGame.TeamColor.BLACK;
 
 public class PlayerClient extends GameClient{
     private final ServerFacade server;
@@ -59,7 +63,11 @@ public class PlayerClient extends GameClient{
         playerColor = params[1].toUpperCase();
         // only join if the game is not over
         server.join(new JoinRequest(authToken, playerColor, gameID));
-        ws.connect(authToken, gameID);
+        ChessGame.TeamColor connectColor = BLACK;
+        if (Objects.equals(playerColor, "WHITE")) {
+            connectColor = ChessGame.TeamColor.WHITE;
+        }
+        ws.connect(authToken, gameID, connectColor);
         return "\n joining game...";
     }
 

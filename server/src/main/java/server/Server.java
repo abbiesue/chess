@@ -28,7 +28,7 @@ public class Server {
         userHandler = new UserHandler(userDAO, authDAO);
         gameHandler = new GameHandler(gameDAO, authDAO);
         clearHandler = new ClearHandler(gameDAO, authDAO, userDAO);
-        webSocketHandler = new WebSocketHandler((SQLAuthDAO) authDAO);
+        webSocketHandler = new WebSocketHandler((SQLAuthDAO) authDAO, (SQLGameDAO) gameDAO, (SQLUserDAO) userDAO);
     }
 
     public int run(int desiredPort) {

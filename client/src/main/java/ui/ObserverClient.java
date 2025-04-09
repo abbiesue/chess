@@ -51,7 +51,7 @@ public class ObserverClient extends GameClient{
         playerColor = WHITE;
         int listID = Integer.parseInt(params[0]);
         gameID = getIDFromList(listID);
-        ws.connect(authToken, gameID);
+        ws.connect(authToken, gameID, null);
         return "observing game...";
     }
 
