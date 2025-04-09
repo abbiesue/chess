@@ -4,7 +4,7 @@ import chess.ChessGame;
 import dataaccess.*;
 import model.GameData;
 import records.*;
-import Exceptions.ResponseException;
+import exceptions.ResponseException;
 import java.util.List;
 import java.util.Objects;
 

@@ -3,7 +3,7 @@ package dataaccess;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import records.RegisterRequest;
-import Exceptions.ResponseException;
+import exceptions.ResponseException;
 import service.UserService;
 
 public class SQLUserDAOTests {

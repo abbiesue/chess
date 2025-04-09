@@ -5,7 +5,7 @@ import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
 import records.*;
 import dataaccess.*;
-import Exceptions.ResponseException;
+import exceptions.ResponseException;
 import java.util.UUID;
 
 public class UserService {

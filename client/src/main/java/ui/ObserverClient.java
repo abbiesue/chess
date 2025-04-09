@@ -1,6 +1,6 @@
 package ui;
 
-import Exceptions.ResponseException;
+import exceptions.ResponseException;
 import server.ServerFacade;
 import websocket.ServerMessageObserver;
 import websocket.WebSocketFacade;

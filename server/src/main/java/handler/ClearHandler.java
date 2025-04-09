@@ -3,7 +3,7 @@ package handler;
 import com.google.gson.Gson;
 import dataaccess.*;
 import records.ClearResult;
-import Exceptions.ResponseException;
+import exceptions.ResponseException;
 import service.ClearService;
 
 public class ClearHandler {

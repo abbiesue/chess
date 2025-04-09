@@ -2,7 +2,7 @@ package service;
 
 import dataaccess.*;
 import records.ClearResult;
-import Exceptions.ResponseException;
+import exceptions.ResponseException;
 
 public class ClearService {
     UserDAO userDAO;

@@ -41,7 +41,5 @@ b
 2server/src/main/java/dataaccess/MemoryAuthDAO.java,8/a/8a97b34294ab136117de6d255e41a49f801be6d3
 d
 4server/src/main/java/dataaccess/DatabaseManager.java,f/b/fb7cdb568d97831984b27de21950263d16967a67
-b
-2server/src/test/java/service/GameServiceTests.java,c/b/cbbd93c03402376669a48a743c29d734c3573acf
 l
 <shared/src/test/java/passoff/chess/game/ValidMovesTests.java,f/f/ffd727fc5e9fd2b43cbe3581e669a4c1ed406a80

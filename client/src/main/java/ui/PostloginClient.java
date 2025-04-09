@@ -2,7 +2,7 @@ package ui;
 
 import model.GameData;
 import records.*;
-import Exceptions.ResponseException;
+import exceptions.ResponseException;
 import server.ServerFacade;
 
 import java.util.Arrays;

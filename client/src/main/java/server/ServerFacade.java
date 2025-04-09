@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
-import Exceptions.ResponseException;
+import exceptions.ResponseException;
 
 public class ServerFacade {
     private final String serverURL;

@@ -5,7 +5,7 @@ import chess.ChessGame;
 import chess.ChessMove;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import Exceptions.ResponseException;
+import exceptions.ResponseException;
 import ui.ServerMessageDeserializer;
 import websocket.commands.*;
 import websocket.messages.ErrorMessage;

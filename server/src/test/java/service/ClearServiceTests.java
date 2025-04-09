@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import records.*;
-import Exceptions.ResponseException;
+import exceptions.ResponseException;
 
 public class ClearServiceTests {
     MemoryGameDAO gameDAO = new MemoryGameDAO();
