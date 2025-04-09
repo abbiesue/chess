@@ -63,13 +63,11 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         List<GameData> games = new ArrayList<>();
         try (var conn = DatabaseManager.getConnection()) {
             var statement = "SELECT gameID, whiteUsername, blackUsername, gameName, gameJson FROM gameData";
-            try (var ps = conn.prepareStatement(statement)) {
-                try (var rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        if (!isGameOver(Integer.parseInt(rs.getString("gameID")))) {
-                            games.add(readGame(rs));
-                        }
-                    }
+            var ps = conn.prepareStatement(statement);
+            var rs = ps.executeQuery();
+            while (rs.next()) {
+                if (!isGameOver(Integer.parseInt(rs.getString("gameID")))) {
+                    games.add(readGame(rs));
                 }
             }
         } catch (Exception e) {
