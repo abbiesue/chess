@@ -3,25 +3,26 @@ package ui;
 import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
+import model.GameData;
 import records.ListRequest;
+import records.ListResult;
 import server.ResponseException;
 import server.ServerFacade;
 import websocket.ServerMessageObserver;
-import websocket.messages.ErrorMessage;
-import websocket.messages.LoadGameMessage;
-import websocket.messages.NotificationMessage;
-import websocket.messages.ServerMessage;
+import websocket.messages.*;
 
 import java.util.List;
 import java.util.Objects;
 
 public abstract class GameClient implements ServerMessageObserver {
     String playerColor;
+    ServerFacade server;
+    int gameID;
+    String authToken;
 
     //these two don't use the websocket and instead interact with the chessgame and BoardPrinter
 
-    public String highlightLegalMoves(String playerColor, int gameID, ServerFacade server,
-                                      String authToken, String... params) throws ResponseException {
+    public String highlightLegalMoves(String... params) throws ResponseException {
         if (params.length < 2) {
             return "did you mean \"highlight legal moves <START_POSITION>\"? Please try again.";
         } else if (params.length < 3) {
@@ -44,8 +45,7 @@ public abstract class GameClient implements ServerMessageObserver {
         }
     }
 
-    public String redrawChessBoard(String playerColor, int gameID, ServerFacade server,
-                                   String authToken, String... params) throws ResponseException {
+    public String redrawChessBoard(String... params) throws ResponseException {
         // add code to make sure that even if there is the right number of parameters they are the right parameters
         if (params.length < 2) {
             return "did you mean \"redraw chess board\"? Please try again.";
@@ -79,6 +79,15 @@ public abstract class GameClient implements ServerMessageObserver {
             }
         }
         System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE + "\n" + ">>> " + EscapeSequences.SET_TEXT_COLOR_GREEN);
+    }
+
+    public int getIDFromList(int listID) throws ResponseException {
+        ListResult listResult = server.list(new ListRequest(authToken));
+        if (listID > listResult.games().size() || listID < 0) {
+            return -1;
+        }
+        GameData game = listResult.games().get(listID-1);
+        return game.gameID();
     }
 
     public ChessGame.TeamColor stringToTeamColor(String playerColor) {

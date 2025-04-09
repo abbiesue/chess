@@ -1,8 +1,5 @@
 package ui;
 
-import model.GameData;
-import records.ListRequest;
-import records.ListResult;
 import server.ResponseException;
 import server.ServerFacade;
 import websocket.ServerMessageObserver;
@@ -12,11 +9,7 @@ import java.util.Arrays;
 
 public class ObserverClient extends GameClient implements ServerMessageObserver{
     static final String WHITE = "WHITE";
-    private final ServerFacade server;
     private WebSocketFacade ws;
-
-    private int gameID;
-    private String authToken;
 
     public ObserverClient(String authToken, ServerFacade server, String serverURL) throws ResponseException {
         this.authToken = authToken;
@@ -31,8 +24,8 @@ public class ObserverClient extends GameClient implements ServerMessageObserver{
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd) {
                 case "observe" -> observe(params);
-                case "highlight" -> highlightLegalMoves(playerColor, gameID, server, authToken, params);
-                case "redraw" -> redrawChessBoard(playerColor, gameID, server, authToken, params);
+                case "highlight" -> highlightLegalMoves(params);
+                case "redraw" -> redrawChessBoard(params);
                 case "leave" -> leave();
                 default -> help();
             };
@@ -61,14 +54,5 @@ public class ObserverClient extends GameClient implements ServerMessageObserver{
                 leave - to exit the game window
                 help - to list options
                 """;
-    }
-
-    public int getIDFromList(int listID) throws ResponseException {
-        ListResult listResult = server.list(new ListRequest(authToken));
-        if (listID > listResult.games().size() || listID < 0) {
-            return -1;
-        }
-        GameData game = listResult.games().get(listID-1);
-        return game.gameID();
     }
 }

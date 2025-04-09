@@ -3,10 +3,7 @@ package ui;
 import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
-import model.GameData;
 import records.JoinRequest;
-import records.ListRequest;
-import records.ListResult;
 import server.ResponseException;
 import server.ServerFacade;
 import websocket.ServerMessageObserver;
@@ -18,13 +15,7 @@ import java.util.Objects;
 import static chess.ChessGame.TeamColor.BLACK;
 
 public class PlayerClient extends GameClient implements ServerMessageObserver{
-    private final ServerFacade server;
     private WebSocketFacade ws;
-
-    private int gameID;
-    private String authToken;
-
-
 
     public PlayerClient(String authToken, ServerFacade server, String serverURL) throws ResponseException {
         this.authToken = authToken;
@@ -40,8 +31,8 @@ public class PlayerClient extends GameClient implements ServerMessageObserver{
             return switch (cmd) {
                 case "join" -> join(params);
                 case "make" -> makeMove(params);
-                case "highlight" -> highlightLegalMoves(playerColor, gameID, server, authToken, params);
-                case "redraw" -> redrawChessBoard(playerColor, gameID, server, authToken, params);
+                case "highlight" -> highlightLegalMoves(params);
+                case "redraw" -> redrawChessBoard(params);
                 case "resign" -> "Are you sure? If so, type \"Yield\" to confirm";
                 case "yield" -> resign();
                 case "leave" -> leave();
@@ -105,15 +96,6 @@ public class PlayerClient extends GameClient implements ServerMessageObserver{
                 leave - to exit the game window
                 help - to list options
                 """;
-    }
-
-    public int getIDFromList(int listID) throws ResponseException {
-        ListResult listResult = server.list(new ListRequest(authToken));
-        if (listID > listResult.games().size() || listID < 0) {
-            return -1;
-        }
-        GameData game = listResult.games().get(listID-1);
-        return game.gameID();
     }
 
     private boolean validPosition(String stringPos) {
