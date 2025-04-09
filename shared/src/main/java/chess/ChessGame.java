@@ -149,18 +149,7 @@ public class ChessGame {
         if (!isInCheck(teamColor)) {
             return false;
         }
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (board.getPiece(new ChessPosition(i, j)) != null) {
-                    ChessPiece pieceCheck = board.getPiece(new ChessPosition(i, j)).clone();
-                    if (pieceCheck.getTeamColor() == teamColor && !validMoves(new ChessPosition(i, j)).isEmpty()) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-
+        return mateHelper(teamColor);
     }
 
     /**
@@ -176,11 +165,15 @@ public class ChessGame {
         if (isInCheck(teamColor)) {
             return false;
         }
+        return mateHelper(teamColor);
+    }
+
+    private boolean mateHelper(TeamColor teamColor) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                if (board.getPiece(new ChessPosition(i,j)) != null) {
-                    ChessPiece pieceCheck = board.getPiece(new ChessPosition(i,j)).clone();
-                    if (pieceCheck.getTeamColor() == teamColor && !validMoves(new ChessPosition(i,j)).isEmpty()) {
+                if (board.getPiece(new ChessPosition(i, j)) != null) {
+                    ChessPiece pieceCheck = board.getPiece(new ChessPosition(i, j)).clone();
+                    if (pieceCheck.getTeamColor() == teamColor && !validMoves(new ChessPosition(i, j)).isEmpty()) {
                         return false;
                     }
                 }
