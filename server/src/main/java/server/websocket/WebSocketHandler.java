@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import dataaccess.SQLAuthDAO;
 import dataaccess.SQLGameDAO;
 import dataaccess.SQLUserDAO;
+import model.GameData;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
@@ -64,7 +65,7 @@ public class WebSocketHandler {
             switch (command.getCommandType()) {
                 case CONNECT -> connect(session, username, (ConnectCommand) command);
                 case MAKE_MOVE -> makeMove(session, username, (MakeMoveCommand) command);
-                case LEAVE -> leaveGame(session, username, (LeaveGameCommand) command);
+                case LEAVE -> leaveGame(username, (LeaveGameCommand) command);
                 case RESIGN -> resign(session, username, (ResignCommand) command);
             }
         } catch (ResponseException | IOException e) {
@@ -91,10 +92,23 @@ public class WebSocketHandler {
     private void resign(Session session, String username, ResignCommand command) {
         System.out.println("ResignCommand received");
 
+
     }
 
-    private void leaveGame(Session session, String username, LeaveGameCommand command) {
+    private void leaveGame(String username, LeaveGameCommand command) throws ResponseException, IOException {
         System.out.println("LeaveGameCommand received");
+        //if the username given is on the gameData, remove it
+        GameData gameData = gameDAO.getGame(command.getGameID());
+        if (gameData.blackUsername() == username){
+            gameDAO.updateGame(command.getGameID(), ChessGame.TeamColor.BLACK, null);
+        } else if (gameData.whiteUsername() == username) {
+            gameDAO.updateGame(command.getGameID(), ChessGame.TeamColor.WHITE, null);
+        }
+        //remove session from connections
+        connections.remove(username);
+        //broadcast that this person has left the game
+        connections.broadcast(username, command.getGameID(),new NotificationMessage(buildLeaveNotification(username)));
+
     }
 
     private void makeMove(Session session, String username, MakeMoveCommand command) {
@@ -120,5 +134,9 @@ public class WebSocketHandler {
             notification = notification.concat(" joined as the " + command.getPlayerColor() + " player");
         }
         return notification;
+    }
+
+    private String buildLeaveNotification(String username) {
+        return username + "has left the game";
     }
 }

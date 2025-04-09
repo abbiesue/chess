@@ -32,20 +32,19 @@ public class WebSocketFacade extends Endpoint {
             this.observer = observer;
 
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            //this is the problem child
             this.session = container.connectToServer(this, socketURI);
 
             //set message handler
             this.session.addMessageHandler((MessageHandler.Whole<String>) msg -> {
                 System.out.println("Received raw message: " + msg);
-//                try {
-//                    System.out.println("before gson");
-//                    ServerMessage message = gson.fromJson(msg, ServerMessage.class);
-//                    System.out.println("after gson");
-//                    observer.notify(message);
-//                } catch (Exception e) {
-//                    observer.notify(new ErrorMessage(e.getMessage()));
-//                }
+                try {
+                    System.out.println("before gson");
+                    ServerMessage message = gson.fromJson(msg, ServerMessage.class);
+                    System.out.println("after gson");
+                    observer.notify(message);
+                } catch (Exception e) {
+                    observer.notify(new ErrorMessage(e.getMessage()));
+                }
             });
         } catch (DeploymentException | URISyntaxException | IOException e) {
             throw new ResponseException(500, e.getMessage());
