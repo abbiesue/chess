@@ -15,14 +15,14 @@ import websocket.commands.*;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
+import websocket.messages.ServerMessage;
 
 import java.io.IOException;
-
-import static chess.ChessGame.TeamColor.WHITE;
 
 @WebSocket
 public class WebSocketHandler {
     static final ResponseException UNAUTHORIZED = new ResponseException(401, "Error: unauthorized");
+    static final ResponseException BAD_REQUEST = new ResponseException(400, "Error: bad request");
 
     private final ConnectionManager connections = new ConnectionManager();
 
@@ -49,6 +49,12 @@ public class WebSocketHandler {
             if (authDAO.getAuth(authToken) == null) {
                 throw UNAUTHORIZED;
             }
+            //validate gameID
+            int gameID = command.getGameID();
+            if (gameDAO.getGame(gameID) == null) {
+                throw BAD_REQUEST;
+            }
+
             //store username
             String username = authDAO.getAuth(authToken).username();
 
@@ -66,7 +72,16 @@ public class WebSocketHandler {
         }
     }
 
-    private void sendMessage(RemoteEndpoint remote, ErrorMessage errorMessage) {
+
+
+    private void sendMessage(RemoteEndpoint remote, ServerMessage message) {
+        try {
+            String json = new Gson().toJson(message);
+            remote.sendString(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void saveSession(String username, Integer gameID, Session session) {
@@ -89,10 +104,8 @@ public class WebSocketHandler {
     private void connect(Session session, String username, ConnectCommand command) throws ResponseException, IOException {
         System.out.println("ConnectCommand received"); //remove later
         ChessGame game = gameDAO.getGame(command.getGameID()).game();
-        var message = new LoadGameMessage(game);
-        String jsonMessage = new Gson().toJson(message);
-        //sends a load game back to the client
-        session.getRemote().sendString(jsonMessage);
+        var message = new LoadGameMessage(game, command.getPlayerColor());
+        sendMessage(session.getRemote(), message);
         //build notification
         String notification = buildConnectNotification(username, command);
         //broadcasts to everyone else someone joined.
@@ -102,9 +115,9 @@ public class WebSocketHandler {
     private String buildConnectNotification(String username, ConnectCommand command) {
         String notification = username;
         if (command.getPlayerColor() == null) {
-            notification = notification.concat("joined as an observer");
+            notification = notification.concat(" joined as an observer");
         } else {
-            notification = notification.concat("joined as the " + command.getPlayerColor() + " player");
+            notification = notification.concat(" joined as the " + command.getPlayerColor() + " player");
         }
         return notification;
     }
