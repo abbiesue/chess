@@ -17,11 +17,9 @@ import java.util.Objects;
 
 import static chess.ChessGame.TeamColor.BLACK;
 
-public class PlayerClient extends GameClient{
+public class PlayerClient extends GameClient implements ServerMessageObserver{
     private final ServerFacade server;
-    private String serverURL;
     private WebSocketFacade ws;
-    ServerMessageObserver observer;
 
     private String playerColor;
     private int gameID;
@@ -29,12 +27,10 @@ public class PlayerClient extends GameClient{
 
 
 
-    public PlayerClient(String authToken, ServerFacade server, String serverURL, ServerMessageObserver observer) throws ResponseException {
+    public PlayerClient(String authToken, ServerFacade server, String serverURL) throws ResponseException {
         this.authToken = authToken;
         this.server = server;
-        this.serverURL = serverURL;
-        this.observer = observer;
-        ws = new WebSocketFacade(serverURL, observer);
+        ws = new WebSocketFacade(serverURL, this);
     }
 
     public String eval(String input) {

@@ -6,11 +6,15 @@ import chess.ChessPosition;
 import records.ListRequest;
 import server.ResponseException;
 import server.ServerFacade;
+import websocket.ServerMessageObserver;
+import websocket.messages.ErrorMessage;
+import websocket.messages.NotificationMessage;
+import websocket.messages.ServerMessage;
 
 import java.util.List;
 import java.util.Objects;
 
-public abstract class GameClient {
+public abstract class GameClient implements ServerMessageObserver {
     //these two don't use the websocket and instead interact with the chessgame and BoardPrinter
 
     public String highlightLegalMoves(String playerColor, int gameID, ServerFacade server, String authToken, String... params) throws ResponseException {
@@ -48,6 +52,24 @@ public abstract class GameClient {
             printer.printFromGame(game, printColor,null);
             return "";
         }
+    }
+
+    @Override
+    public void notify(ServerMessage notification) {
+        //call different private classes based on message type
+        System.out.println("entered notify");
+        switch (notification.getServerMessageType()) {
+            case LOAD_GAME -> {
+                System.out.println("Load Game received");
+            }
+            case NOTIFICATION -> {
+                System.out.println(EscapeSequences.SET_TEXT_COLOR_MAGENTA + ((NotificationMessage)notification).getMessage());
+            }
+            case ERROR -> {
+                System.out.println(EscapeSequences.SET_TEXT_COLOR_RED + ((ErrorMessage)notification).getMessage());
+            }
+        }
+        System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE + "\n" + ">>> " + EscapeSequences.SET_TEXT_COLOR_GREEN);
     }
 
     public ChessGame.TeamColor stringToTeamColor(String playerColor) {

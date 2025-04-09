@@ -1,6 +1,5 @@
 package ui;
 
-import chess.ChessGame;
 import model.GameData;
 import records.ListRequest;
 import records.ListResult;
@@ -11,21 +10,19 @@ import websocket.WebSocketFacade;
 
 import java.util.Arrays;
 
-public class ObserverClient extends GameClient{
+public class ObserverClient extends GameClient implements ServerMessageObserver{
     static final String WHITE = "WHITE";
     private final ServerFacade server;
-    private String serverURL;
     private WebSocketFacade ws;
 
     private String playerColor;
     private int gameID;
     private String authToken;
 
-    public ObserverClient(String authToken, ServerFacade server, String serverURL, ServerMessageObserver observer) throws ResponseException {
+    public ObserverClient(String authToken, ServerFacade server, String serverURL) throws ResponseException {
         this.authToken = authToken;
         this.server = server;
-        this.serverURL = serverURL;
-        ws = new WebSocketFacade(serverURL, observer);
+        ws = new WebSocketFacade(serverURL, this);
     }
 
     public String eval(String input) {
@@ -75,5 +72,4 @@ public class ObserverClient extends GameClient{
         GameData game = listResult.games().get(listID-1);
         return game.gameID();
     }
-
 }
