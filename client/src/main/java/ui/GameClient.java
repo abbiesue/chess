@@ -38,6 +38,9 @@ public abstract class GameClient implements ServerMessageObserver {
             ChessPosition position = stringToPosition(stringPos, printColor);
             //get the game from a gameID
             ChessGame game = getGame(gameID, server, authToken);
+            if (game.getBoard().getPiece(position) == null) {
+                return "There's no piece there...";
+            }
             List<ChessMove> validMoves = (List<ChessMove>) game.validMoves(position);
             BoardPrinter printer = new BoardPrinter();
             printer.printFromGame(game, printColor, validMoves);
