@@ -82,14 +82,4 @@ public class WebSocketFacade extends Endpoint {
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
     }
-
-//    private ChessGame getGame(int gameID) throws ResponseException {
-//        var games = server.list(new ListRequest(authToken)).games();
-//        for (int i = 0; i < games.size(); i++) {
-//            if (games.get(i).gameID() == gameID) {
-//                return games.get(i).game();
-//            }
-//        }
-//        throw new ResponseException(400, "Game not Found");
-//    }
 }

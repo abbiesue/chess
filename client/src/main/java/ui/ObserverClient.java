@@ -16,9 +16,7 @@ public class ObserverClient extends GameClient{
     private final ServerFacade server;
     private String serverURL;
     private WebSocketFacade ws;
-    ServerMessageObserver observer;
 
-    private String username = null;
     private String playerColor;
     private int gameID;
     private String authToken;
@@ -37,8 +35,8 @@ public class ObserverClient extends GameClient{
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd) {
                 case "observe" -> observe(params);
-                case "highlight" -> highlightLegalMoves(params);
-                case "redraw" -> redrawChessBoard(params);
+                case "highlight" -> highlightLegalMoves(playerColor, gameID, server, authToken, params);
+                case "redraw" -> redrawChessBoard(playerColor, gameID, server, authToken, params);
                 case "leave" -> leave();
                 default -> help();
             };

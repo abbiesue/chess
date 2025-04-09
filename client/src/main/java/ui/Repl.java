@@ -83,7 +83,7 @@ public class Repl implements ServerMessageObserver {
         System.out.println("entered notify");
         switch (notification.getServerMessageType()) {
             case LOAD_GAME -> {
-                printer.printFromGame(((LoadGameMessage) notification).getGame(), ((LoadGameMessage) notification).getPrintColor());
+                System.out.println("Load Game received");
             }
             case NOTIFICATION -> {
                 System.out.println(EscapeSequences.SET_TEXT_COLOR_MAGENTA + ((NotificationMessage)notification).getMessage());

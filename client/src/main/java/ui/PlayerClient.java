@@ -45,8 +45,8 @@ public class PlayerClient extends GameClient{
             return switch (cmd) {
                 case "join" -> join(params);
                 case "make" -> makeMove(params);
-                case "highlight" -> highlightLegalMoves(params);
-                case "redraw" -> redrawChessBoard(params);
+                case "highlight" -> highlightLegalMoves(playerColor, gameID, server, authToken, params);
+                case "redraw" -> redrawChessBoard(playerColor, gameID, server, authToken, params);
                 case "resign" -> "Are you sure? If so, type \"Yield\" to confirm";
                 case "yield" -> resign();
                 case "leave" -> leave();
@@ -84,8 +84,8 @@ public class PlayerClient extends GameClient{
         } else if (!validPosition(params[1]) || !validPosition(params[2])) {
             throw new ResponseException(400, "Position does not exist on the board");
         }
-        ChessPosition startPosition = stringToPosition(params[1]);
-        ChessPosition endPosition = stringToPosition(params[2]);
+        ChessPosition startPosition = stringToPosition(params[1], stringToTeamColor(playerColor));
+        ChessPosition endPosition = stringToPosition(params[2], stringToTeamColor(playerColor));
         ChessMove move = new ChessMove(startPosition,endPosition,null);
         ws.makeMove(authToken, gameID, move);
         return "";
@@ -119,24 +119,6 @@ public class PlayerClient extends GameClient{
         }
         GameData game = listResult.games().get(listID-1);
         return game.gameID();
-    }
-
-    private ChessPosition stringToPosition(String stringPos) throws ResponseException {
-        char rowChar = Character.toUpperCase(stringPos.charAt(0));
-        int row;
-        switch (rowChar) {
-            case 'A' -> row = 1;
-            case 'B' -> row = 2;
-            case 'C' -> row = 3;
-            case 'D' -> row = 4;
-            case 'E' -> row = 5;
-            case 'F' -> row = 6;
-            case 'G' -> row = 7;
-            case 'H' -> row = 8;
-            default -> throw new ResponseException(400, "Invalid Position");
-        }
-        int col = stringPos.charAt(1) - '0';
-        return new ChessPosition(row, col);
     }
 
     private boolean validPosition(String stringPos) {

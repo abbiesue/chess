@@ -2,10 +2,12 @@ package ui;
 
 import chess.ChessBoard;
 import chess.ChessGame;
+import chess.ChessMove;
 import chess.ChessPosition;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static ui.EscapeSequences.*;
 import static ui.EscapeSequences.SET_TEXT_COLOR_BRIGHT_RED;
@@ -21,7 +23,7 @@ public class BoardPrinter {
     private PrintStream out;
     private String playerColor;
 
-    public void printFromGame(ChessGame game, ChessGame.TeamColor printColor){
+    public void printFromGame(ChessGame game, ChessGame.TeamColor printColor, List<ChessMove> validMoves){
         ChessBoard board = game.getBoard();
         out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         if (printColor == ChessGame.TeamColor.WHITE) {
@@ -68,7 +70,25 @@ public class BoardPrinter {
                         }
                     }
                 }
-                printBoardSquare(printChar, shade);
+                boolean printed = false;
+                if (validMoves == null || validMoves.isEmpty()) {
+                    printBoardSquare(printChar, shade);
+                } else {
+                    if (validMoves.get(0).getStartPosition().equals(location)) {
+                        printHighlightedSquare(printChar, shade);
+                        printed = true;
+                    }
+                    for (ChessMove move : validMoves) {
+                        if (move.getEndPosition().equals(location)) {
+                            printHighlightedSquare(printChar, shade);
+                            printed = true;
+                        }
+                    }
+                    if (!printed) {
+                        printBoardSquare(printChar, shade);
+                    }
+
+                }
                 if (shade.equals(LIGHT)) {shade = DARK;} else {shade = LIGHT;}
             }
             printBoarderSquare(rowHeader);
@@ -77,6 +97,16 @@ public class BoardPrinter {
             rowHeader = "";
         }
         printHorizontalBoarder();
+    }
+
+    private void printHighlightedSquare(String piece, String shade) {
+        if (shade.equals(DARK)) {
+            setDarkHighlight();
+        } else {
+            setLightHighlight();
+        }
+        out.print(SET_TEXT_COLOR_BLACK);
+        out.print(piece);
     }
 
     private void printHorizontalBoarder() {
@@ -124,6 +154,16 @@ public class BoardPrinter {
     private void setLight() {
         out.print(SET_BG_COLOR_BRIGHT_RED);
         out.print(SET_TEXT_COLOR_BRIGHT_RED);
+    }
+
+    private void setDarkHighlight() {
+        out.print(SET_BG_COLOR_GREEN);
+        out.print(SET_TEXT_COLOR_GREEN);
+    }
+
+    private void setLightHighlight() {
+        out.print(SET_BG_COLOR_LIGHT_GREEN);
+        out.print(SET_TEXT_COLOR_LIGHT_GREEN);
     }
 
 }
