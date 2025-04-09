@@ -1,6 +1,7 @@
 package server.websocket;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dataaccess.SQLAuthDAO;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
@@ -25,7 +26,11 @@ public class WebSocketHandler {
     @OnWebSocketMessage
     public void onMessage(Session session, String msg) {
         try {
-            UserGameCommand command = new Gson().fromJson(msg, UserGameCommand.class);
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(UserGameCommand.class, new UserGameCommandDeserializer())
+                    .create();
+
+            UserGameCommand command = gson.fromJson(msg, UserGameCommand.class);
             //validate authToken
             String authToken = command.getAuthToken();
             if (authDAO.getAuth(authToken) == null) {
@@ -69,7 +74,6 @@ public class WebSocketHandler {
     }
 
     private void connect(Session session, String username, ConnectCommand command) {
-        //
         System.out.println("ConnectCommand received");
     }
 
