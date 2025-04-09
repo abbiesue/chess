@@ -1,6 +1,6 @@
 package ui;
 
-import server.ResponseException;
+import Exceptions.ResponseException;
 import server.ServerFacade;
 
 import java.util.Scanner;

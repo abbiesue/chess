@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
+import Exceptions.ResponseException;
 
 public class ServerFacade {
     private final String serverURL;
@@ -121,7 +122,7 @@ public class ServerFacade {
         return headers;
     }
 
-    private void throwIfNotSuccessful(HttpURLConnection http) throws IOException, ResponseException{
+    private void throwIfNotSuccessful(HttpURLConnection http) throws IOException, ResponseException {
         var status = http.getResponseCode();
         if (!isSuccessful(status)) {
             try(InputStream respErr = http.getErrorStream()) {

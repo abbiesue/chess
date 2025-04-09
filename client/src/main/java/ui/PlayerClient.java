@@ -4,7 +4,7 @@ import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
 import records.JoinRequest;
-import server.ResponseException;
+import Exceptions.ResponseException;
 import server.ServerFacade;
 import websocket.ServerMessageObserver;
 import websocket.WebSocketFacade;

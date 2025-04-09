@@ -2,7 +2,7 @@ package dataaccess;
 
 import model.AuthData;
 import org.junit.jupiter.api.*;
-import server.ResponseException;
+import Exceptions.ResponseException;
 
 public class SQLAuthDAOTests {
     private SQLAuthDAO authDAO;

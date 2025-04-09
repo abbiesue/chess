@@ -1,9 +1,8 @@
 package ui;
 
-import chess.ChessGame;
 import model.GameData;
 import records.*;
-import server.ResponseException;
+import Exceptions.ResponseException;
 import server.ServerFacade;
 
 import java.util.Arrays;

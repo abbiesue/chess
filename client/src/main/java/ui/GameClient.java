@@ -6,7 +6,7 @@ import chess.ChessPosition;
 import model.GameData;
 import records.ListRequest;
 import records.ListResult;
-import server.ResponseException;
+import Exceptions.ResponseException;
 import server.ServerFacade;
 import websocket.ServerMessageObserver;
 import websocket.messages.*;

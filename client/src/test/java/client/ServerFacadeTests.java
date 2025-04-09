@@ -3,7 +3,7 @@ package client;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import records.*;
-import server.ResponseException;
+import Exceptions.ResponseException;
 import server.Server;
 import server.ServerFacade;
 

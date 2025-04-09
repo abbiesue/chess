@@ -1,18 +1,15 @@
 package service;
 
-import chess.ChessGame;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
-import model.AuthData;
-import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import records.*;
-import server.ResponseException;
+import Exceptions.ResponseException;
 
 public class GameServiceTests {
     MemoryGameDAO gameDAO = new MemoryGameDAO();

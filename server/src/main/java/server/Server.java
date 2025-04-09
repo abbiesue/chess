@@ -1,5 +1,6 @@
 package server;
 
+import Exceptions.ResponseException;
 import dataaccess.*;
 import handler.*;
 import server.websocket.WebSocketHandler;

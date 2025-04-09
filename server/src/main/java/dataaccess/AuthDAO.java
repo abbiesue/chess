@@ -1,7 +1,7 @@
 package dataaccess;
 
 import model.AuthData;
-import server.ResponseException;
+import Exceptions.ResponseException;
 
 public interface AuthDAO {
     void createAuth(AuthData authdata) throws ResponseException;

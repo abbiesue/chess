@@ -1,7 +1,7 @@
 package dataaccess;
 
 import model.UserData;
-import server.ResponseException;
+import Exceptions.ResponseException;
 
 public interface UserDAO {
     void createUser(UserData userData) throws ResponseException;

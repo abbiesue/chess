@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import records.*;
-import server.ResponseException;
+import Exceptions.ResponseException;
 
 public class UserServiceTests {
     UserService userService;
