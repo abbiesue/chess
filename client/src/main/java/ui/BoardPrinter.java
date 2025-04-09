@@ -63,8 +63,9 @@ public class BoardPrinter {
 
 
     private String getPieceChar(ChessPiece piece) {
-        if (piece == null) return EMPTY;
-
+        if (piece == null) {
+            return EMPTY;
+        }
         return switch (piece.getPieceType()) {
             case ROOK -> (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_ROOK : BLACK_ROOK;
             case KNIGHT -> (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_KNIGHT : BLACK_KNIGHT;
@@ -76,10 +77,14 @@ public class BoardPrinter {
     }
 
     private boolean isHighlighted(ChessPosition pos, List<ChessMove> moves) {
-        if (moves == null || moves.isEmpty()) return false;
+        if (moves == null || moves.isEmpty()) {
+            return false;
+        }
 
         ChessPosition start = moves.get(0).getStartPosition();
-        if (start.equals(pos)) return true;
+        if (start.equals(pos)) {
+            return true;
+        }
 
         return moves.stream().anyMatch(move -> move.getEndPosition().equals(pos));
     }
