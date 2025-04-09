@@ -8,6 +8,7 @@ import server.ResponseException;
 import server.ServerFacade;
 import websocket.ServerMessageObserver;
 import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class GameClient implements ServerMessageObserver {
+    String playerColor;
+
     //these two don't use the websocket and instead interact with the chessgame and BoardPrinter
 
     public String highlightLegalMoves(String playerColor, int gameID, ServerFacade server, String authToken, String... params) throws ResponseException {
@@ -60,13 +63,17 @@ public abstract class GameClient implements ServerMessageObserver {
         System.out.println("entered notify");
         switch (notification.getServerMessageType()) {
             case LOAD_GAME -> {
-                System.out.println("Load Game received");
+                System.out.println("LoadGameMessage received");
+                //BoardPrinter printer = new BoardPrinter();
+                //printer.printFromGame(((LoadGameMessage)notification).getGame(), stringToTeamColor(playerColor), null);
             }
             case NOTIFICATION -> {
-                System.out.println(EscapeSequences.SET_TEXT_COLOR_MAGENTA + ((NotificationMessage)notification).getMessage());
+                System.out.println("NotificationMessage received");
+                //System.out.println(EscapeSequences.SET_TEXT_COLOR_MAGENTA + ((NotificationMessage)notification).getMessage());
             }
             case ERROR -> {
-                System.out.println(EscapeSequences.SET_TEXT_COLOR_RED + ((ErrorMessage)notification).getMessage());
+                System.out.println("ErrorMessage received");
+                //System.out.println(EscapeSequences.SET_TEXT_COLOR_RED + ((ErrorMessage)notification).getMessage());
             }
         }
         System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE + "\n" + ">>> " + EscapeSequences.SET_TEXT_COLOR_GREEN);

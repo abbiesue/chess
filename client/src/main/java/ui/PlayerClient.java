@@ -21,7 +21,6 @@ public class PlayerClient extends GameClient implements ServerMessageObserver{
     private final ServerFacade server;
     private WebSocketFacade ws;
 
-    private String playerColor;
     private int gameID;
     private String authToken;
 

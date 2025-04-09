@@ -19,8 +19,6 @@ m
 =shared/src/test/java/passoff/chess/piece/KnightMoveTests.java,4/6/46ef87c304e18ba9d31ab5df8735551001527431
 j
 :shared/src/test/java/passoff/chess/game/MakeMoveTests.java,9/1/9175234a3f303bad2cdae147fbe2e704f0f9016d
-]
--shared/src/main/java/chess/ChessPosition.java,3/b/3b013a24b64d343e15bac32b29d3d69c6c135d82
 g
 7shared/src/test/java/passoff/chess/ChessBoardTests.java,7/0/704add9b7257f7adc3fb4fb5f33f76b7c8820901
 X
