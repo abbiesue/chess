@@ -71,11 +71,6 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
         return moves;
     }
 
-
-    public boolean checkNAdd(int row, int col) {
-        return true;
-    } //not a lot of copied code so I'm just not gonna implement this method in the Pawn calculator.
-
     void promote(ChessPosition startPosition, ChessPosition endPosition) {
         moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.QUEEN));
         moves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.BISHOP));

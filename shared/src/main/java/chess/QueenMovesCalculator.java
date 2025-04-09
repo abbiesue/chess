@@ -21,7 +21,7 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
         row = startPosition.getRow() + 1;
         col = startPosition.getColumn();
         while (row < 9) {
-            if (!checkNAdd(row,col)) {
+            if (!callCheckNAdd(row,col)) {
                 break;
             }
             row++;
@@ -30,7 +30,7 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
         col = startPosition.getColumn()+1;
         row = startPosition.getRow()+1;
         while (row <= 8 && col <= 8) {
-            if (!checkNAdd(row,col)) {
+            if (!callCheckNAdd(row,col)) {
                 break;
             }
             row++;
@@ -40,7 +40,7 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
         col = startPosition.getColumn() + 1;
         row = startPosition.getRow();
         while (col < 9) {
-            if (!checkNAdd(row,col)) {
+            if (!callCheckNAdd(row,col)) {
                 break;
             }
             col++;
@@ -50,7 +50,7 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
         row = startPosition.getRow()-1;
         while (row > 0 && col <= 8) {
             //set new ChessPosition
-            if (!checkNAdd(row,col)) {
+            if (!callCheckNAdd(row,col)) {
                 break;
             }
             row--;
@@ -60,7 +60,7 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
         col = startPosition.getColumn();
         row = startPosition.getRow() - 1;
         while (row > 0) {
-            if (!checkNAdd(row,col)) {
+            if (!callCheckNAdd(row,col)) {
                 break;
             }
             row--;
@@ -69,7 +69,7 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
         col = startPosition.getColumn()-1;
         row = startPosition.getRow()-1;
         while (row > 0 && col > 0) {
-            if (!checkNAdd(row,col)) {
+            if (!callCheckNAdd(row,col)) {
                 break;
             }
             row--;
@@ -79,7 +79,7 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
         col = startPosition.getColumn() - 1;
         row = startPosition.getRow();
         while (col > 0) {
-            if (!checkNAdd(row,col)) {
+            if (!callCheckNAdd(row,col)) {
                 break;
             }
             col--;
@@ -88,7 +88,7 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
         col = startPosition.getColumn()-1;
         row = startPosition.getRow()+1;
         while (row <= 8 && col > 0) {
-            if (!checkNAdd(row,col)) {
+            if (!callCheckNAdd(row,col)) {
                 break;
             }
             row++;
@@ -96,19 +96,8 @@ public class QueenMovesCalculator implements PieceMovesCalculator{
         }
         return moves;
     }
-
-    public boolean checkNAdd(int row, int col) {
-        ChessPosition position = new ChessPosition(row, col);
-        if (chessBoard.getPiece(position) != null) {
-            if (chessBoard.getPiece(position).getTeamColor() != chessBoard.getPiece(startPosition).getTeamColor()) {
-                moves.add(new ChessMove(startPosition, position, null));
-            }
-            return false;
-        }
-        if (chessBoard.getPiece(position) == null) {
-            moves.add(new ChessMove(startPosition, position, null));
-        }
-        return true;
+    private boolean callCheckNAdd(int row, int col) {
+        return checkNAdd(row, col, moves, startPosition, chessBoard);
     }
 
 }
