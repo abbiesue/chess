@@ -1,9 +1,6 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessMove;
-import chess.ChessPosition;
+import chess.*;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
@@ -23,81 +20,74 @@ public class BoardPrinter {
     private PrintStream out;
     private String playerColor;
 
-    public void printFromGame(ChessGame game, ChessGame.TeamColor printColor, List<ChessMove> validMoves){
+    public void printFromGame(ChessGame game, ChessGame.TeamColor printColor, List<ChessMove> validMoves) {
         ChessBoard board = game.getBoard();
         out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-        if (printColor == ChessGame.TeamColor.WHITE) {
-            this.playerColor = WHITE;
-        } else {this.playerColor = "BLACK";}
-        if (playerColor.equals(WHITE)){
-            game.getBoard().flipBoard();
+        this.playerColor = (printColor == ChessGame.TeamColor.WHITE) ? WHITE : "BLACK";
+
+        if (playerColor.equals(WHITE)) {
+            board.flipBoard();
         }
+
         String shade = DARK;
-        int rowNumber;
-        String rowHeader = "";
-
         printHorizontalBoarder();
-        for (int row = 1; row <= TOTAL_ROWS; row++) {
-            if (playerColor.equals(WHITE)) {rowNumber = (TOTAL_ROWS+1) - row;} else {rowNumber = row;}
-            out.print("\n");
-            rowHeader = rowHeader.concat(" " + rowNumber + " ");
-            printBoarderSquare(rowHeader);
-            for (int col = 1; col <= TOTAL_COLUMNS; col++) {
-                var location = new ChessPosition(row, col);
-                String printChar = EMPTY;
-                if (board.getPiece(location) != null) {
-                    var type = board.getPiece(location).getPieceType();
-                    var color = board.getPiece(location).getTeamColor();
-                    //switch to assign printChar
-                    switch (type) {
-                        case ROOK -> {
-                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_ROOK;} else {printChar = BLACK_ROOK;}
-                        }
-                        case KNIGHT -> {
-                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_KNIGHT;} else {printChar = BLACK_KNIGHT;}
-                        }
-                        case BISHOP -> {
-                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_BISHOP;} else {printChar = BLACK_BISHOP;}
-                        }
-                        case KING -> {
-                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_KING;} else {printChar = BLACK_KING;}
-                        }
-                        case QUEEN -> {
-                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_QUEEN;} else {printChar = BLACK_QUEEN;}
-                        }
-                        case PAWN -> {
-                            if (color == ChessGame.TeamColor.WHITE) {printChar = WHITE_PAWN;} else {printChar = BLACK_PAWN;}
-                        }
-                    }
-                }
-                boolean printed = false;
-                if (validMoves == null || validMoves.isEmpty()) {
-                    printBoardSquare(printChar, shade);
-                } else {
-                    if (validMoves.get(0).getStartPosition().equals(location)) {
-                        printHighlightedSquare(printChar, shade);
-                        printed = true;
-                    }
-                    for (ChessMove move : validMoves) {
-                        if (move.getEndPosition().equals(location)) {
-                            printHighlightedSquare(printChar, shade);
-                            printed = true;
-                        }
-                    }
-                    if (!printed) {
-                        printBoardSquare(printChar, shade);
-                    }
 
+        for (int row = 1; row <= TOTAL_ROWS; row++) {
+            int rowNumber = playerColor.equals(WHITE) ? (TOTAL_ROWS + 1 - row) : row;
+            String rowLabel = " " + rowNumber + " ";
+
+            out.print("\n");
+            printBoarderSquare(rowLabel);
+
+            for (int col = 1; col <= TOTAL_COLUMNS; col++) {
+                ChessPosition position = new ChessPosition(row, col);
+                String pieceChar = getPieceChar(board.getPiece(position));
+                boolean isHighlight = isHighlighted(position, validMoves);
+
+                if (isHighlight) {
+                    printHighlightedSquare(pieceChar, shade);
+                } else {
+                    printBoardSquare(pieceChar, shade);
                 }
-                if (shade.equals(LIGHT)) {shade = DARK;} else {shade = LIGHT;}
+
+                shade = toggleShade(shade);
             }
-            printBoarderSquare(rowHeader);
+
+            printBoarderSquare(rowLabel);
             out.print(SET_BG_COLOR_DARK_GREY);
-            if (shade.equals(LIGHT)) {shade = DARK;} else {shade = LIGHT;}
-            rowHeader = "";
+            shade = toggleShade(shade);
         }
+
         printHorizontalBoarder();
     }
+
+
+    private String getPieceChar(ChessPiece piece) {
+        if (piece == null) return EMPTY;
+
+        return switch (piece.getPieceType()) {
+            case ROOK -> (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_ROOK : BLACK_ROOK;
+            case KNIGHT -> (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_KNIGHT : BLACK_KNIGHT;
+            case BISHOP -> (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_BISHOP : BLACK_BISHOP;
+            case KING -> (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_KING : BLACK_KING;
+            case QUEEN -> (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_QUEEN : BLACK_QUEEN;
+            case PAWN -> (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_PAWN : BLACK_PAWN;
+        };
+    }
+
+    private boolean isHighlighted(ChessPosition pos, List<ChessMove> moves) {
+        if (moves == null || moves.isEmpty()) return false;
+
+        ChessPosition start = moves.get(0).getStartPosition();
+        if (start.equals(pos)) return true;
+
+        return moves.stream().anyMatch(move -> move.getEndPosition().equals(pos));
+    }
+
+    private String toggleShade(String shade) {
+        return shade.equals(LIGHT) ? DARK : LIGHT;
+    }
+
 
     private void printHighlightedSquare(String piece, String shade) {
         if (shade.equals(DARK)) {
