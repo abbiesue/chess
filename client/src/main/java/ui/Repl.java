@@ -2,10 +2,9 @@ package ui;
 
 import server.ServerFacade;
 import websocket.ServerMessageObserver;
-import websocket.messages.ServerMessage;
+import websocket.messages.*;
 
 import java.util.Scanner;
-
 
 public class Repl implements ServerMessageObserver {
     private final PreloginClient preloginClient;
@@ -14,6 +13,8 @@ public class Repl implements ServerMessageObserver {
     private ObserverClient observerClient;
     ServerFacade server;
     String serverURL;
+
+    BoardPrinter printer = new BoardPrinter();
 
     public Repl(String serverURL) {
         server = new ServerFacade(serverURL);
@@ -78,6 +79,19 @@ public class Repl implements ServerMessageObserver {
 
     @Override
     public void notify(ServerMessage notification) {
-        //call diferent private classes based on message type
+        //call different private classes based on message type
+        System.out.println("entered notify");
+        switch (notification.getServerMessageType()) {
+            case LOAD_GAME -> {
+                printer.printFromGame(((LoadGameMessage) notification).getGame(), ((LoadGameMessage) notification).getPrintColor());
+            }
+            case NOTIFICATION -> {
+                System.out.println(EscapeSequences.SET_TEXT_COLOR_MAGENTA + ((NotificationMessage)notification).getMessage());
+            }
+            case ERROR -> {
+                System.out.println(EscapeSequences.SET_TEXT_COLOR_RED + ((ErrorMessage)notification).getMessage());
+            }
+        }
+        printPrompt();
     }
 }
