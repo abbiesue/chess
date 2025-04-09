@@ -89,10 +89,13 @@ public class WebSocketHandler {
         connections.add(username, gameID, session);
     }
 
-    private void resign(Session session, String username, ResignCommand command) {
+    private void resign(Session session, String username, ResignCommand command) throws ResponseException, IOException {
         System.out.println("ResignCommand received");
-
-
+        //update game to over
+        gameDAO.setGameOver(command.getGameID());
+        //notifies everyone that the user resigned
+        connections.broadcast(username, command.getGameID(), new NotificationMessage(buildResignMessage(username)));
+        sendMessage(session.getRemote(), new NotificationMessage("You resigned."));
     }
 
     private void leaveGame(String username, LeaveGameCommand command) throws ResponseException, IOException {
@@ -137,6 +140,10 @@ public class WebSocketHandler {
     }
 
     private String buildLeaveNotification(String username) {
-        return username + "has left the game";
+        return username + " has left the game";
+    }
+
+    private String buildResignMessage(String username) {
+        return username + " admits defeat... They resign...";
     }
 }
