@@ -20,7 +20,8 @@ public abstract class GameClient implements ServerMessageObserver {
 
     //these two don't use the websocket and instead interact with the chessgame and BoardPrinter
 
-    public String highlightLegalMoves(String playerColor, int gameID, ServerFacade server, String authToken, String... params) throws ResponseException {
+    public String highlightLegalMoves(String playerColor, int gameID, ServerFacade server,
+                                      String authToken, String... params) throws ResponseException {
         if (params.length < 2) {
             return "did you mean \"highlight legal moves <START_POSITION>\"? Please try again.";
         } else if (params.length < 3) {
@@ -43,7 +44,8 @@ public abstract class GameClient implements ServerMessageObserver {
         }
     }
 
-    public String redrawChessBoard(String playerColor, int gameID, ServerFacade server, String authToken, String... params) throws ResponseException {
+    public String redrawChessBoard(String playerColor, int gameID, ServerFacade server,
+                                   String authToken, String... params) throws ResponseException {
         // add code to make sure that even if there is the right number of parameters they are the right parameters
         if (params.length < 2) {
             return "did you mean \"redraw chess board\"? Please try again.";
