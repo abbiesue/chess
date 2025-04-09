@@ -99,16 +99,8 @@ public class ChessGame {
         }
         //make move
         TeamColor color = board.getPiece(move.getStartPosition()).getTeamColor();
-        if (move.getPromotionPiece() == null) {
-            ChessPiece newPiece = board.getPiece(move.getStartPosition()).clone();
-            board.addPiece(move.getEndPosition(), newPiece);
-            board.addPiece(move.getStartPosition(), null);
-        } else {
-            ChessPiece.PieceType type = move.getPromotionPiece();
-            ChessPiece newPiece = new ChessPiece(color, type);
-            board.addPiece(move.getEndPosition(), newPiece);
-            board.addPiece(move.getStartPosition(), null);
-        }
+        makeMoveHelper(move, color);
+
         if (color == TeamColor.BLACK) {
             teamTurn = TeamColor.WHITE;
         } else {
@@ -215,15 +207,7 @@ public class ChessGame {
         return null;
     }
 
-    private boolean isValidMove(ChessMove move) {
-        // used by ValidMoves to make a move and check the outcome. This only acts on a copy board
-        // makes a move on a copy board and then checks if the king is in check of checkmate.
-        // doesn't need to check if this is a valid move, because it should only be called by ValidMoves
-
-        //make copy board
-        ChessBoard boardCopy = board.clone();
-        TeamColor color = boardCopy.getPiece(move.getStartPosition()).getTeamColor();;
-        //make move
+    private void makeMoveHelper(ChessMove move, TeamColor color) {
         if (move.getPromotionPiece() == null) {
             ChessPiece newPiece = board.getPiece(move.getStartPosition()).clone();
             board.addPiece(move.getEndPosition(), newPiece);
@@ -234,6 +218,19 @@ public class ChessGame {
             board.addPiece(move.getEndPosition(), newPiece);
             board.addPiece(move.getStartPosition(), null);
         }
+    }
+
+    private boolean isValidMove(ChessMove move) {
+        // used by ValidMoves to make a move and check the outcome. This only acts on a copy board
+        // makes a move on a copy board and then checks if the king is in check of checkmate.
+        // doesn't need to check if this is a valid move, because it should only be called by ValidMoves
+
+        //make copy board
+        ChessBoard boardCopy = board.clone();
+        TeamColor color = boardCopy.getPiece(move.getStartPosition()).getTeamColor();;
+
+        //make move
+        makeMoveHelper(move, color);
 
         if (isInCheck(color)) {
             board = boardCopy;
