@@ -21,10 +21,12 @@ public class BoardPrinter {
     private PrintStream out;
     private String playerColor;
 
-    public void printFromGame(ChessGame game, String printColor){
+    public void printFromGame(ChessGame game, ChessGame.TeamColor printColor){
         ChessBoard board = game.getBoard();
         out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-        this.playerColor = printColor;
+        if (printColor == ChessGame.TeamColor.WHITE) {
+            this.playerColor = WHITE;
+        } else {this.playerColor = "BLACK";}
         if (playerColor.equals(WHITE)){
             game.getBoard().flipBoard();
         }
