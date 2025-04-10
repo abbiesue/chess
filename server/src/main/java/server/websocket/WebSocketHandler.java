@@ -99,7 +99,7 @@ public class WebSocketHandler {
         if (Objects.equals(username, gameDAO.getGame(command.getGameID()).blackUsername()) ||
                 Objects.equals(username, gameDAO.getGame(command.getGameID()).whiteUsername())) {
             if (gameDAO.isGameOver(command.getGameID())) {
-                throw new ResponseException(400, "Error: game is already over");
+                throw new ResponseException(400, "game is already over");
             }
             //update game to over
             gameDAO.setGameOver(command.getGameID());
@@ -200,7 +200,7 @@ public class WebSocketHandler {
         String notification = username + " moved their ";
         ChessBoard board = game.getBoard();
         ChessPiece piece = board.getPiece(move.getEndPosition());
-        return notification.concat(piece + " to " + positionToString(move.getEndPosition()));
+        return notification.concat(piece.getPieceType().name() + " to " + positionToString(move.getEndPosition()));
     }
 
     private String positionToString(ChessPosition position) {
