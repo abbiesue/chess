@@ -78,7 +78,11 @@ public class WebSocketHandler {
 
     private void sendMessage(RemoteEndpoint remote, ServerMessage message) {
         try {
-            String json = new Gson().toJson(message);
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(ServerMessage.class, new ServerMessageSerializer())
+                    .create();
+
+            String json = gson.toJson(message);
             remote.sendString(json);
         } catch (IOException e) {
             e.printStackTrace();
@@ -132,7 +136,7 @@ public class WebSocketHandler {
         }
         //check that game is not over
         if (gameDAO.isGameOver(command.getGameID())) {
-            throw new ResponseException(400, "Error: game is over");
+            throw new ResponseException(400, "game is over");
         }
         //store variables
         ChessMove move = command.getMove();
@@ -145,7 +149,10 @@ public class WebSocketHandler {
         } else {playerColor = ChessGame.TeamColor.WHITE; opponentColor = ChessGame.TeamColor.BLACK;}
         //check it is the player's turn
         if (game.getTeamTurn() != playerColor) {
-            throw new ResponseException(400, "Error: It's not your turn");
+            throw new ResponseException(400, "It's not your turn");
+        }
+        if (game.getBoard().getPiece(move.getStartPosition()) == null) {
+            throw new ResponseException(400, "That is an empty space");
         }
         //check that move is a valid move, update game
         game.makeMove(move);

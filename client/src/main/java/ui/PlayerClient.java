@@ -70,8 +70,8 @@ public class PlayerClient extends GameClient implements ServerMessageObserver{
         } else if (!validPosition(params[1]) || !validPosition(params[2])) {
             throw new ResponseException(400, "Position does not exist on the board");
         }
-        ChessPosition startPosition = stringToPosition(params[1], stringToTeamColor(playerColor));
-        ChessPosition endPosition = stringToPosition(params[2], stringToTeamColor(playerColor));
+        ChessPosition startPosition = stringToPosition(params[1]);
+        ChessPosition endPosition = stringToPosition(params[2]);
         ChessMove move = new ChessMove(startPosition,endPosition,null);
         ws.makeMove(authToken, gameID, move);
         return "";

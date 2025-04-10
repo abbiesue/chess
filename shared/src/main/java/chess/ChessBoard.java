@@ -68,16 +68,6 @@ public class ChessBoard implements Cloneable{
 
     }
 
-    public void flipBoard() {
-        var flipped = new ChessPiece[9][9];
-        for (int row = 1; row < 9; row++) {
-            for (int col = 1; col < 9; col++) {
-                flipped[row][col] = squares[9-row][9-col];
-            }
-        }
-        squares = flipped;
-    }
-
     @Override
     public String toString() {
         String outString =  "ChessBoard: \n";

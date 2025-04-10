@@ -25,22 +25,21 @@ public class BoardPrinter {
         out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         this.playerColor = (printColor == ChessGame.TeamColor.WHITE) ? WHITE : "BLACK";
 
-        if (playerColor.equals(WHITE)) {
-            board.flipBoard();
-        }
-
-        String shade = DARK;
+        String shade = LIGHT;
         printHorizontalBoarder();
 
         for (int row = 1; row <= TOTAL_ROWS; row++) {
-            int rowNumber = playerColor.equals(WHITE) ? (TOTAL_ROWS + 1 - row) : row;
-            String rowLabel = " " + rowNumber + " ";
+            int actualRow = playerColor.equals(WHITE) ? (TOTAL_ROWS + 1 - row) : row;
+            String rowLabel = " " + actualRow + " ";
 
             out.print("\n");
             printBoarderSquare(rowLabel);
 
             for (int col = 1; col <= TOTAL_COLUMNS; col++) {
-                ChessPosition position = new ChessPosition(row, col);
+                int actualCol = playerColor.equals(WHITE) ? col : (TOTAL_COLUMNS + 1 - col);
+
+                ChessPosition position = new ChessPosition(actualRow, actualCol); // ✅ FIXED
+
                 String pieceChar = getPieceChar(board.getPiece(position));
                 boolean isHighlight = isHighlighted(position, validMoves);
 
@@ -57,7 +56,6 @@ public class BoardPrinter {
             out.print(SET_BG_COLOR_DARK_GREY);
             shade = toggleShade(shade);
         }
-
         printHorizontalBoarder();
     }
 

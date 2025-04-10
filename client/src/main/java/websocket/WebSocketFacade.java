@@ -35,15 +35,14 @@ public class WebSocketFacade extends Endpoint {
             this.session = container.connectToServer(this, socketURI);
 
             //set message handler
-            this.session.addMessageHandler((MessageHandler.Whole<String>) msg -> {
-                System.out.println("Received raw message: " + msg);
-                try {
-                    System.out.println("before gson");
-                    ServerMessage message = gson.fromJson(msg, ServerMessage.class);
-                    System.out.println("after gson");
-                    observer.notify(message);
-                } catch (Exception e) {
-                    observer.notify(new ErrorMessage(e.getMessage()));
+            this.session.addMessageHandler(new MessageHandler.Whole<String>() {
+                public void onMessage(String msg) {
+                    try {
+                        ServerMessage message = gson.fromJson(msg, ServerMessage.class);
+                        observer.notify(message);
+                    } catch (Exception e) {
+                        observer.notify(new ErrorMessage(e.getMessage()));
+                    }
                 }
             });
         } catch (DeploymentException | URISyntaxException | IOException e) {

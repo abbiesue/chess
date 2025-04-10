@@ -35,7 +35,7 @@ public abstract class GameClient implements ServerMessageObserver {
             String stringPos = params[2];
             //turn the string into a position
             ChessGame.TeamColor printColor = stringToTeamColor(playerColor);
-            ChessPosition position = stringToPosition(stringPos, printColor);
+            ChessPosition position = stringToPosition(stringPos);
             //get the game from a gameID
             ChessGame game = getGame(gameID, server, authToken);
             if (game.getBoard().getPiece(position) == null) {
@@ -65,20 +65,16 @@ public abstract class GameClient implements ServerMessageObserver {
     @Override
     public void notify(ServerMessage notification) {
         //call different private classes based on message type
-        System.out.println("entered notify");
         switch (notification.getServerMessageType()) {
             case LOAD_GAME -> {
-                System.out.println("LoadGameMessage received");
-                //BoardPrinter printer = new BoardPrinter();
-                //printer.printFromGame(((LoadGameMessage)notification).getGame(), stringToTeamColor(playerColor), null);
+                BoardPrinter printer = new BoardPrinter();
+                printer.printFromGame(((LoadGameMessage)notification).getGame(), stringToTeamColor(playerColor), null);
             }
             case NOTIFICATION -> {
-                System.out.println("NotificationMessage received");
-                //System.out.println(EscapeSequences.SET_TEXT_COLOR_MAGENTA + ((NotificationMessage)notification).getMessage());
+                System.out.println(EscapeSequences.SET_TEXT_COLOR_MAGENTA + ((NotificationMessage)notification).getMessage());
             }
             case ERROR -> {
-                System.out.println("ErrorMessage received");
-                //System.out.println(EscapeSequences.SET_TEXT_COLOR_RED + ((ErrorMessage)notification).getMessage());
+                System.out.println(EscapeSequences.SET_TEXT_COLOR_RED + ((ErrorMessage)notification).getMessage());
             }
         }
         System.out.print(EscapeSequences.SET_TEXT_COLOR_WHITE + "\n" + ">>> " + EscapeSequences.SET_TEXT_COLOR_GREEN);
@@ -111,44 +107,21 @@ public abstract class GameClient implements ServerMessageObserver {
         throw new ResponseException(400, "Game not Found");
     }
 
-    public ChessPosition stringToPosition(String stringPos, ChessGame.TeamColor playerColor) throws ResponseException {
+    public ChessPosition stringToPosition(String stringPos) throws ResponseException {
         char colChar = Character.toUpperCase(stringPos.charAt(0));
         int col;
         int row = stringPos.charAt(1) - '0';
-        if (playerColor == ChessGame.TeamColor.WHITE) {
-            switch (colChar) {
-                case 'A' -> col = 1;
-                case 'B' -> col = 2;
-                case 'C' -> col = 3;
-                case 'D' -> col = 4;
-                case 'E' -> col = 5;
-                case 'F' -> col = 6;
-                case 'G' -> col = 7;
-                case 'H' -> col = 8;
-                default -> throw new ResponseException(400, "Invalid Position");
-            }
-            switch (row) {
-                case 1 -> row = 8;
-                case 2 -> row = 7;
-                case 3 -> row = 6;
-                case 4 -> row = 5;
-                case 5 -> row = 4;
-                case 6 -> row = 3;
-                case 7 -> row = 2;
-                case 8 -> row = 1;
-            }
-        } else {
-            switch (colChar) {
-                case 'A' -> col = 8;
-                case 'B' -> col = 7;
-                case 'C' -> col = 6;
-                case 'D' -> col = 5;
-                case 'E' -> col = 4;
-                case 'F' -> col = 3;
-                case 'G' -> col = 2;
-                case 'H' -> col = 1;
-                default -> throw new ResponseException(400, "Invalid Position");
-            }
+
+        switch (colChar) {
+            case 'A' -> col = 1;
+            case 'B' -> col = 2;
+            case 'C' -> col = 3;
+            case 'D' -> col = 4;
+            case 'E' -> col = 5;
+            case 'F' -> col = 6;
+            case 'G' -> col = 7;
+            case 'H' -> col = 8;
+            default -> throw new ResponseException(400, "Invalid Position");
         }
 
         return new ChessPosition(row, col);
