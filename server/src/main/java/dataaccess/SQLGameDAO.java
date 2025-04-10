@@ -66,9 +66,7 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
             var ps = conn.prepareStatement(statement);
             var rs = ps.executeQuery();
             while (rs.next()) {
-                if (!isGameOver(Integer.parseInt(rs.getString("gameID")))) {
-                    games.add(readGame(rs));
-                }
+                games.add(readGame(rs));
             }
         } catch (Exception e) {
             throw new ResponseException(500, String.format("Unable to read data: %s", e.getMessage()));
@@ -83,6 +81,7 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         var whiteUsername = oldGame.whiteUsername();
         var blackUsername = oldGame.blackUsername();
         var gameName = oldGame.gameName();
+        boolean finished = isGameOver(gameID);
         ChessGame game = oldGame.game();
 
         if (playerColor == ChessGame.TeamColor.WHITE) {
@@ -92,9 +91,9 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         }
 
         deleteGame(gameID);
-        var statement = "INSERT INTO gameData (gameID, whiteUsername, blackUsername, gameName, gameJson) VALUES (?,?,?,?,?)";
+        var statement = "INSERT INTO gameData (gameID, whiteUsername, blackUsername, gameName, gameJson, finished) VALUES (?,?,?,?,?,?)";
         var gameJson = new Gson().toJson(game);
-        executeUpdate(statement, gameID, whiteUsername, blackUsername, gameName, gameJson);
+        executeUpdate(statement, gameID, whiteUsername, blackUsername, gameName, gameJson, finished);
     }
 
     public void updateAfterMove(int gameID, ChessGame newGame) throws ResponseException {
@@ -102,12 +101,13 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         var whiteUsername = oldGame.whiteUsername();
         var blackUsername = oldGame.blackUsername();
         var gameName = oldGame.gameName();
+        boolean finished = isGameOver(gameID);
         ChessGame game = newGame;
 
         deleteGame(gameID);
-        var statement = "INSERT INTO gameData (gameID, whiteUsername, blackUsername, gameName, gameJson) VALUES (?,?,?,?,?)";
+        var statement = "INSERT INTO gameData (gameID, whiteUsername, blackUsername, gameName, gameJson, finished) VALUES (?,?,?,?,?,?)";
         var gameJson = new Gson().toJson(game);
-        executeUpdate(statement, gameID, whiteUsername, blackUsername, gameName, gameJson);
+        executeUpdate(statement, gameID, whiteUsername, blackUsername, gameName, gameJson, finished);
     }
 
     @Override

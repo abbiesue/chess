@@ -176,6 +176,9 @@ public class WebSocketHandler {
         String notification = buildConnectNotification(username, command);
         //broadcasts to everyone else someone joined.
         connections.broadcast(username, command.getGameID(), new NotificationMessage(notification));
+        if (gameDAO.isGameOver(command.getGameID())) {
+            sendMessage(session.getRemote(), new NotificationMessage("This game is over"));
+        }
     }
 
     private String buildConnectNotification(String username, ConnectCommand command) {
