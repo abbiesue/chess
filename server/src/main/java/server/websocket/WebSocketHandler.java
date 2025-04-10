@@ -207,7 +207,7 @@ public class WebSocketHandler {
         int row = position.getRow();
         int col = position.getColumn();
         String positionString = "";
-        switch (row) {
+        switch (col) {
             case 1 -> positionString = "A";
             case 2 -> positionString = "B";
             case 3 -> positionString = "C";
@@ -217,7 +217,7 @@ public class WebSocketHandler {
             case 7 -> positionString = "G";
             case 8 -> positionString = "H";
         }
-        return positionString.concat(String.valueOf(col));
+        return positionString.concat(String.valueOf(row));
     }
 
     private void notifyOpponentsStatus(ChessGame.TeamColor opponentColor, ChessGame game, int gameID) throws IOException {

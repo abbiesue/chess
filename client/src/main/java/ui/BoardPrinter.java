@@ -38,7 +38,7 @@ public class BoardPrinter {
             for (int col = 1; col <= TOTAL_COLUMNS; col++) {
                 int actualCol = playerColor.equals(WHITE) ? col : (TOTAL_COLUMNS + 1 - col);
 
-                ChessPosition position = new ChessPosition(actualRow, actualCol); // ✅ FIXED
+                ChessPosition position = new ChessPosition(actualRow, actualCol);
 
                 String pieceChar = getPieceChar(board.getPiece(position));
                 boolean isHighlight = isHighlighted(position, validMoves);
@@ -107,9 +107,9 @@ public class BoardPrinter {
         setGrey();
         String[] headers;
         if (playerColor.equals(WHITE)) {
-            headers = new String[]{ "   ", " a ", " b ", " c ", " d ", " e ", " f ", " g ", " h ", "   "};
+            headers = new String[]{ "   ", " A ", " B ", " C ", " D ", " E ", " F ", " G ", " H ", "   "};
         } else {
-            headers = new String[]{ "   ", " h ", " g ", " f ", " e ", " d ", " c ", " b ", " a ", "   "};
+            headers = new String[]{ "   ", " H ", " G ", " F ", " E ", " D ", " C ", " B ", " A ", "   "};
         }
         for (int col = 0; col < BOARD_SIZE_IN_SQUARES + 2; col++) {
             printBoarderSquare(headers[col]);
