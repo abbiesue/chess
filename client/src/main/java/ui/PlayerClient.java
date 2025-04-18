@@ -2,6 +2,7 @@ package ui;
 
 import chess.ChessGame;
 import chess.ChessMove;
+import chess.ChessPiece;
 import chess.ChessPosition;
 import records.JoinRequest;
 import exceptions.ResponseException;
@@ -59,10 +60,17 @@ public class PlayerClient extends GameClient implements ServerMessageObserver{
 
     public String makeMove(String... params) throws ResponseException{
         // validate parameters
+        ChessPiece.PieceType promotionPiece = null;
         if (params.length < 1) {
-            return "Did you mean \"make move <START_POSITION> <END_POSITION>\"? Please try again.";
-        } else if (params.length != 3) {
-            throw new ResponseException(400, "Expected: make move <START_POSITION> <END_POSITION>");
+            return "Did you mean \"make move <START_POSITION> <END_POSITION> <PROMOTION_PIECE(opt)>\"? Please try again.";
+        } else if (params.length < 3 || params.length > 4) {
+            throw new ResponseException(400, "Expected: make move <START_POSITION> <END_POSITION> <PROMOTION_PIECE(opt)>");
+        } else if(params.length == 4) {
+            if (isValidPromotionPiece(params[3])) {
+                promotionPiece = stringToPieceType(params[3]);
+            } else {
+                throw new ResponseException(400, "That's an invalid promotion piece");
+            }
         } else if (!Character.isAlphabetic(params[1].charAt(0)) || !Character.isDigit(params[1].charAt(1)) || params[1].length() > 2) {
             throw new ResponseException(400, "Expected: <START_POSITION> in form <letter#> ex: E2 or A8");
         } else if (!Character.isAlphabetic(params[2].charAt(0)) || !Character.isDigit(params[2].charAt(1)) || params[2].length() > 2) {
@@ -72,9 +80,30 @@ public class PlayerClient extends GameClient implements ServerMessageObserver{
         }
         ChessPosition startPosition = stringToPosition(params[1]);
         ChessPosition endPosition = stringToPosition(params[2]);
-        ChessMove move = new ChessMove(startPosition,endPosition,null);
+        ChessMove move = new ChessMove(startPosition,endPosition,promotionPiece);
         ws.makeMove(authToken, gameID, move);
         return "";
+    }
+
+    private ChessPiece.PieceType stringToPieceType(String param) throws ResponseException {
+        param = param.toUpperCase();
+        return switch (param) {
+            case "ROOK" -> ChessPiece.PieceType.ROOK;
+            case "KNIGHT" -> ChessPiece.PieceType.KNIGHT;
+            case "BISHOP" -> ChessPiece.PieceType.BISHOP;
+            case "KING" -> ChessPiece.PieceType.KING;
+            case "QUEEN" -> ChessPiece.PieceType.QUEEN;
+            case "PAWN" -> ChessPiece.PieceType.PAWN;
+            default -> throw new ResponseException(400, "Invalid promotion piece type");
+        };
+    }
+
+    private boolean isValidPromotionPiece(String param) {
+        param = param.toUpperCase();
+        return switch (param) {
+            case "ROOK", "KNIGHT", "BISHOP", "KING", "QUEEN", "PAWN" -> true;
+            default -> false;
+        };
     }
 
     public String resign() throws ResponseException {
@@ -89,7 +118,7 @@ public class PlayerClient extends GameClient implements ServerMessageObserver{
 
     public String help() {
         return """
-                make move <START_POSITION> <END_POSITION> - to take your turn
+                make move <START_POSITION> <END_POSITION> <PROMOTION_PIECE(opt)> - to take your turn. promotion piece is for pawn promotion
                 highlight legal moves <START_POSITION> - to highlight legal moves on the board for a specific piece
                 redraw chess board - to redraw the chessboard
                 resign - to forfeit and end the game
